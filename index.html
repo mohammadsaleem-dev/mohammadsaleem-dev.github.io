@@ -77,6 +77,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
       flex-wrap: nowrap;
+      position: relative; /* needed for dropdown */
     }
     .brand{
       display: flex;
@@ -84,6 +85,8 @@
       gap: 10px;
       font-weight: 700;
       letter-spacing: 0.2px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .dot{
       width: 10px; height: 10px;
@@ -91,29 +94,17 @@
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       box-shadow: 0 0 0 4px rgba(110,220,255,0.10);
     }
-.nav-links{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--muted);
-  font-weight: 600;
 
-  /* FIX: keep in one line */
-  flex-wrap: nowrap;
-  white-space: nowrap;
-
-  /* if there isn’t enough space, scroll horizontally instead of wrapping */
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-
-  /* allow it to shrink between brand and Resume button */
-  min-width: 0;
-}
-
-/* optional: hide scrollbar (Chrome/Edge/Safari/Firefox) */
-.nav-links::-webkit-scrollbar { height: 0; }
-.nav-links { scrollbar-width: none; }
-
+    /* Desktop links */
+    .nav-links{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+      min-width: 0;
+    }
     .nav-links a{
       padding: 10px 12px;
       border-radius: 999px;
@@ -123,11 +114,39 @@
       color: var(--text);
       background: rgba(255,255,255,0.06);
     }
+
     .nav-actions{
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+    }
+
+    /* Hamburger button hidden on desktop */
+    .menu-btn{
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .menu-btn:hover{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .menu-btn .bar{
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 999px;
     }
 
     /* Buttons */
@@ -145,6 +164,7 @@
       cursor: pointer;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
       user-select: none;
+      white-space: nowrap;
     }
     .btn:hover{
       transform: translateY(-1px);
@@ -165,6 +185,40 @@
       background: rgba(255,255,255,0.04);
     }
 
+    /* Mobile dropdown behavior */
+    @media (max-width: 720px){
+      .menu-btn{ display: inline-flex; }
+
+      /* Hide inline links on mobile */
+      .nav-links{
+        display: none;
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: calc(100% + 10px);
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(10,16,32,0.92);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+        flex-direction: column;
+        gap: 8px;
+        white-space: normal;
+        z-index: 60;
+      }
+
+      .nav-links.is-open{ display: flex; }
+
+      .nav-links a{
+        padding: 12px 12px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.04);
+      }
+
+      .nav-actions{ flex-shrink: 0; }
+    }
+
     /* Layout */
     .grid{
       display: grid;
@@ -175,8 +229,7 @@
     @media (max-width: 960px){
       .grid{ grid-template-columns: 1fr; }
       .nav-inner{ border-radius: 22px; height: auto; padding: 14px; }
-      .nav-links{ justify-content: center; }
-      .nav-actions{ justify-content: center; width: 100%; }
+      .nav-actions{ justify-content: center; width: auto; }
     }
 
     .card{
@@ -409,7 +462,14 @@
           <span>Mohammad Saleem</span>
         </a>
 
-        <div class="nav-links">
+        <!-- Hamburger for mobile -->
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <div class="nav-links" id="navLinks">
           <a href="#home">Home</a>
           <a href="#projects">Projects</a>
           <a href="#skills">Skills</a>
@@ -668,6 +728,40 @@
         window.scrollTo(0, 0);
         window.addEventListener("load", () => window.scrollTo(0, 0), { once: true });
       }
+    })();
+
+    // Mobile menu toggle
+    (function () {
+      const btn = document.getElementById("menuBtn");
+      const links = document.getElementById("navLinks");
+      if (!btn || !links) return;
+
+      const closeMenu = () => {
+        links.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      };
+
+      btn.addEventListener("click", () => {
+        const open = links.classList.toggle("is-open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      // Close when clicking a link
+      links.querySelectorAll("a").forEach(a => {
+        a.addEventListener("click", closeMenu);
+      });
+
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!links.classList.contains("is-open")) return;
+        const clickedInside = links.contains(e.target) || btn.contains(e.target);
+        if (!clickedInside) closeMenu();
+      });
+
+      // Close on resize back to desktop
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 720) closeMenu();
+      });
     })();
   </script>
 </body>
