@@ -4,441 +4,587 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ✅ SEO title -->
   <title>Mohammad Saleem | Computer Engineer Portfolio</title>
+  <meta name="description" content="Mohammad Saleem — Computer Engineering Graduate. Portfolio featuring blockchain, AI, cybersecurity projects, experience, awards, and certifications." />
 
   <style>
     :root{
-      --bg1:#070a14;
-      --bg2:#0b1636;
+      --bg1:#060b1a;
+      --bg2:#0b1630;
       --card: rgba(255,255,255,0.06);
-      --card2: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.12);
+      --border: rgba(255,255,255,0.10);
       --text:#eaf0ff;
-      --muted: rgba(234,240,255,0.75);
-      --accent:#7c8cff;
-      --accent2:#5fe0ff;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --muted: rgba(234,240,255,0.72);
+      --accent1:#7aa7ff;
+      --accent2:#5c7cff;
+      --shadow: 0 18px 60px rgba(0,0,0,0.45);
       --radius: 22px;
     }
 
-    *{ box-sizing:border-box; }
-    html{ scroll-behavior:smooth; }
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(124,140,255,0.35), transparent 60%),
-        radial-gradient(900px 600px at 85% 15%, rgba(95,224,255,0.22), transparent 55%),
-        radial-gradient(1000px 700px at 50% 120%, rgba(124,140,255,0.18), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      min-height:100vh;
-      padding: 28px 18px 60px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 15% 10%, rgba(122,167,255,0.25), transparent 55%),
+                  radial-gradient(1000px 700px at 80% 30%, rgba(92,124,255,0.18), transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
     }
 
-    a{ color:inherit; text-decoration:none; }
-    .container{ max-width: 1100px; margin: 0 auto; }
+    a{ color: inherit; text-decoration: none; }
 
-    /* ===== NAV ===== */
+    .wrap{
+      width: min(1200px, 92vw);
+      margin: 0 auto;
+      padding: 22px 0 70px;
+    }
+
     .nav{
       position: sticky;
       top: 14px;
-      z-index: 1000;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: rgba(10, 16, 35, 0.55);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
       border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      background: rgba(10, 20, 45, 0.45);
+      backdrop-filter: blur(14px);
       border-radius: 999px;
-      padding: 10px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      box-shadow: var(--shadow);
       gap: 12px;
     }
 
     .brand{
-      display:flex; align-items:center; gap:10px;
-      padding: 6px 10px;
-      border-radius: 999px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-weight: 700;
+      letter-spacing: .2px;
+      white-space: nowrap;
     }
     .dot{
-      width:10px; height:10px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, var(--accent2), var(--accent));
-      box-shadow: 0 0 20px rgba(124,140,255,0.55);
+      width:10px;height:10px;border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 18px rgba(122,167,255,0.7);
     }
-    .brand strong{ font-weight:700; letter-spacing:0.2px; }
 
     .navlinks{
-      display:flex; align-items:center; gap: 14px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
       flex-wrap: wrap;
       justify-content:center;
     }
     .navlinks a{
-      font-size: 14px;
-      color: var(--muted);
-      padding: 10px 10px;
+      padding: 9px 12px;
       border-radius: 999px;
-      transition: all .2s ease;
+      color: var(--muted);
+      transition: 0.2s ease;
     }
     .navlinks a:hover{
       color: var(--text);
       background: rgba(255,255,255,0.06);
-      transform: translateY(-1px);
     }
 
-    .nav-actions{
-      display:flex; align-items:center; gap: 10px;
-    }
-
-    /* ✅ Resume button with forced download + hover */
-    .nav-btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      font-size: 14px;
-      cursor: pointer;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
-      user-select:none;
-    }
-    .nav-btn:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(124,140,255,0.55);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
-    }
-    .nav-btn:active{
-      transform: translateY(0px) scale(0.98);
-    }
-
-    /* ===== HERO ===== */
-    .hero{
-      padding: 34px 8px 16px;
-      display:grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
-      align-items: stretch;
-      margin-top: 16px;
-    }
-    .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-    }
-    .hero h1{
-      margin: 0 0 10px;
-      font-size: clamp(28px, 4vw, 44px);
-      letter-spacing: -0.6px;
-    }
-    .subtitle{
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.6;
-    }
-    .chips{
-      display:flex; flex-wrap: wrap; gap: 10px;
-      margin-top: 10px;
-    }
-    .chip{
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-      color: rgba(234,240,255,0.82);
-      font-size: 13px;
-    }
-
-    .hero-actions{
-      display:flex; gap: 10px; flex-wrap: wrap;
-      margin-top: 18px;
+    .navcta{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      white-space: nowrap;
     }
 
     .btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 16px;
+      gap:10px;
+      padding: 11px 16px;
+      border-radius: 999px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.06);
       color: var(--text);
       font-weight: 600;
-      letter-spacing: 0.2px;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+      transition: 0.2s ease;
+      cursor: pointer;
+      user-select:none;
     }
     .btn:hover{
-      transform: translateY(-2px);
+      transform: translateY(-1px);
       background: rgba(255,255,255,0.10);
-      border-color: rgba(124,140,255,0.55);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
     }
+
     .btn.primary{
-      background: linear-gradient(135deg, rgba(124,140,255,0.95), rgba(95,224,255,0.65));
-      border-color: rgba(124,140,255,0.55);
+      border: none;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 16px 40px rgba(92,124,255,0.30);
     }
-    .btn.primary:hover{
-      border-color: rgba(95,224,255,0.75);
+    .btn.primary:hover{ filter: brightness(1.05); }
+
+    .btn.download:hover{
+      box-shadow: 0 14px 32px rgba(122,167,255,0.22);
     }
 
-    /* ===== SECTIONS ===== */
-    section{ padding: 18px 8px; }
-    .section-title{
-      font-size: 22px;
-      margin: 0 0 14px;
-      letter-spacing: -0.2px;
-    }
-    .grid-2{
+    .grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 22px;
+      margin-top: 18px;
     }
-    .project{
-      background: var(--card2);
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
     }
-    .project:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(124,140,255,0.45);
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(600px 200px at 10% 10%, rgba(122,167,255,0.18), transparent 50%),
+                  radial-gradient(600px 240px at 80% 0%, rgba(92,124,255,0.14), transparent 55%);
+      pointer-events:none;
     }
-    .project h3{
-      margin: 0 0 8px;
-      font-size: 16px;
+    .card > *{ position: relative; }
+
+    .title{
+      font-size: clamp(36px, 5vw, 62px);
+      margin: 6px 0 8px;
+      line-height: 1.05;
+      letter-spacing: -0.6px;
     }
-    .project p{
-      margin: 0;
+    .subtitle{
       color: var(--muted);
-      line-height: 1.55;
-      font-size: 14px;
+      font-size: 18px;
+      margin: 0 0 18px;
+    }
+    .lead{
+      color: rgba(234,240,255,0.80);
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      max-width: 62ch;
     }
 
-    ul{
-      margin: 0;
-      padding-left: 18px;
-      color: rgba(234,240,255,0.88);
-      line-height: 1.75;
+    .pillrow{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
     }
-    ul li strong{ color: var(--text); }
-
-    .tags{
-      display:flex; flex-wrap: wrap; gap: 10px;
-      margin-top: 12px;
-    }
-    .tag{
-      padding: 8px 12px;
+    .pill{
+      padding: 9px 12px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.05);
+      color: rgba(234,240,255,0.82);
       font-size: 13px;
-    }
-
-    .contact-actions{
-      display:flex; gap: 10px; flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
-      color: rgba(234,240,255,0.92);
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-      font-size: 14px;
+      transition: 0.2s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     .pill:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(124,140,255,0.55);
+      background: rgba(255,255,255,0.09);
+      transform: translateY(-1px);
     }
 
-    footer{
-      text-align:center;
-      color: rgba(234,240,255,0.55);
-      margin-top: 18px;
-      font-size: 13px;
+    section{ margin-top: 26px; }
+    h2{
+      font-size: 30px;
+      margin: 12px 0 12px;
+      letter-spacing: -0.3px;
     }
 
-    /* ===== Responsive ===== */
+    .cards2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
     @media (max-width: 900px){
-      .hero{ grid-template-columns: 1fr; }
+      .cards2{ grid-template-columns: 1fr; }
     }
-    @media (max-width: 650px){
-      .nav{ border-radius: 18px; padding: 12px; }
-      .navlinks{ display:none; }
+
+    .project h3{ margin: 0 0 8px; font-size: 18px; }
+    .project p{ margin: 0; color: rgba(234,240,255,0.78); line-height: 1.6; }
+
+    .smallmuted{
+      color: rgba(234,240,255,0.70);
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ✅ Clean timeline list style */
+    .list{
+      display: grid;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .item{
+      padding: 16px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      transition: 0.2s ease;
+    }
+    .item:hover{
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-1px);
+    }
+    .itemtop{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .when{
+      color: rgba(234,240,255,0.70);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .what{
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .where{
+      color: rgba(234,240,255,0.78);
+      font-size: 14px;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .footer{
+      margin-top: 30px;
+      color: rgba(234,240,255,0.55);
+      text-align:center;
+      font-size: 13px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-
-    <!-- ===== NAVBAR ===== -->
-    <nav class="nav">
+  <div class="wrap">
+    <div class="nav">
       <div class="brand">
         <span class="dot"></span>
-        <strong>Mohammad Saleem</strong>
+        <span>Mohammad Saleem</span>
       </div>
 
-      <div class="navlinks" aria-label="Primary">
+      <div class="navlinks">
         <a href="#home">Home</a>
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
         <a href="#education">Education</a>
+        <a href="#experience">Experience</a>
+        <a href="#awards">Awards</a>
+        <a href="#certificates">Certificates</a>
         <a href="#contact">Contact</a>
       </div>
 
-      <div class="nav-actions">
-        <!-- ✅ Resume: forced download + hover -->
-        <a class="nav-btn" href="assets/resume.pdf" download>Resume</a>
-
-        <!-- ❌ Hire/Collaborate button deleted (as requested) -->
+      <div class="navcta">
+        <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
       </div>
-    </nav>
+    </div>
 
-    <!-- ===== HERO ===== -->
-    <header id="home" class="hero">
-      <div class="card">
-        <h1>Mohammad Saleem</h1>
-        <p class="subtitle">
-          Computer Engineering Graduate | Blockchain | AI | Cybersecurity
-        </p>
+    <section id="home" style="margin-top: 18px;">
+      <div class="grid">
+        <div class="card">
+          <div class="title">Mohammad Saleem</div>
+          <div class="subtitle">Computer Engineering Graduate | Blockchain | AI | Cybersecurity</div>
 
-        <p class="subtitle" style="margin-top:-6px;">
-          Welcome to my personal website. This page presents my academic background,
-          technical projects, and professional interests.
-        </p>
+          <div class="lead">
+            Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
+          </div>
 
-        <div class="hero-actions">
-          <!-- ✅ Open resume in new tab -->
-          <a class="btn primary" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
-          <!-- ✅ Force download -->
-          <a class="btn" href="assets/resume.pdf" download>Download Resume</a>
-          <!-- ✅ Jump to contact -->
-          <a class="btn" href="#contact">Contact</a>
+          <div style="display:flex; gap: 12px; flex-wrap:wrap;">
+            <a class="btn primary" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
+            <a class="btn download" href="assets/resume.pdf" download="Mohammad-Saleem-Resume.pdf">Download Resume</a>
+            <a class="btn" href="#contact">Contact</a>
+          </div>
+
+          <div class="pillrow">
+            <span class="pill">Ethereum / Smart Contracts</span>
+            <span class="pill">ROS 2</span>
+            <span class="pill">Networking &amp; Security</span>
+            <span class="pill">Web (HTML/CSS)</span>
+          </div>
         </div>
 
-        <div class="chips">
-          <span class="chip">Ethereum / Smart Contracts</span>
-          <span class="chip">ROS 2</span>
-          <span class="chip">Networking & Security</span>
-          <span class="chip">Web (HTML/CSS)</span>
-        </div>
-      </div>
+        <div class="card">
+          <h2 style="margin-top:0;">Quick Links</h2>
 
-      <div class="card">
-        <h2 class="section-title" style="margin-top:0;">Quick Links</h2>
-        <div class="contact-actions">
-          <!-- ✅ GitHub button -->
-          <a class="pill" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
+          <div class="pillrow" style="margin-top: 10px;">
+            <a class="pill" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
 
-          <!-- ✅ LinkedIn button (replace if you want) -->
-          <a class="pill" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
+            <!-- ✅ Replace with your real LinkedIn -->
+            <a class="pill" href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">LinkedIn</a>
 
-          <!-- ✅ Direct resume link -->
-          <a class="pill" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
-        </div>
+            <a class="pill" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+          </div>
 
-        <div class="tags">
-          <span class="tag">Amman, Jordan</span>
-          <span class="tag">University of Jordan</span>
-          <span class="tag">Open to opportunities</span>
+          <div class="pillrow">
+            <span class="pill">Amman, Jordan</span>
+            <span class="pill">University of Jordan</span>
+          </div>
+
+          <div class="pillrow">
+            <span class="pill">Open to opportunities</span>
+          </div>
         </div>
       </div>
-    </header>
+    </section>
 
-    <!-- ===== PROJECTS ===== -->
     <section id="projects">
-      <h2 class="section-title">Projects</h2>
-      <div class="grid-2">
-        <div class="project">
+      <h2>Projects</h2>
+      <div class="cards2">
+        <div class="card project">
           <h3>Decentralized Voting System on Ethereum</h3>
           <p>Blockchain-based secure voting platform focused on transparency and data integrity.</p>
         </div>
-        <div class="project">
+
+        <div class="card project">
           <h3>ROS CPU Scheduling Simulation</h3>
           <p>Simulation of FCFS, Round Robin, and Priority scheduling algorithms using ROS 2.</p>
         </div>
-        <div class="project">
+
+        <div class="card project">
           <h3>SCADA Tank Level Monitoring System</h3>
           <p>Arduino and LabVIEW based real-time monitoring solution.</p>
         </div>
-        <div class="project">
+
+        <div class="card project">
           <h3>NZXT Fan Controller (Arduino)</h3>
           <p>Relay + PWM control, speed LEDs, buzzer, and pushbuttons for multi-mode fan control.</p>
         </div>
       </div>
     </section>
 
-    <!-- ===== SKILLS ===== -->
     <section id="skills">
-      <div class="grid-2">
+      <h2>Skills</h2>
+      <div class="cards2">
         <div class="card">
-          <h2 class="section-title">Skills</h2>
-          <ul>
-            <li><strong>Programming:</strong> Java, Python, JavaScript, C/C++ (basic)</li>
-            <li><strong>Web:</strong> HTML/CSS, responsive UI</li>
-            <li><strong>Blockchain:</strong> Ethereum, smart contracts, wallets (MetaMask)</li>
-            <li><strong>Systems:</strong> ROS 2 simulation, Linux/Ubuntu</li>
-            <li><strong>Automation:</strong> LabVIEW, Arduino, sensor integration</li>
-            <li><strong>Networking/Security:</strong> fundamentals, secure system design mindset</li>
-          </ul>
+          <p class="smallmuted">
+            • <b>Programming:</b> Java, Python, JavaScript, C/C++ (basic)<br/>
+            • <b>Web:</b> HTML/CSS, responsive UI<br/>
+            • <b>Blockchain:</b> Ethereum, smart contracts, wallets (MetaMask)
+          </p>
         </div>
 
-        <!-- ===== EDUCATION ===== -->
-        <div class="card" id="education">
-          <h2 class="section-title">Education</h2>
-          <div style="font-weight:700; font-size:16px; margin-bottom:6px;">B.Sc. in Computer Engineering</div>
-          <div style="color:var(--muted); margin-bottom:12px;">University of Jordan</div>
-          <div class="tags">
-            <span class="tag">Blockchain</span>
-            <span class="tag">Networks</span>
-            <span class="tag">Cybersecurity</span>
+        <div class="card">
+          <p class="smallmuted">
+            • <b>Systems:</b> ROS 2 simulation, Linux/Ubuntu<br/>
+            • <b>Automation:</b> LabVIEW, Arduino, sensor integration<br/>
+            • <b>Networking/Security:</b> fundamentals, secure system design mindset
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ EDUCATION (updated with High School) -->
+    <section id="education">
+      <h2>Education</h2>
+      <div class="cards2">
+        <div class="card">
+          <div class="list">
+            <div class="item">
+              <div class="itemtop">
+                <div class="what">B.Sc. in Computer Engineering</div>
+                <div class="when">2019 – 2025</div>
+              </div>
+              <div class="where">University of Jordan — Amman, Jordan</div>
+              <div class="pillrow" style="margin-top:10px;">
+                <span class="pill">Blockchain</span>
+                <span class="pill">Networks</span>
+                <span class="pill">Cybersecurity</span>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="itemtop">
+                <div class="what">High School Diploma (Tawjihi)</div>
+                <div class="when">2018 – 2019</div>
+              </div>
+              <div class="where">Al-Jazeera School — Amman, Jordan</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="smallmuted">
+            If you want, we can add a short “Research Interests” paragraph here tailored to your MS/PhD goals.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ EXPERIENCE -->
+    <section id="experience">
+      <h2>Experience</h2>
+      <div class="card">
+        <div class="list">
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">Electricity Distribution Co. (EDCO) — Operating Systems Dept. (Intern)</div>
+              <div class="when">Jun – Sep 2024</div>
+            </div>
+            <div class="where">
+              Internship focused on IT infrastructure (ADDS, Azure, Office 365) and service automation with PowerShell.
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== CONTACT ===== -->
-    <section id="contact">
+    <!-- ✅ AWARDS -->
+    <section id="awards">
+      <h2>Awards and Achievements</h2>
       <div class="card">
-        <h2 class="section-title">Contact</h2>
-        <p class="subtitle" style="margin-top:-2px;">
-          Feel free to reach out for research collaboration, assistantships, or software roles.
-        </p>
+        <div class="list">
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">Twelfth National Technology Parade — 5th place (Security & Defense Technology Hub)</div>
+              <div class="when">Jul 2025</div>
+            </div>
+            <div class="where">Placed 5th among 17 participants from Jordan in Security and defense technology hub.</div>
+          </div>
 
-        <div class="contact-actions">
-          <a class="pill" href="mailto:mohammadsaleem2001@gmail.com">Email: mohammadsaleem2001@gmail.com</a>
-
-          <!-- ✅ GitHub profile button (requested) -->
-          <a class="pill" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
-
-          <!-- ✅ LinkedIn button (requested) -->
-          <a class="pill" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
-
-          <!-- ✅ Resume direct link -->
-          <a class="pill" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">Jordan Math Competition — 2nd place</div>
+              <div class="when">Jun – Sep 2014</div>
+            </div>
+            <div class="where">Placed 2nd among 5000 participants from Jordan.</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <footer>
-      © 2026 Mohammad Saleem • Built with GitHub Pages
-    </footer>
+    <!-- ✅ CERTIFICATES (links included — replace placeholders with your real URLs so “all links work”) -->
+    <section id="certificates">
+      <h2>Certificates</h2>
+      <div class="card">
+        <div class="list">
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-CISCO-LINK-HERE" target="_blank" rel="noopener">Network Technician Career Path (Cisco)</a>
+              </div>
+              <div class="when">Jan 2026</div>
+            </div>
+            <div class="where">Awarded by Cisco.</div>
+          </div>
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-CISCO-LINK-HERE" target="_blank" rel="noopener">Introduction to Modern AI (Cisco)</a>
+              </div>
+              <div class="when">Jan 2026</div>
+            </div>
+            <div class="where">Awarded by Cisco.</div>
+          </div>
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-AWS-ACADEMY-LINK-HERE" target="_blank" rel="noopener">Cloud Foundations (AWS Academy)</a>
+              </div>
+              <div class="when">Nov 2024</div>
+            </div>
+            <div class="where">Awarded by AWS Academy.</div>
+          </div>
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-CISCO-LINK-HERE" target="_blank" rel="noopener">Introduction to Data Science (Cisco)</a>
+              </div>
+              <div class="when">May 2023</div>
+            </div>
+            <div class="where">Awarded by Cisco.</div>
+          </div>
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-CISCO-LINK-HERE" target="_blank" rel="noopener">Introduction to Cybersecurity (Cisco)</a>
+              </div>
+              <div class="when">Jul 2022</div>
+            </div>
+            <div class="where">Awarded by Cisco.</div>
+          </div>
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-SOLOLEARN-LINK-HERE" target="_blank" rel="noopener">Python Core (Sololearn)</a>
+              </div>
+              <div class="when">Mar – Apr 2022</div>
+            </div>
+            <div class="where">Awarded by Sololearn.</div>
+          </div>
+
+          <div class="item">
+            <div class="itemtop">
+              <div class="what">
+                <a class="pill" href="PASTE-COURSERA-LINK-HERE" target="_blank" rel="noopener">Using Databases with Python (Coursera)</a>
+              </div>
+              <div class="when">Aug – Oct 2021</div>
+            </div>
+            <div class="where">Awarded by Coursera.</div>
+          </div>
+
+        </div>
+
+        <p class="smallmuted" style="margin-top:14px;">
+          Replace each <b>PASTE-...-LINK-HERE</b> with your certificate verification/share link so every button opens correctly.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="card">
+        <p class="smallmuted">
+          Feel free to reach out for research collaboration, assistantships, or software roles.
+        </p>
+
+        <div class="pillrow">
+          <span class="pill">Email: mohammadsaleem2001@gmail.com</span>
+          <a class="pill" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      © 2026 Eng. Mohammad Saleem
+    </div>
   </div>
+
+  <script>
+    // Fix "opens slightly scrolled down"
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => {
+      if (!location.hash || location.hash === '#home') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      }
+    });
+  </script>
 </body>
 </html>
