@@ -76,6 +76,7 @@
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+      flex-wrap: nowrap;
     }
     .brand{
       display: flex;
@@ -90,14 +91,29 @@
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       box-shadow: 0 0 0 4px rgba(110,220,255,0.10);
     }
-    .nav-links{
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      color: var(--muted);
-      font-weight: 600;
-      flex-wrap: wrap;
-    }
+.nav-links{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-weight: 600;
+
+  /* FIX: keep in one line */
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  /* if there isn’t enough space, scroll horizontally instead of wrapping */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* allow it to shrink between brand and Resume button */
+  min-width: 0;
+}
+
+/* optional: hide scrollbar (Chrome/Edge/Safari/Firefox) */
+.nav-links::-webkit-scrollbar { height: 0; }
+.nav-links { scrollbar-width: none; }
+
     .nav-links a{
       padding: 10px 12px;
       border-radius: 999px;
