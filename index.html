@@ -1,79 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohammad Saleem</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mohammad Saleem | Portfolio</title>
 
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
-  line-height: 1.6;
-}
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:rgba(255,255,255,0.06);
+      --panel2:rgba(255,255,255,0.08);
+      --text:#e8eefc;
+      --muted:rgba(232,238,252,0.75);
+      --line:rgba(255,255,255,0.12);
+      --accent:#7c5cff;
+      --accent2:#22c55e;
+      --shadow: 0 18px 45px rgba(0,0,0,0.35);
+      --radius: 18px;
+    }
 
-h1 {
-  font-size: 36px;
-}
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(124,92,255,0.28), transparent 65%),
+        radial-gradient(900px 500px at 85% 25%, rgba(34,197,94,0.16), transparent 70%),
+        radial-gradient(700px 400px at 40% 95%, rgba(56,189,248,0.12), transparent 60%),
+        var(--bg);
+      min-height:100vh;
+    }
 
-.subtitle {
-  color: #555;
-  margin-bottom: 20px;
-}
+    a{ color:inherit; text-decoration:none; }
+    .container{
+      width:min(1050px, 92vw);
+      margin:0 auto;
+      padding: 28px 0 80px;
+    }
 
-.section {
-  margin-top: 30px;
-}
+    /* NAV */
+    .nav{
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      margin: 12px auto 26px;
+      backdrop-filter: blur(10px);
+      background: rgba(10,14,26,0.55);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+    }
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 12px 14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding-left: 6px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #38bdf8);
+      box-shadow: 0 0 0 4px rgba(124,92,255,0.18);
+    }
+    .menu{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .menu a{
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: .2s ease;
+    }
+    .menu a:hover{
+      color: var(--text);
+      border-color: var(--line);
+      background: rgba(255,255,255,0.06);
+    }
+    .cta{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 14px;
+      transition: .2s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(124,92,255,0.5);
+      box-shadow: 0 10px 25px rgba(124,92,255,0.15);
+    }
+    .btn.primary{
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent), #38bdf8);
+      color: #0a0e1a;
+      font-weight: 700;
+    }
+    .btn.primary:hover{
+      box-shadow: 0 12px 30px rgba(124,92,255,0.25);
+    }
 
-.project {
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-</style>
+    /* HERO */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+      .nav{ position: static; }
+    }
+
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-left{
+      padding: 26px 26px 24px;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-left:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(400px 250px at 15% 25%, rgba(124,92,255,0.24), transparent 70%),
+        radial-gradient(450px 260px at 70% 10%, rgba(56,189,248,0.18), transparent 65%),
+        radial-gradient(350px 240px at 85% 75%, rgba(34,197,94,0.14), transparent 70%);
+      pointer-events:none;
+      filter: blur(0px);
+      opacity:.9;
+    }
+    .hero-left > *{ position:relative; }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+    .kicker b{ color: var(--text); }
+    h1{
+      margin: 14px 0 8px;
+      font-size: clamp(30px, 4.2vw, 44px);
+      line-height: 1.12;
+      letter-spacing: -0.6px;
+    }
+    .subtitle{
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0 0 18px;
+      max-width: 60ch;
+    }
+    .hero-actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .hero-right{
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .mini{
+      padding: 16px;
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .mini h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing: .2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .tag{
+      font-size: 13px;
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    /* SECTIONS */
+    .section{
+      margin-top: 22px;
+      padding: 22px;
+    }
+    .section h2{
+      margin: 0 0 14px;
+      font-size: 20px;
+      letter-spacing: .2px;
+    }
+    .muted{ color: var(--muted); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .project{
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      transition: .2s ease;
+    }
+    .project:hover{
+      transform: translateY(-2px);
+      border-color: rgba(124,92,255,0.45);
+      box-shadow: 0 16px 35px rgba(0,0,0,0.28);
+    }
+    .project-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .pill{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px){
+      .two-col{ grid-template-columns: 1fr; }
+    }
+
+    .list{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .list li{ margin: 8px 0; }
+
+    .footer{
+      margin-top: 22px;
+      text-align:center;
+      color: rgba(232,238,252,0.55);
+      font-size: 13px;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container">
 
-<h1>Mohammad Saleem</h1>
+    <!-- NAV -->
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <span class="dot"></span>
+          <span>Mohammad Saleem</span>
+        </div>
 
-<div class="subtitle">
-Computer Engineering Graduate | Blockchain | AI | Cybersecurity
-</div>
+        <div class="menu">
+          <a href="#home">Home</a>
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#contact">Contact</a>
+        </div>
 
-<p>
-Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
-</p>
+        <div class="cta">
+          <!-- Later we can replace this with a real PDF resume -->
+          <a class="btn" href="#contact">Resume</a>
+          <a class="btn primary" href="#contact">Hire / Collaborate</a>
+        </div>
+      </div>
+    </div>
 
-<div class="section">
-<h2>Projects</h2>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="card hero-left">
+        <div class="kicker">
+          <span>🟣</span>
+          <span><b>Computer Engineering Graduate</b> • Blockchain • AI • Cybersecurity</span>
+        </div>
 
-<div class="project">
-<b>Decentralized Voting System on Ethereum</b>
-<p>Blockchain-based secure voting platform focused on transparency and data integrity.</p>
-</div>
+        <h1>Building secure, reliable systems with modern software + emerging tech.</h1>
 
-<div class="project">
-<b>ROS CPU Scheduling Simulation</b>
-<p>Simulation of FCFS, Round Robin, and Priority scheduling algorithms using ROS 2.</p>
-</div>
+        <p class="subtitle">
+          I’m Mohammad Saleem. I design and build projects across blockchain systems, robotics simulation (ROS 2),
+          and practical automation/SCADA. This site highlights my work and technical focus.
+        </p>
 
-<div class="project">
-<b>SCADA Tank Level Monitoring System</b>
-<p>Arduino and LabVIEW based real-time monitoring solution.</p>
-</div>
-</div>
+        <div class="hero-actions">
+          <a class="btn primary" href="#projects">View Projects</a>
+          <a class="btn" href="#contact">Contact Me</a>
+          <a class="btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
 
-<div class="section">
-<h2>Contact</h2>
-<p>
-Email: mohammadssaleem2001@gmail.com <br>
-GitHub: <a href="https://github.com/MoTech0" target="_blank">https://github.com/MoTech0</a>
-</p>
-</div>
+      <div class="card hero-right">
+        <div class="mini">
+          <h3>Quick Summary</h3>
+          <div class="muted">
+            Interests: blockchain security, distributed systems, networking, and applied AI.
+          </div>
+          <div class="tags">
+            <span class="tag">Ethereum</span>
+            <span class="tag">ROS 2</span>
+            <span class="tag">Java</span>
+            <span class="tag">Python</span>
+            <span class="tag">Web</span>
+          </div>
+        </div>
 
+        <div class="mini">
+          <h3>Open To</h3>
+          <ul class="list">
+            <li>Graduate Research / Teaching Assistantships</li>
+            <li>Software / AI Engineer roles</li>
+            <li>Research collaboration & open-source</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>Location</h3>
+          <div class="muted">Amman, Jordan</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="card section">
+      <h2>Projects</h2>
+      <div class="grid">
+
+        <div class="project">
+          <div class="project-title">
+            <span>Decentralized Voting System on Ethereum</span>
+            <span class="pill">Blockchain</span>
+          </div>
+          <div class="muted">
+            Blockchain-based secure voting platform focused on transparency and data integrity.
+          </div>
+          <div class="tags">
+            <span class="tag">Solidity</span>
+            <span class="tag">Ethers.js</span>
+            <span class="tag">Security</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-title">
+            <span>ROS CPU Scheduling Simulation</span>
+            <span class="pill">ROS 2</span>
+          </div>
+          <div class="muted">
+            Simulation of FCFS, Round Robin, and Priority scheduling algorithms using ROS 2.
+          </div>
+          <div class="tags">
+            <span class="tag">ROS 2</span>
+            <span class="tag">C++/Python</span>
+            <span class="tag">Metrics</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-title">
+            <span>SCADA Tank Level Monitoring System</span>
+            <span class="pill">Automation</span>
+          </div>
+          <div class="muted">
+            Arduino + LabVIEW based real-time monitoring solution for tank level and alerts.
+          </div>
+          <div class="tags">
+            <span class="tag">LabVIEW</span>
+            <span class="tag">Arduino</span>
+            <span class="tag">Sensors</span>
+          </div>
+        </div>
+
+      </div>
+      <p class="muted" style="margin-top:14px;">
+        Want this to look even better? Next we’ll add project links, screenshots, and a real resume PDF.
+      </p>
+    </section>
+
+    <!-- SKILLS + EDUCATION -->
+    <section class="two-col">
+      <div id="skills" class="card section">
+        <h2>Skills</h2>
+        <ul class="list">
+          <li><b>Programming:</b> Java, Python, JavaScript, C/C++ (basic)</li>
+          <li><b>Web:</b> HTML/CSS, responsive UI</li>
+          <li><b>Blockchain:</b> Ethereum, smart contracts, wallets (MetaMask)</li>
+          <li><b>Systems:</b> ROS 2 simulation, Linux/Ubuntu</li>
+          <li><b>Automation:</b> LabVIEW, Arduino, sensor integration</li>
+          <li><b>Networking/Security:</b> fundamentals, secure system design mindset</li>
+        </ul>
+      </div>
+
+      <div id="education" class="card section">
+        <h2>Education</h2>
+        <div class="muted">
+          <b>B.Sc. in Computer Engineering</b><br />
+          University of Jordan
+        </div>
+        <div class="tags" style="margin-top:12px;">
+          <span class="tag">Blockchain</span>
+          <span class="tag">Networks</span>
+          <span class="tag">Cybersecurity</span>
+        </div>
+
+        <p class="muted" style="margin-top:12px;">
+          If you want, we can add a short “Research Interests” paragraph here tailored to your MS/PhD goals.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="card section">
+      <h2>Contact</h2>
+      <p class="muted" style="margin:0 0 10px;">
+        Feel free to reach out for research collaboration, assistantships, or software roles.
+      </p>
+
+      <div class="tags">
+        <span class="tag">Email: mohammadssaleem2001@gmail.com</span>
+        <a class="tag" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
+        <!-- Add LinkedIn later if you want -->
+      </div>
+    </section>
+
+    <div class="footer">
+      © <span id="y"></span> Mohammad Saleem • Built with GitHub Pages
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
