@@ -3,307 +3,283 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mohammad Saleem | Portfolio</title>
+
+  <!-- ✅ SEO title -->
+  <title>Mohammad Saleem | Computer Engineer Portfolio</title>
 
   <style>
     :root{
-      --bg:#0b1020;
-      --panel:rgba(255,255,255,0.06);
-      --panel2:rgba(255,255,255,0.08);
-      --text:#e8eefc;
-      --muted:rgba(232,238,252,0.75);
-      --line:rgba(255,255,255,0.12);
-      --accent:#7c5cff;
-      --accent2:#22c55e;
-      --shadow: 0 18px 45px rgba(0,0,0,0.35);
-      --radius: 18px;
+      --bg1:#070a14;
+      --bg2:#0b1636;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.12);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,0.75);
+      --accent:#7c8cff;
+      --accent2:#5fe0ff;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
     }
 
     *{ box-sizing:border-box; }
     html{ scroll-behavior:smooth; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 500px at 20% 10%, rgba(124,92,255,0.28), transparent 65%),
-        radial-gradient(900px 500px at 85% 25%, rgba(34,197,94,0.16), transparent 70%),
-        radial-gradient(700px 400px at 40% 95%, rgba(56,189,248,0.12), transparent 60%),
-        var(--bg);
+        radial-gradient(1200px 700px at 20% -10%, rgba(124,140,255,0.35), transparent 60%),
+        radial-gradient(900px 600px at 85% 15%, rgba(95,224,255,0.22), transparent 55%),
+        radial-gradient(1000px 700px at 50% 120%, rgba(124,140,255,0.18), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
       min-height:100vh;
+      padding: 28px 18px 60px;
     }
 
     a{ color:inherit; text-decoration:none; }
-    .container{
-      width:min(1050px, 92vw);
-      margin:0 auto;
-      padding: 28px 0 80px;
-    }
+    .container{ max-width: 1100px; margin: 0 auto; }
 
-    /* NAV */
+    /* ===== NAV ===== */
     .nav{
       position: sticky;
-      top: 12px;
-      z-index: 50;
-      margin: 12px auto 26px;
-      backdrop-filter: blur(10px);
-      background: rgba(10,14,26,0.55);
-      border: 1px solid var(--line);
-      border-radius: 999px;
+      top: 14px;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(10, 16, 35, 0.55);
+      border: 1px solid var(--border);
       box-shadow: var(--shadow);
-    }
-    .nav-inner{
+      border-radius: 999px;
+      padding: 10px 14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 14px;
-      padding: 12px 14px;
+      gap: 12px;
     }
+
     .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding-left: 6px;
-      font-weight: 700;
-      letter-spacing: .2px;
+      display:flex; align-items:center; gap:10px;
+      padding: 6px 10px;
+      border-radius: 999px;
     }
     .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #38bdf8);
-      box-shadow: 0 0 0 4px rgba(124,92,255,0.18);
+      width:10px; height:10px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, var(--accent2), var(--accent));
+      box-shadow: 0 0 20px rgba(124,140,255,0.55);
     }
-    .menu{
-      display:flex;
-      align-items:center;
-      gap: 14px;
+    .brand strong{ font-weight:700; letter-spacing:0.2px; }
+
+    .navlinks{
+      display:flex; align-items:center; gap: 14px;
       flex-wrap: wrap;
-      justify-content:flex-end;
+      justify-content:center;
     }
-    .menu a{
+    .navlinks a{
       font-size: 14px;
       color: var(--muted);
-      padding: 8px 10px;
+      padding: 10px 10px;
       border-radius: 999px;
-      border: 1px solid transparent;
-      transition: .2s ease;
+      transition: all .2s ease;
     }
-    .menu a:hover{
+    .navlinks a:hover{
       color: var(--text);
-      border-color: var(--line);
       background: rgba(255,255,255,0.06);
+      transform: translateY(-1px);
     }
-    .cta{
-      display:flex;
-      align-items:center;
-      gap:10px;
+
+    .nav-actions{
+      display:flex; align-items:center; gap: 10px;
     }
+
+    /* ✅ Resume button with forced download + hover */
+    .nav-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+      user-select:none;
+    }
+    .nav-btn:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(124,140,255,0.55);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    }
+    .nav-btn:active{
+      transform: translateY(0px) scale(0.98);
+    }
+
+    /* ===== HERO ===== */
+    .hero{
+      padding: 34px 8px 16px;
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -0.6px;
+    }
+    .subtitle{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .chips{
+      display:flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 10px;
+    }
+    .chip{
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: rgba(234,240,255,0.82);
+      font-size: 13px;
+    }
+
+    .hero-actions{
+      display:flex; gap: 10px; flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
     .btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
       background: rgba(255,255,255,0.06);
       color: var(--text);
-      font-size: 14px;
-      transition: .2s ease;
-      white-space: nowrap;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
     .btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(124,92,255,0.5);
-      box-shadow: 0 10px 25px rgba(124,92,255,0.15);
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(124,140,255,0.55);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
     }
     .btn.primary{
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--accent), #38bdf8);
-      color: #0a0e1a;
-      font-weight: 700;
+      background: linear-gradient(135deg, rgba(124,140,255,0.95), rgba(95,224,255,0.65));
+      border-color: rgba(124,140,255,0.55);
     }
     .btn.primary:hover{
-      box-shadow: 0 12px 30px rgba(124,92,255,0.25);
+      border-color: rgba(95,224,255,0.75);
     }
 
-    /* HERO */
-    .hero{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 18px;
-      margin-top: 18px;
-    }
-    @media (max-width: 900px){
-      .hero{ grid-template-columns: 1fr; }
-      .nav{ position: static; }
-    }
-
-    .card{
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    .hero-left{
-      padding: 26px 26px 24px;
-      overflow:hidden;
-      position:relative;
-    }
-    .hero-left:before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background:
-        radial-gradient(400px 250px at 15% 25%, rgba(124,92,255,0.24), transparent 70%),
-        radial-gradient(450px 260px at 70% 10%, rgba(56,189,248,0.18), transparent 65%),
-        radial-gradient(350px 240px at 85% 75%, rgba(34,197,94,0.14), transparent 70%);
-      pointer-events:none;
-      filter: blur(0px);
-      opacity:.9;
-    }
-    .hero-left > *{ position:relative; }
-
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      font-size: 13px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 12px;
-    }
-    .kicker b{ color: var(--text); }
-    h1{
-      margin: 14px 0 8px;
-      font-size: clamp(30px, 4.2vw, 44px);
-      line-height: 1.12;
-      letter-spacing: -0.6px;
-    }
-    .subtitle{
-      color: var(--muted);
-      font-size: 16px;
-      margin: 0 0 18px;
-      max-width: 60ch;
-    }
-    .hero-actions{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .hero-right{
-      padding: 18px;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
-
-    .mini{
-      padding: 16px;
-      background: var(--panel2);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-    }
-    .mini h3{
-      margin:0 0 8px;
-      font-size: 14px;
-      letter-spacing: .2px;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-    .tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .tag{
-      font-size: 13px;
-      color: var(--text);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line);
-      padding: 7px 10px;
-      border-radius: 999px;
-    }
-
-    /* SECTIONS */
-    .section{
-      margin-top: 22px;
-      padding: 22px;
-    }
-    .section h2{
+    /* ===== SECTIONS ===== */
+    section{ padding: 18px 8px; }
+    .section-title{
+      font-size: 22px;
       margin: 0 0 14px;
-      font-size: 20px;
-      letter-spacing: .2px;
+      letter-spacing: -0.2px;
     }
-    .muted{ color: var(--muted); }
-
-    .grid{
+    .grid-2{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
-    @media (max-width: 900px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-
     .project{
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
       padding: 16px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line);
-      transition: .2s ease;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
     }
     .project:hover{
       transform: translateY(-2px);
-      border-color: rgba(124,92,255,0.45);
-      box-shadow: 0 16px 35px rgba(0,0,0,0.28);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(124,140,255,0.45);
     }
-    .project-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-      font-weight: 800;
-      letter-spacing: .2px;
+    .project h3{
+      margin: 0 0 8px;
+      font-size: 16px;
     }
-    .pill{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
+    .project p{
+      margin: 0;
       color: var(--muted);
-      white-space: nowrap;
+      line-height: 1.55;
+      font-size: 14px;
     }
 
-    .two-col{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 900px){
-      .two-col{ grid-template-columns: 1fr; }
-    }
-
-    .list{
+    ul{
       margin: 0;
       padding-left: 18px;
-      color: var(--muted);
+      color: rgba(234,240,255,0.88);
+      line-height: 1.75;
     }
-    .list li{ margin: 8px 0; }
+    ul li strong{ color: var(--text); }
 
-    .footer{
-      margin-top: 22px;
-      text-align:center;
-      color: rgba(232,238,252,0.55);
+    .tags{
+      display:flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 12px;
+    }
+    .tag{
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
       font-size: 13px;
+    }
+
+    .contact-actions{
+      display:flex; gap: 10px; flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: rgba(234,240,255,0.92);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      font-size: 14px;
+    }
+    .pill:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(124,140,255,0.55);
+    }
+
+    footer{
+      text-align:center;
+      color: rgba(234,240,255,0.55);
+      margin-top: 18px;
+      font-size: 13px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px){
+      .nav{ border-radius: 18px; padding: 12px; }
+      .navlinks{ display:none; }
     }
   </style>
 </head>
@@ -311,192 +287,158 @@
 <body>
   <div class="container">
 
-    <!-- NAV -->
-    <div class="nav">
-      <div class="nav-inner">
-        <div class="brand">
-          <span class="dot"></span>
-          <span>Mohammad Saleem</span>
-        </div>
-
-        <div class="menu">
-          <a href="#home">Home</a>
-          <a href="#projects">Projects</a>
-          <a href="#skills">Skills</a>
-          <a href="#education">Education</a>
-          <a href="#contact">Contact</a>
-        </div>
-
-        <div class="cta">
-          <!-- Later we can replace this with a real PDF resume -->
-          <a class="nav-btn" href="assets/resume.pdf" download>Resume</a>
-          <a class="btn primary" href="#contact">Hire / Collaborate</a>
-        </div>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="nav">
+      <div class="brand">
+        <span class="dot"></span>
+        <strong>Mohammad Saleem</strong>
       </div>
-    </div>
 
-    <!-- HERO -->
-    <section id="home" class="hero">
-      <div class="card hero-left">
-        <div class="kicker">
-          <span>🟣</span>
-          <span><b>Computer Engineering Graduate</b> • Blockchain • AI • Cybersecurity</span>
-        </div>
+      <div class="navlinks" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </div>
 
-        <h1>Building secure, reliable systems with modern software + emerging tech.</h1>
+      <div class="nav-actions">
+        <!-- ✅ Resume: forced download + hover -->
+        <a class="nav-btn" href="assets/resume.pdf" download>Resume</a>
 
+        <!-- ❌ Hire/Collaborate button deleted (as requested) -->
+      </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <header id="home" class="hero">
+      <div class="card">
+        <h1>Mohammad Saleem</h1>
         <p class="subtitle">
-          I’m Mohammad Saleem. I design and build projects across blockchain systems, robotics simulation (ROS 2),
-          and practical automation/SCADA. This site highlights my work and technical focus.
+          Computer Engineering Graduate | Blockchain | AI | Cybersecurity
+        </p>
+
+        <p class="subtitle" style="margin-top:-6px;">
+          Welcome to my personal website. This page presents my academic background,
+          technical projects, and professional interests.
         </p>
 
         <div class="hero-actions">
-          <a class="btn primary" href="#projects">View Projects</a>
-          <a class="btn" href="#contact">Contact Me</a>
-          <a class="btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub</a>
+          <!-- ✅ Open resume in new tab -->
+          <a class="btn primary" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
+          <!-- ✅ Force download -->
+          <a class="btn" href="assets/resume.pdf" download>Download Resume</a>
+          <!-- ✅ Jump to contact -->
+          <a class="btn" href="#contact">Contact</a>
+        </div>
+
+        <div class="chips">
+          <span class="chip">Ethereum / Smart Contracts</span>
+          <span class="chip">ROS 2</span>
+          <span class="chip">Networking & Security</span>
+          <span class="chip">Web (HTML/CSS)</span>
         </div>
       </div>
 
-      <div class="card hero-right">
-        <div class="mini">
-          <h3>Quick Summary</h3>
-          <div class="muted">
-            Interests: blockchain security, distributed systems, networking, and applied AI.
-          </div>
-          <div class="tags">
-            <span class="tag">Ethereum</span>
-            <span class="tag">ROS 2</span>
-            <span class="tag">Java</span>
-            <span class="tag">Python</span>
-            <span class="tag">Web</span>
-          </div>
+      <div class="card">
+        <h2 class="section-title" style="margin-top:0;">Quick Links</h2>
+        <div class="contact-actions">
+          <!-- ✅ GitHub button -->
+          <a class="pill" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
+
+          <!-- ✅ LinkedIn button (replace if you want) -->
+          <a class="pill" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
+
+          <!-- ✅ Direct resume link -->
+          <a class="pill" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
         </div>
 
-        <div class="mini">
-          <h3>Open To</h3>
-          <ul class="list">
-            <li>Graduate Research / Teaching Assistantships</li>
-            <li>Software / AI Engineer roles</li>
-            <li>Research collaboration & open-source</li>
+        <div class="tags">
+          <span class="tag">Amman, Jordan</span>
+          <span class="tag">University of Jordan</span>
+          <span class="tag">Open to opportunities</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <div class="grid-2">
+        <div class="project">
+          <h3>Decentralized Voting System on Ethereum</h3>
+          <p>Blockchain-based secure voting platform focused on transparency and data integrity.</p>
+        </div>
+        <div class="project">
+          <h3>ROS CPU Scheduling Simulation</h3>
+          <p>Simulation of FCFS, Round Robin, and Priority scheduling algorithms using ROS 2.</p>
+        </div>
+        <div class="project">
+          <h3>SCADA Tank Level Monitoring System</h3>
+          <p>Arduino and LabVIEW based real-time monitoring solution.</p>
+        </div>
+        <div class="project">
+          <h3>NZXT Fan Controller (Arduino)</h3>
+          <p>Relay + PWM control, speed LEDs, buzzer, and pushbuttons for multi-mode fan control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section id="skills">
+      <div class="grid-2">
+        <div class="card">
+          <h2 class="section-title">Skills</h2>
+          <ul>
+            <li><strong>Programming:</strong> Java, Python, JavaScript, C/C++ (basic)</li>
+            <li><strong>Web:</strong> HTML/CSS, responsive UI</li>
+            <li><strong>Blockchain:</strong> Ethereum, smart contracts, wallets (MetaMask)</li>
+            <li><strong>Systems:</strong> ROS 2 simulation, Linux/Ubuntu</li>
+            <li><strong>Automation:</strong> LabVIEW, Arduino, sensor integration</li>
+            <li><strong>Networking/Security:</strong> fundamentals, secure system design mindset</li>
           </ul>
         </div>
 
-        <div class="mini">
-          <h3>Location</h3>
-          <div class="muted">Amman, Jordan</div>
+        <!-- ===== EDUCATION ===== -->
+        <div class="card" id="education">
+          <h2 class="section-title">Education</h2>
+          <div style="font-weight:700; font-size:16px; margin-bottom:6px;">B.Sc. in Computer Engineering</div>
+          <div style="color:var(--muted); margin-bottom:12px;">University of Jordan</div>
+          <div class="tags">
+            <span class="tag">Blockchain</span>
+            <span class="tag">Networks</span>
+            <span class="tag">Cybersecurity</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="card section">
-      <h2>Projects</h2>
-      <div class="grid">
-
-        <div class="project">
-          <div class="project-title">
-            <span>Decentralized Voting System on Ethereum</span>
-            <span class="pill">Blockchain</span>
-          </div>
-          <div class="muted">
-            Blockchain-based secure voting platform focused on transparency and data integrity.
-          </div>
-          <div class="tags">
-            <span class="tag">Solidity</span>
-            <span class="tag">Ethers.js</span>
-            <span class="tag">Security</span>
-          </div>
-        </div>
-
-        <div class="project">
-          <div class="project-title">
-            <span>ROS CPU Scheduling Simulation</span>
-            <span class="pill">ROS 2</span>
-          </div>
-          <div class="muted">
-            Simulation of FCFS, Round Robin, and Priority scheduling algorithms using ROS 2.
-          </div>
-          <div class="tags">
-            <span class="tag">ROS 2</span>
-            <span class="tag">C++/Python</span>
-            <span class="tag">Metrics</span>
-          </div>
-        </div>
-
-        <div class="project">
-          <div class="project-title">
-            <span>SCADA Tank Level Monitoring System</span>
-            <span class="pill">Automation</span>
-          </div>
-          <div class="muted">
-            Arduino + LabVIEW based real-time monitoring solution for tank level and alerts.
-          </div>
-          <div class="tags">
-            <span class="tag">LabVIEW</span>
-            <span class="tag">Arduino</span>
-            <span class="tag">Sensors</span>
-          </div>
-        </div>
-
-      </div>
-      <p class="muted" style="margin-top:14px;">
-        Want this to look even better? Next we’ll add project links, screenshots, and a real resume PDF.
-      </p>
-    </section>
-
-    <!-- SKILLS + EDUCATION -->
-    <section class="two-col">
-      <div id="skills" class="card section">
-        <h2>Skills</h2>
-        <ul class="list">
-          <li><b>Programming:</b> Java, Python, JavaScript, C/C++ (basic)</li>
-          <li><b>Web:</b> HTML/CSS, responsive UI</li>
-          <li><b>Blockchain:</b> Ethereum, smart contracts, wallets (MetaMask)</li>
-          <li><b>Systems:</b> ROS 2 simulation, Linux/Ubuntu</li>
-          <li><b>Automation:</b> LabVIEW, Arduino, sensor integration</li>
-          <li><b>Networking/Security:</b> fundamentals, secure system design mindset</li>
-        </ul>
-      </div>
-
-      <div id="education" class="card section">
-        <h2>Education</h2>
-        <div class="muted">
-          <b>B.Sc. in Computer Engineering</b><br />
-          University of Jordan
-        </div>
-        <div class="tags" style="margin-top:12px;">
-          <span class="tag">Blockchain</span>
-          <span class="tag">Networks</span>
-          <span class="tag">Cybersecurity</span>
-        </div>
-
-        <p class="muted" style="margin-top:12px;">
-          If you want, we can add a short “Research Interests” paragraph here tailored to your MS/PhD goals.
+    <!-- ===== CONTACT ===== -->
+    <section id="contact">
+      <div class="card">
+        <h2 class="section-title">Contact</h2>
+        <p class="subtitle" style="margin-top:-2px;">
+          Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
+
+        <div class="contact-actions">
+          <a class="pill" href="mailto:mohammadsaleem2001@gmail.com">Email: mohammadsaleem2001@gmail.com</a>
+
+          <!-- ✅ GitHub profile button (requested) -->
+          <a class="pill" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
+
+          <!-- ✅ LinkedIn button (requested) -->
+          <a class="pill" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
+
+          <!-- ✅ Resume direct link -->
+          <a class="pill" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+        </div>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="card section">
-      <h2>Contact</h2>
-      <p class="muted" style="margin:0 0 10px;">
-        Feel free to reach out for research collaboration, assistantships, or software roles.
-      </p>
-
-      <div class="tags">
-        <span class="tag">Email: mohammadssaleem2001@gmail.com</span>
-        <a class="tag" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
-        <!-- Add LinkedIn later if you want -->
-      </div>
-    </section>
-
-    <div class="footer">
-      © <span id="y"></span> Mohammad Saleem • Built with GitHub Pages
-    </div>
+    <footer>
+      © 2026 Mohammad Saleem • Built with GitHub Pages
+    </footer>
   </div>
-
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
