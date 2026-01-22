@@ -169,8 +169,8 @@
       box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
 
-    .menu-btn{
-  display: none;
+.menu-btn{
+  display: none; /* will be enabled in media query */
   width: 46px;
   height: 46px;
   border-radius: 999px;
@@ -178,11 +178,12 @@
   background: rgba(255,255,255,0.05);
   cursor: pointer;
 
-  /* make dots horizontal */
-  display: none;              /* your media query enables it */
+  display: none;               /* keep this as-is; media query turns it on */
   align-items: center;
   justify-content: center;
-  gap: 6px;                   /* spacing between dots */
+
+  flex-direction: column;      /* ✅ makes dots vertical */
+  gap: 5px;                    /* spacing between dots */
 }
 
 .menu-btn .dot3{
@@ -192,6 +193,7 @@
   background: rgba(255,255,255,0.85);
   display: inline-block;
 }
+
 
     /* Buttons */
     .btn{
