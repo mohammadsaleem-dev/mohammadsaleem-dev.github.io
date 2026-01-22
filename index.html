@@ -92,7 +92,7 @@
     .nav-inner{
       height: var(--navh);
       display: grid;                          /* ✅ GRID fixes overlap at "in-between" sizes */
-      grid-template-columns: auto 1fr auto;    /* brand | links | actions */
+      grid-template-columns: minmax(0, 1fr) auto auto;    /* brand | links | actions */
       align-items: center;
       gap: 14px;
       padding: 0 18px;
@@ -118,6 +118,26 @@
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       box-shadow: 0 0 0 4px rgba(110,220,255,0.10);
     }
+
+
+    .brand{
+  min-width: 0; /* important for truncation inside grid */
+}
+
+.brand span:last-child{
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px; /* default */
+}
+
+@media (max-width: 520px){
+  .brand span:last-child{
+    max-width: 140px; /* tighter on small phones */
+  }
+}
 
     /* Desktop links */
     .nav-links{
@@ -587,32 +607,32 @@
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
       <div class="nav-inner">
-        <a class="brand" href="#home">
-          <span class="dot"></span>
-          <span>Mohammad Saleem</span>
-        </a>
+<a class="brand" href="#home">
+  <span class="dot"></span>
+  <span>Mohammad Saleem</span>
+</a>
 
-        <!-- Hamburger (will show at <=1024px) -->
-        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-          <span class="dot3"></span>
-          <span class="dot3"></span>
-          <span class="dot3"></span>
-        </button>
+<div class="nav-links" id="navLinks">
+  <a href="#home">Home</a>
+  <a href="#projects">Projects</a>
+  <a href="#skills">Skills</a>
+  <a href="#education">Education</a>
+  <a href="#experience">Experience</a>
+  <a href="#awards">Awards</a>
+  <a href="#certificates">Certificates</a>
+  <a href="#contact">Contact</a>
+</div>
 
-        <div class="nav-links" id="navLinks">
-          <a href="#home">Home</a>
-          <a href="#projects">Projects</a>
-          <a href="#skills">Skills</a>
-          <a href="#education">Education</a>
-          <a href="#experience">Experience</a>
-          <a href="#awards">Awards</a>
-          <a href="#certificates">Certificates</a>
-          <a href="#contact">Contact</a>
-        </div>
+<div class="nav-actions">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+    <span class="dot3"></span>
+    <span class="dot3"></span>
+    <span class="dot3"></span>
+  </button>
 
-        <div class="nav-actions">
-          <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
-        </div>
+  <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
+</div>
+
       </div>
     </div>
   </div>
