@@ -52,7 +52,9 @@
       background-attachment: fixed;
       min-height: 100vh;
     }
-
+footer p{
+  margin:6px 0;
+}
     a{ color: inherit; text-decoration: none; }
     a:focus-visible, button:focus-visible{
       outline: 2px solid rgba(140,170,255,0.85);
@@ -1008,9 +1010,6 @@ if(localStorage.getItem("theme") === "light"){
         if (window.scrollY > 600) btn.classList.add("show");
         else btn.classList.remove("show");
       };
-footer {
-  margin:6px 0;
-}
       window.addEventListener("scroll", toggleBtn, { passive: true });
       toggleBtn();
 
