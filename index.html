@@ -28,7 +28,7 @@
       --muted2: rgba(255,255,255,0.55);
       --accent: rgba(120,140,255,0.95);
       --accent2: rgba(110,220,255,0.95);
-      --shadow: 0 12px 34px rgba(0,0,0,0.45);
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
       --radius: 24px;
       --radius2: 18px;
       --max: 1120px;
@@ -47,21 +47,12 @@
       scroll-behavior: smooth;
       scroll-padding-top: calc(var(--navh) + 18px);
     }
-
-      body{
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  color: var(--text);
-  background: var(--page-bg);
-  /* background-attachment: fixed;  ❌ remove this */
-  min-height: 100vh;
-}
-
-/* ✅ If you REALLY want fixed on strong desktops only: */
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference){
-  body{ background-attachment: fixed; }
-}
-
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: var(--page-bg);
+      background-attachment: fixed;
       min-height: 100vh;
     }
     a{ color: inherit; text-decoration: none; }
@@ -85,27 +76,23 @@
     }
 
     /* Background orb */
-.bg-orb{
-  position: fixed;
-  inset: -20%;
-  pointer-events: none;
-  filter: blur(24px);            /* was 60px ✅ cheaper */
-  opacity: 0.55;                   /* slightly lower */
-  z-index: -1;
-  background:
-    radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.18), transparent 60%),
-    radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
-    radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
-  will-change: transform;          /* helps animation */
-  transform: translateZ(0);        /* GPU hint */
-  animation: floaty 18s ease-in-out infinite; /* slower ✅ */
-}
-
-/* ✅ Disable orb animation when user prefers reduced motion OR on small devices */
-@media (prefers-reduced-motion: reduce), (max-width: 900px){
-  .bg-orb{ animation: none; }
-}
-
+    .bg-orb{
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      filter: blur(60px);
+      opacity: 0.65;
+      z-index: -1;
+      background:
+        radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.18), transparent 60%),
+        radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
+        radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
+      animation: floaty 14s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
+    }
 
     /* =========================
        LIGHT MODE (clean)
@@ -147,11 +134,8 @@
       top: 0;
       z-index: 50;
       padding-top: 14px;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      backdrop-filter: blur(16px);
     }
-
-    
     .nav-inner{
       height: var(--navh);
       display: grid;
@@ -275,7 +259,7 @@
       transform: translateY(-1px);
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.32);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
     .btn-ghost{ background: rgba(255,255,255,0.04); }
 
@@ -320,7 +304,7 @@
         border-radius: 18px;
         border: 1px solid rgba(255,255,255,0.12);
         background: rgba(10,16,32,0.92);
-        backdrop-filter: none;
+        backdrop-filter: blur(18px);
         box-shadow: 0 18px 60px rgba(0,0,0,0.55);
         flex-direction: column;
         gap: 8px;
@@ -648,35 +632,6 @@
       pointer-events: auto;
     }
 
-    /* ==============================
-   ✅ Step 3: Backdrop-filter performance gate
-   ============================== */
-
-/* Default: no blur (cheaper baseline) */
-.time-card,
-.to-top{
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-/* Enable blur only if browser supports it */
-@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
-  .nav{ backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .time-card{ backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .to-top{ backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-}
-
-/* On smaller devices: disable blur completely */
-@media (max-width: 900px){
-  .nav,
-  .time-card,
-  .to-top{
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-}
-
-    
     .section-divider{
       height:1px;
       background: linear-gradient(to right, transparent, rgba(255,255,255,.15), transparent);
@@ -751,12 +706,11 @@
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.14);
   background: rgba(255,255,255,0.06);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.24);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.28);
   min-width: 180px;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
-
 
 .time-label{
   font-size: 12px;
