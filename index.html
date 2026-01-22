@@ -714,6 +714,72 @@ body.light a{
   box-shadow: none;
 }
 
+    /* ===========================
+   LIGHT MODE - Final Fix Pack
+   Put this at END of CSS
+   =========================== */
+
+body.light{
+  /* stronger border so frames are visible */
+  --border: rgba(15,18,25,0.14);
+}
+
+/* Make ANY leftover inline white text readable */
+body.light p,
+body.light span,
+body.light li{
+  color: var(--muted);
+}
+
+/* Headings stay dark */
+body.light h1, body.light h2, body.light h3,
+body.light .title, body.light .cert-name, body.light b{
+  color: var(--text) !important;
+}
+
+/* Fix: dates + small meta texts */
+body.light .cert-date,
+body.light .item .date,
+body.light .stat span,
+body.light .item .meta,
+body.light .section-sub,
+body.light .subtitle,
+body.light .lead,
+body.light footer{
+  color: var(--muted) !important;
+}
+
+/* Fix: “Prefer email…” + “Feel free to reach out…” (inline color override) */
+body.light #contact p,
+body.light #home p,
+body.light .card p{
+  color: var(--muted) !important;
+}
+
+/* ✅ Make certificate boxes/frame visible */
+body.light .cert,
+body.light .mini,
+body.light .item,
+body.light .stat,
+body.light .pill{
+  border-color: rgba(15,18,25,0.16) !important;
+  background: rgba(255,255,255,0.92) !important; /* clean white cards */
+}
+
+/* Keep the big cards looking like Amazon (clean) */
+body.light .card{
+  border-color: rgba(15,18,25,0.14) !important;
+  background: rgba(255,255,255,0.88) !important;
+  box-shadow: 0 14px 32px rgba(15,18,25,0.10) !important;
+}
+
+/* Pills/buttons: make border visible in light mode */
+body.light .btn,
+body.light .pill{
+  border-color: rgba(15,18,25,0.18) !important;
+}
+
+
 
 
 
