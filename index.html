@@ -8,7 +8,7 @@
   <link rel="icon" sizes="32x32" href="assets/favicon.png">
   <link rel="icon" sizes="192x192" href="assets/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
-  
+
   <title>Mohammad Saleem | Computer Engineer Portfolio</title>
 
   <meta property="og:title" content="Mohammad Saleem — Computer Engineer Portfolio">
@@ -34,7 +34,6 @@
       --max: 1120px;
       --navh: 74px;
 
-      /* DARK MODE BACKGROUND */
       --page-bg:
         radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
         radial-gradient(900px 600px at 90% 5%, rgba(110,220,255,0.12), transparent 55%),
@@ -58,24 +57,21 @@
     a{ color: inherit; text-decoration: none; }
     footer p{ margin: 6px 0; }
 
-    a:focus-visible, button:focus-visible{
+    a:focus-visible, button:focus-visible, input:focus-visible{
       outline: 2px solid rgba(140,170,255,0.85);
       outline-offset: 3px;
       border-radius: 12px;
     }
 
-    /* Container keeps empty space left/right */
     .container{
       max-width: var(--max);
       margin: 0 auto;
       padding: 22px 18px 80px;
     }
-    /* slightly bigger side padding on large screens (nicer “empty space”) */
     @media (min-width: 1200px){
       .container{ padding-left: 28px; padding-right: 28px; }
     }
 
-    /* Background orb */
     .bg-orb{
       position: fixed;
       inset: -20%;
@@ -94,9 +90,7 @@
       50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
     }
 
-    /* =========================
-       LIGHT MODE (clean)
-       ========================= */
+    /* LIGHT MODE */
     body.light{
       --text: rgba(15, 18, 25, 0.95);
       --muted: rgba(15, 18, 25, 0.72);
@@ -112,20 +106,10 @@
     body.light .bg-orb{ opacity: 0; }
 
     body.light a:focus-visible,
-    body.light button:focus-visible{
+    body.light button:focus-visible,
+    body.light input:focus-visible{
       outline: 2px solid rgba(120,140,255,0.55);
       outline-offset: 3px;
-    }
-
-    /* Make text readable in light mode (including inline-styled paragraphs) */
-    body.light p,
-    body.light span,
-    body.light li{
-      color: var(--muted);
-    }
-    body.light h1, body.light h2, body.light h3,
-    body.light .title, body.light .cert-name, body.light b{
-      color: var(--text) !important;
     }
 
     /* NAV */
@@ -201,9 +185,9 @@
       flex-shrink: 0;
     }
 
-    /* Hamburger (3 dots) */
+    /* 3 dots menu */
     .menu-btn{
-      display: none; /* enabled on <=1024px */
+      display: none;
       width: 46px;
       height: 46px;
       border-radius: 999px;
@@ -228,7 +212,6 @@
       background: rgba(255,255,255,0.85);
       display: inline-block;
     }
-    /* ✅ Light mode 3 dots + button */
     body.light .menu-btn{
       background: rgba(255,255,255,0.90);
       border-color: rgba(15,18,25,0.18);
@@ -280,17 +263,14 @@
     }
     .btn-primary:hover::after{ opacity: 1; }
 
-    /* ✅ Light mode buttons */
     body.light .btn{
       background: rgba(255,255,255,0.92);
       border-color: rgba(15,18,25,0.18);
       box-shadow: 0 10px 20px rgba(15,18,25,0.08);
     }
-    body.light .btn:hover{
-      background: rgba(255,255,255,0.98);
-    }
+    body.light .btn:hover{ background: rgba(255,255,255,0.98); }
 
-    /* Mobile/Tablet dropdown */
+    /* Mobile dropdown */
     @media (max-width: 1024px){
       .menu-btn{ display: inline-flex; }
 
@@ -324,7 +304,6 @@
           max-height 260ms ease,
           visibility 0ms linear 260ms;
       }
-
       .nav-links.is-open{
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -338,14 +317,11 @@
           max-height 260ms ease,
           visibility 0ms;
       }
-
       .nav-links a{
         padding: 12px 12px;
         border-radius: 14px;
         background: rgba(255,255,255,0.04);
       }
-
-      /* ✅ LIGHT MODE dropdown background + links */
       body.light .nav-links{
         background: rgba(255,255,255,0.96);
         border-color: rgba(15,18,25,0.14);
@@ -403,7 +379,7 @@
       color: var(--muted);
       font-size: 16px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .lead{
       color: rgba(255,255,255,0.78);
@@ -551,6 +527,7 @@
     @media (max-width: 640px){
       .cert-grid{ grid-template-columns: 1fr; }
     }
+
     .cert{
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.10);
@@ -558,7 +535,7 @@
       padding: 14px 14px;
       display:flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
     .cert:hover{
@@ -607,31 +584,285 @@
       transform: translateY(0);
     }
 
-    .to-top{
-      position: fixed;
-      right: 22px;
-      bottom: 22px;
-      width: 46px;
-      height: 46px;
+    /* ========= Time Widget ========= */
+    .meta-wrap{
+      display: flex;
+      justify-content: center;
+      margin: 14px 0 6px;
+      width: 100%;
+    }
+    .time-card{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: 6px;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+      min-width: 180px;
+    }
+    .time-label{
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      color: rgba(255,255,255,0.65);
+    }
+    .time-value{
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+    body.light .time-card{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(15,18,25,0.16);
+      box-shadow: 0 14px 28px rgba(15,18,25,0.10);
+    }
+    body.light .time-label{ color: rgba(15,18,25,0.62) !important; }
+
+    /* ========= NEW: Social icons ========= */
+    .social-row{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    .icon-btn{
+      width: 44px;
+      height: 44px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.9);
-      font-weight: 900;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(8px);
-      pointer-events: none;
-      transition: 200ms ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: 180ms ease;
       backdrop-filter: blur(12px);
-      z-index: 70;
+      -webkit-backdrop-filter: blur(12px);
     }
-    .to-top.show{
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+    .icon-btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.30);
+    }
+    .icon-btn svg{ width: 20px; height: 20px; fill: rgba(255,255,255,0.92); }
+    body.light .icon-btn{
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(15,18,25,0.16);
+      box-shadow: 0 10px 22px rgba(15,18,25,0.10);
+    }
+    body.light .icon-btn svg{ fill: rgba(15,18,25,0.90); }
+
+    /* ========= NEW: Location row ========= */
+    .loc-row{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin-top: 14px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 700;
+    }
+    .loc-row svg{ width: 18px; height: 18px; fill: rgba(255,255,255,0.78); }
+    body.light .loc-row{ color: rgba(15,18,25,0.80); }
+    body.light .loc-row svg{ fill: rgba(15,18,25,0.80); }
+
+    /* ========= NEW: Tech icons ========= */
+    .tech-icons{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+      align-items: center;
+    }
+    .tech{
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: 180ms ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .tech:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.20);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.28);
+    }
+    .tech svg{ width: 28px; height: 28px; }
+    body.light .tech{
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(15,18,25,0.14);
+      box-shadow: 0 10px 22px rgba(15,18,25,0.10);
     }
 
+    /* ========= NEW: Logos (university/school/issuers) ========= */
+    .logo-row{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .logo-pill{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      max-width: 100%;
+    }
+    .logo-pill img{
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 4px;
+    }
+    .logo-pill span{
+      font-weight: 800;
+      color: rgba(255,255,255,0.86);
+      white-space: nowrap;
+    }
+    body.light .logo-pill{
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(15,18,25,0.14);
+      box-shadow: 0 10px 22px rgba(15,18,25,0.10);
+    }
+    body.light .logo-pill span{ color: rgba(15,18,25,0.90) !important; }
+
+    /* Issuer logo inside cert */
+    .issuer{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .issuer img{
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .issuer span{
+      font-weight: 800;
+      color: rgba(255,255,255,0.78);
+    }
+    body.light .issuer span{ color: rgba(15,18,25,0.75) !important; }
+    body.light .issuer img{
+      background: rgba(15,18,25,0.04);
+      border-color: rgba(15,18,25,0.10);
+    }
+
+    /* ========= NEW: Scroll slider ========= */
+    .scroll-ui{
+      position: fixed;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    }
+    .scroll-ui button{
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      font-weight: 900;
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+    .scroll-ui button:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.22);
+    }
+    .scroll-range{
+      -webkit-appearance: none;
+      appearance: none;
+      width: 10px;
+      height: 220px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      outline: none;
+      writing-mode: bt-lr; /* old fallback */
+      transform: rotate(180deg); /* natural: top = 0 */
+    }
+    .scroll-range::-webkit-slider-thumb{
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.90);
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      cursor: pointer;
+    }
+    .scroll-range::-moz-range-thumb{
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.90);
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      cursor: pointer;
+    }
+
+    body.light .scroll-ui{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(15,18,25,0.14);
+      box-shadow: 0 14px 30px rgba(15,18,25,0.12);
+    }
+    body.light .scroll-ui button{
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(15,18,25,0.14);
+      color: rgba(15,18,25,0.90);
+    }
+    body.light .scroll-range{
+      background: rgba(15,18,25,0.10);
+    }
+    body.light .scroll-range::-webkit-slider-thumb,
+    body.light .scroll-range::-moz-range-thumb{
+      background: rgba(15,18,25,0.85);
+      border-color: rgba(15,18,25,0.20);
+    }
+
+    @media (max-width: 860px){
+      .scroll-ui{ display: none; } /* hide on small screens */
+    }
+
+    /* Divider */
     .section-divider{
       height:1px;
       background: linear-gradient(to right, transparent, rgba(255,255,255,.15), transparent);
@@ -639,41 +870,8 @@
     }
 
     *{ -webkit-tap-highlight-color: transparent; }
-    /* ==============================
-       LIGHT MODE TEXT FORCE FIX
-       ============================== */
-    
-    body.light,
-    body.light * {
-      color: var(--text) !important;
-    }
-    
-    /* Secondary text */
-    body.light .subtitle,
-    body.light .lead,
-    body.light .section-sub,
-    body.light .meta,
-    body.light .cert-by,
-    body.light footer,
-    body.light .stat span,
-    body.light .pill,
-    body.light li,
-    body.light p,
-    body.light span {
-      color: var(--muted) !important;
-    }
-    
-    /* Headings stay strong */
-    body.light h1,
-    body.light h2,
-    body.light h3,
-    body.light .title,
-    body.light .cert-name,
-    body.light b {
-      color: var(--text) !important;
-    }
 
-    /* ✅ Light mode “frames visible” pack */
+    /* LIGHT MODE “frames visible” pack */
     body.light .cert,
     body.light .mini,
     body.light .item,
@@ -687,60 +885,18 @@
       background: rgba(255,255,255,0.88) !important;
       box-shadow: 0 14px 32px rgba(15,18,25,0.10) !important;
     }
-/* ✅ Place widget between navbar and hero */
-.meta-wrap{
-  display: flex;
-  justify-content: center;
-  margin: 14px 0 6px;
-  width: 100%;
-}
-
-/* ✅ Centered Time Card (no weather) */
-.time-card{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap: 6px;
-  padding: 14px 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 14px 36px rgba(0,0,0,0.28);
-  min-width: 180px;
-}
-
-.time-label{
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  color: rgba(255,255,255,0.65);
-}
-
-.time-value{
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 0.3px;
-}
-
-body.light .time-card{
-  background: rgba(255,255,255,0.92);
-  border-color: rgba(15,18,25,0.16);
-  box-shadow: 0 14px 28px rgba(15,18,25,0.10);
-}
-
-body.light .time-label{
-  color: rgba(15,18,25,0.62) !important;
-}
-
-    
   </style>
 </head>
 
 <body>
   <div class="bg-orb"></div>
+
+  <!-- ✅ Scroll slider (up/down + drag) -->
+  <div class="scroll-ui" aria-label="Scroll controls">
+    <button id="scrollUp" aria-label="Scroll up">↑</button>
+    <input id="scrollRange" class="scroll-range" type="range" min="0" max="1000" value="0" aria-label="Scroll slider">
+    <button id="scrollDown" aria-label="Scroll down">↓</button>
+  </div>
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
@@ -767,7 +923,6 @@ body.light .time-label{
             <span class="dot3"></span>
           </button>
 
-
           <button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">🌙</button>
           <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
         </div>
@@ -776,30 +931,133 @@ body.light .time-label{
   </div>
 
   <div class="container">
-  <div id="top" class="anchor"></div>
-  <!-- ✅ Time (between navbar and content) -->
-  <div class="meta-wrap">
-    <div class="time-card" title="Local time">
-      <div class="time-label">My Local Time</div>
-      <div class="time-value" id="liveTime">--:--</div>
+    <div id="top" class="anchor"></div>
+
+    <!-- ✅ Time (between navbar and content) -->
+    <div class="meta-wrap">
+      <div class="time-card" title="Local time">
+        <div class="time-label">My Local Time</div>
+        <div class="time-value" id="liveTime">--:--</div>
+      </div>
     </div>
-  </div>
 
-
-    
     <div id="home" class="grid anchor">
       <div class="card reveal">
         <h1>Mohammad Saleem</h1>
         <div class="subtitle">Computer Engineering Graduate | Blockchain | AI | Cybersecurity</div>
+
+        <!-- ✅ Location row with icon -->
+        <div class="loc-row" title="Location">
+          <!-- location icon -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2c-3.86 0-7 3.14-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+          </svg>
+          <span>Amman, Jordan</span>
+        </div>
+
         <p class="lead">
           Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
         </p>
+
+        <!-- ✅ Social media icons -->
+        <div class="social-row" aria-label="Social links">
+          <!-- GitHub -->
+          <a class="icon-btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 .5C5.73.5.75 5.64.75 12c0 5.1 3.29 9.42 7.86 10.95.58.11.79-.26.79-.57v-2.1c-3.2.7-3.87-1.4-3.87-1.4-.52-1.36-1.27-1.72-1.27-1.72-1.04-.74.08-.72.08-.72 1.15.08 1.76 1.2 1.76 1.2 1.02 1.78 2.68 1.27 3.33.97.1-.75.4-1.27.72-1.56-2.55-.3-5.23-1.3-5.23-5.78 0-1.28.45-2.33 1.19-3.15-.12-.3-.52-1.52.11-3.17 0 0 .97-.32 3.18 1.2a10.8 10.8 0 0 1 2.9-.4c.98 0 1.96.13 2.9.4 2.2-1.52 3.18-1.2 3.18-1.2.63 1.65.23 2.87.11 3.17.74.82 1.19 1.87 1.19 3.15 0 4.49-2.69 5.48-5.25 5.77.41.36.78 1.08.78 2.18v3.23c0 .31.21.68.8.57A11.3 11.3 0 0 0 23.25 12C23.25 5.64 18.27.5 12 .5z"/>
+            </svg>
+          </a>
+
+          <!-- LinkedIn -->
+          <a class="icon-btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.98 3.5C3.88 3.5 3 4.4 3 5.5S3.88 7.5 4.98 7.5 7 6.6 7 5.5 6.08 3.5 4.98 3.5zM3.5 8.5h3V21h-3V8.5zM9 8.5h2.9v1.7h.04c.4-.76 1.38-1.86 3.06-1.86 3.27 0 3.88 2.16 3.88 4.98V21h-3v-6.64c0-1.58-.03-3.62-2.21-3.62-2.21 0-2.55 1.72-2.55 3.5V21H9V8.5z"/>
+            </svg>
+          </a>
+
+          <!-- X -->
+          <a class="icon-btn" href="https://x.com/MoTech00" target="_blank" rel="noopener" title="X (Twitter)" aria-label="X">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18.9 2H22l-6.8 7.8L23.2 22H16l-5.6-6.9L4.4 22H1.2l7.3-8.4L.8 2H8l5.1 6.2L18.9 2zm-1.1 18h1.7L6.9 3.9H5.1L17.8 20z"/>
+            </svg>
+          </a>
+
+          <!-- Facebook -->
+          <a class="icon-btn" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.86.24-1.45 1.48-1.45H16.7V5.03c-.3-.04-1.33-.13-2.53-.13-2.5 0-4.2 1.52-4.2 4.3V11H7.5v3H10v8h3.5z"/>
+            </svg>
+          </a>
+
+          <!-- Instagram -->
+          <a class="icon-btn" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4.3A4.7 4.7 0 1 1 7.3 13 4.7 4.7 0 0 1 12 8.3zm0 2A2.7 2.7 0 1 0 14.7 13 2.7 2.7 0 0 0 12 10.3zM17.8 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
+            </svg>
+          </a>
+
+          <!-- Email -->
+          <a class="icon-btn" href="mailto:mohammadsaleem2001@gmail.com" title="Email" aria-label="Email">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+        </div>
 
         <div class="pill-row">
           <span class="pill">Open To Research Assistantships</span>
           <span class="pill">Blockchain Security Focus</span>
           <span class="pill">Networking & Security</span>
           <span class="pill">Web (HTML/CSS)</span>
+        </div>
+
+        <!-- ✅ Coding language icons -->
+        <div class="tech-icons" aria-label="Tech stack icons">
+          <!-- HTML5 -->
+          <div class="tech" title="HTML5" aria-label="HTML5">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#E44D26" d="M3 2l1.7 19.6L12 22l7.3-.4L21 2H3z"/>
+              <path fill="#F16529" d="M12 20.2l5.9-.3L19.4 4H12v16.2z"/>
+              <path fill="#EBEBEB" d="M7.8 6.4H12V9H8.1l.3 3.2H12v2.6H6.1L5.4 6.4h2.4z"/>
+              <path fill="#FFFFFF" d="M12 6.4h4.2l-.3 2.6H12V6.4zm0 5.8h3.6l-.4 4.1-3.2.9v-2.7l1.3-.4.1-1H12v-2.6z"/>
+            </svg>
+          </div>
+
+          <!-- CSS3 -->
+          <div class="tech" title="CSS3" aria-label="CSS3">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#1572B6" d="M3 2l1.7 19.6L12 22l7.3-.4L21 2H3z"/>
+              <path fill="#33A9DC" d="M12 20.2l5.9-.3L19.4 4H12v16.2z"/>
+              <path fill="#EBEBEB" d="M7.9 6.4H12V9H8.1l.2 1.7H12v2.6H6.2L5.6 6.4h2.3z"/>
+              <path fill="#FFFFFF" d="M12 12.3h3.6l-.4 4.2-3.2.9v-2.7l1.3-.4.1-1H12v-2.6zm0-5.9h4.2l-.3 2.6H12V6.4z"/>
+            </svg>
+          </div>
+
+          <!-- JavaScript -->
+          <div class="tech" title="JavaScript" aria-label="JavaScript">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#F7DF1E" d="M2 2h20v20H2z"/>
+              <path d="M13.2 18.2c.4.7 1 .9 1.7.9.7 0 1.2-.3 1.2-.9 0-.6-.5-.8-1.3-1.2l-.4-.2c-1.2-.5-2-1.2-2-2.6 0-1.3 1-2.3 2.6-2.3 1.1 0 1.9.4 2.5 1.4l-1.3.8c-.3-.5-.6-.7-1.2-.7-.6 0-.9.3-.9.7 0 .5.3.7 1.1 1l.4.2c1.4.6 2.2 1.2 2.2 2.8 0 1.6-1.3 2.4-3 2.4-1.7 0-2.8-.8-3.3-1.8l1.4-.8zM9.7 18.3c.3.5.6.9 1.3.9.6 0 1-.3 1-.9v-5h1.7v5.1c0 1.6-1 2.4-2.5 2.4-1.3 0-2.1-.7-2.5-1.5l1-.6z" fill="#000"/>
+            </svg>
+          </div>
+
+          <!-- Node.js (simple N) -->
+          <div class="tech" title="Node.js" aria-label="Node.js">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#3C873A" d="M12 2l8.7 5v10L12 22 3.3 17V7L12 2z"/>
+              <path fill="#fff" d="M8 8h2l4 6V8h2v8h-2l-4-6v6H8V8z"/>
+            </svg>
+          </div>
+
+          <!-- Python (simple) -->
+          <div class="tech" title="Python" aria-label="Python">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#3776AB" d="M12 2c3.5 0 3.3 1.5 3.3 1.5v2.1H8.7c-1.8 0-3.4 1.1-3.4 3.4V12h7.2V9.9h-2V8h5.3c1.9 0 3.4 1.6 3.4 3.4v3.2c0 1.7-1.4 3.4-3.4 3.4H13v-2h2.7c.7 0 1.3-.6 1.3-1.3V12h-7.2v2.1h2v1.9H6.7c-1.9 0-3.4-1.6-3.4-3.4V9.4C3.3 6.8 4.7 5 6.7 5H11V3.5S11 2 12 2z"/>
+              <circle cx="14.7" cy="4.2" r="0.8" fill="#fff"/>
+              <path fill="#FFD43B" d="M12 22c-3.5 0-3.3-1.5-3.3-1.5v-2.1h6.6c1.8 0 3.4-1.1 3.4-3.4V12h-7.2v2.1h2V16H8.2c-1.9 0-3.4-1.6-3.4-3.4V9.4C4.8 7.7 6.2 6 8.2 6H11v2h-2.7c-.7 0-1.3.6-1.3 1.3V12h7.2V9.9h-2V8h5.1c1.9 0 3.4 1.6 3.4 3.4v3.2c0 2.6-1.4 4.4-3.4 4.4H13v1.5S13 22 12 22z"/>
+              <circle cx="9.3" cy="19.8" r="0.8" fill="#fff"/>
+            </svg>
+          </div>
         </div>
 
         <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top: 18px;">
@@ -830,6 +1088,18 @@ body.light .time-label{
           <a class="btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
           <a class="btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
           <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+        </div>
+
+        <!-- ✅ University + School logos -->
+        <div class="logo-row" aria-label="Logos">
+          <div class="logo-pill" title="University of Jordan">
+            <img src="assets/uoj.png" alt="University of Jordan logo">
+            <span>University of Jordan</span>
+          </div>
+          <div class="logo-pill" title="Al-Jazeera School">
+            <img src="assets/school.png" alt="Al-Jazeera School logo">
+            <span>Al-Jazeera School</span>
+          </div>
         </div>
 
         <div class="pill-row" style="margin-top: 14px;">
@@ -957,56 +1227,84 @@ body.light .time-label{
         <div class="cert-grid">
           <div class="cert">
             <div class="cert-top">
-              <div class="cert-name">Network Technician Career Path (Cisco)</div>
+              <div class="cert-name">Network Technician Career Path</div>
               <div class="cert-date">Jan 2026</div>
+            </div>
+            <div class="issuer">
+              <img src="assets/cisco.png" alt="Cisco logo">
+              <span>Cisco</span>
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
 
           <div class="cert">
             <div class="cert-top">
-              <div class="cert-name">Introduction to Modern AI (Cisco)</div>
+              <div class="cert-name">Introduction to Modern AI</div>
               <div class="cert-date">Jan 2026</div>
+            </div>
+            <div class="issuer">
+              <img src="assets/cisco.png" alt="Cisco logo">
+              <span>Cisco</span>
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
 
           <div class="cert">
             <div class="cert-top">
-              <div class="cert-name">Cloud Foundations (AWS Academy)</div>
+              <div class="cert-name">Cloud Foundations</div>
               <div class="cert-date">Nov 2024</div>
+            </div>
+            <div class="issuer">
+              <img src="assets/aws.png" alt="AWS logo">
+              <span>AWS Academy</span>
             </div>
             <p class="cert-by">Awarded by AWS Academy.</p>
           </div>
 
           <div class="cert">
             <div class="cert-top">
-              <div class="cert-name">Introduction to Data Science (Cisco)</div>
+              <div class="cert-name">Introduction to Data Science</div>
               <div class="cert-date">May 2023</div>
             </div>
-            <p class="cert-by">Awarded by Cisco.</p>
-          </div>
-
-          <div class="cert">
-            <div class="cert-top">
-              <div class="cert-name">Introduction to Cybersecurity (Cisco)</div>
-              <div class="cert-date">Jul 2022</div>
+            <div class="issuer">
+              <img src="assets/cisco.png" alt="Cisco logo">
+              <span>Cisco</span>
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
 
           <div class="cert">
             <div class="cert-top">
-              <div class="cert-name">Python Core (Sololearn)</div>
+              <div class="cert-name">Introduction to Cybersecurity</div>
+              <div class="cert-date">Jul 2022</div>
+            </div>
+            <div class="issuer">
+              <img src="assets/cisco.png" alt="Cisco logo">
+              <span>Cisco</span>
+            </div>
+            <p class="cert-by">Awarded by Cisco.</p>
+          </div>
+
+          <div class="cert">
+            <div class="cert-top">
+              <div class="cert-name">Python Core</div>
               <div class="cert-date">Apr 2022</div>
+            </div>
+            <div class="issuer">
+              <img src="assets/sololearn.png" alt="Sololearn logo">
+              <span>Sololearn</span>
             </div>
             <p class="cert-by">Awarded by Sololearn.</p>
           </div>
 
           <div class="cert">
             <div class="cert-top">
-              <div class="cert-name">Using Databases with Python (Coursera)</div>
+              <div class="cert-name">Using Databases with Python</div>
               <div class="cert-date">Oct 2021</div>
+            </div>
+            <div class="issuer">
+              <img src="assets/coursera.png" alt="Coursera logo">
+              <span>Coursera</span>
             </div>
             <p class="cert-by">Awarded by Coursera.</p>
           </div>
@@ -1025,6 +1323,9 @@ body.light .time-label{
           <a class="btn" href="mailto:mohammadsaleem2001@gmail.com">Email: mohammadsaleem2001@gmail.com</a>
           <a class="btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub</a>
           <a class="btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://x.com/MoTech00" target="_blank" rel="noopener">X</a>
+          <a class="btn" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener">Facebook</a>
+          <a class="btn" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener">Instagram</a>
           <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
         </div>
       </div>
@@ -1035,8 +1336,6 @@ body.light .time-label{
       <p>Built with HTML, CSS & JavaScript</p>
     </footer>
   </div>
-
-  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
   <script>
     // Theme toggle
@@ -1102,29 +1401,13 @@ body.light .time-label{
       }, { threshold: 0.15 });
       els.forEach(el => io.observe(el));
     })();
-    
 
-    // Back to top button
-    (function(){
-      const btn = document.getElementById("toTop");
-      if (!btn) return;
-
-      const toggleBtn = () => {
-        if (window.scrollY > 600) btn.classList.add("show");
-        else btn.classList.remove("show");
-      };
-      window.addEventListener("scroll", toggleBtn, { passive: true });
-      toggleBtn();
-
-      btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    })();
-
-  // ✅ Live Clock (center card)
+    // ✅ Live Clock
     function updateTime() {
       const now = new Date();
       const el = document.getElementById("liveTime");
       if (!el) return;
-    
+
       el.textContent = now.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -1134,8 +1417,37 @@ body.light .time-label{
     setInterval(updateTime, 1000);
     updateTime();
 
+    // ✅ Scroll slider + buttons (up/down)
+    (function(){
+      const range = document.getElementById("scrollRange");
+      const up = document.getElementById("scrollUp");
+      const down = document.getElementById("scrollDown");
+      if(!range || !up || !down) return;
 
-  
+      const getMaxScroll = () => Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+
+      const syncRange = () => {
+        const maxScroll = getMaxScroll();
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        const v = Math.round((y / maxScroll) * 1000);
+        range.value = String(Math.min(1000, Math.max(0, v)));
+      };
+
+      const scrollToValue = (val) => {
+        const maxScroll = getMaxScroll();
+        const y = (val / 1000) * maxScroll;
+        window.scrollTo({ top: y, behavior: "auto" });
+      };
+
+      range.addEventListener("input", () => scrollToValue(Number(range.value)));
+      window.addEventListener("scroll", syncRange, { passive: true });
+      window.addEventListener("resize", syncRange);
+
+      up.addEventListener("click", () => window.scrollBy({ top: -window.innerHeight * 0.85, behavior: "smooth" }));
+      down.addEventListener("click", () => window.scrollBy({ top: window.innerHeight * 0.85, behavior: "smooth" }));
+
+      syncRange();
+    })();
   </script>
 </body>
 </html>
