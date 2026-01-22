@@ -8,7 +8,7 @@
   <link rel="icon" sizes="32x32" href="assets/favicon.png">
   <link rel="icon" sizes="192x192" href="assets/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
-
+  
   <title>Mohammad Saleem | Computer Engineer Portfolio</title>
 
   <meta property="og:title" content="Mohammad Saleem — Computer Engineer Portfolio">
@@ -687,151 +687,55 @@
       background: rgba(255,255,255,0.88) !important;
       box-shadow: 0 14px 32px rgba(15,18,25,0.10) !important;
     }
+/* ✅ Place widget between navbar and hero */
+.meta-wrap{
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 6px;
+  width: 100%;
+}
 
-    /* ============================================================
-       ✅ ADDITION: NAV TIME + WEATHER (Glassmorphism, animated icon)
-       ============================================================ */
-    .meta-card{
-      display: flex; /* was inline-flex */
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
-      max-width: 320px;
-      overflow: hidden;
-    }
+/* ✅ Centered Time Card (no weather) */
+.time-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 6px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+  min-width: 180px;
+}
 
-    body.light .meta-card{
-      background: rgba(255,255,255,0.92);
-      border-color: rgba(15,18,25,0.16);
-      box-shadow: 0 14px 28px rgba(15,18,25,0.10);
-    }
+.time-label{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: rgba(255,255,255,0.65);
+}
 
-    .meta-left{
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-      min-width: 0;
-    }
-    .meta-time{
-      font-weight: 900;
-      font-size: 13px;
-      letter-spacing: 0.2px;
-      white-space: nowrap;
-    }
-    .meta-loc{
-      margin-top: 3px;
-      font-weight: 700;
-      font-size: 12px;
-      color: rgba(255,255,255,0.70);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 150px;
-    }
-    body.light .meta-loc{ color: rgba(15,18,25,0.62) !important; }
+.time-value{
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
 
-    .meta-right{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    
-    /* ✅ Place widget between navbar and hero */
-    .meta-wrap{
-      display: flex;
-      justify-content: center;
-      margin: 14px 0 6px;
-      width: 100%; /* important */
-    }
-    
-        /* ✅ Centered Time Card (no weather) */
-    .time-card{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap: 6px;
-      padding: 14px 18px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
-      min-width: 180px;
-    }
-    
-    .time-label{
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      color: rgba(255,255,255,0.65);
-    }
-    
-    .time-value{
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: 0.3px;
-    }
-    
-    body.light .time-card{
-      background: rgba(255,255,255,0.92);
-      border-color: rgba(15,18,25,0.16);
-      box-shadow: 0 14px 28px rgba(15,18,25,0.10);
-    }
-    
-    body.light .time-label{
-      color: rgba(15,18,25,0.62) !important;
-    }
+body.light .time-card{
+  background: rgba(255,255,255,0.92);
+  border-color: rgba(15,18,25,0.16);
+  box-shadow: 0 14px 28px rgba(15,18,25,0.10);
+}
 
-
-    .meta-card--wide{
-      width: 100%;
-      max-width: var(--max);
-      justify-content: space-between;
-    }
+body.light .time-label{
+  color: rgba(15,18,25,0.62) !important;
+}
 
     
-    .weather-icon{
-      width: 28px;
-      height: 28px;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
-      animation: floatIcon 2.6s ease-in-out infinite;
-      transform-origin: 50% 60%;
-    }
-    @keyframes floatIcon{
-      0%,100%{ transform: translateY(0) rotate(-2deg) scale(1); }
-      50%{ transform: translateY(-2px) rotate(2deg) scale(1.03); }
-    }
-    .meta-temp{
-      font-weight: 900;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .meta-desc{
-      font-weight: 700;
-      font-size: 12px;
-      color: rgba(255,255,255,0.68);
-      white-space: nowrap;
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    body.light .meta-desc{ color: rgba(15,18,25,0.62) !important; }
-
-    /* Make it compact on very small screens */
-    @media (max-width: 520px){
-      .meta-card{ padding: 10px; }
-      .meta-loc, .meta-desc{ display: none; }
-      .weather-icon{ width: 26px; height: 26px; }
-    }
   </style>
 </head>
 
@@ -1216,13 +1120,20 @@
     })();
 
   // ✅ Live Clock (center card)
-function updateTime() {
-  const now = new Date();
-  const el = document.getElementById("liveTime");
-  if (el) el.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
-setInterval(updateTime, 1000);
-updateTime();
+    function updateTime() {
+      const now = new Date();
+      const el = document.getElementById("liveTime");
+      if (!el) return;
+    
+      el.textContent = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
 
   
   </script>
