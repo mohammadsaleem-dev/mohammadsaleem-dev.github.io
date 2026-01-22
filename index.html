@@ -168,13 +168,30 @@
       border-color: rgba(255,255,255,0.22);
       box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
-    .menu-btn .bar{
-      display: block;
-      width: 18px;
-      height: 2px;
-      background: rgba(255,255,255,0.85);
-      border-radius: 999px;
-    }
+
+    .menu-btn{
+  display: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+
+  /* make dots horizontal */
+  display: none;              /* your media query enables it */
+  align-items: center;
+  justify-content: center;
+  gap: 6px;                   /* spacing between dots */
+}
+
+.menu-btn .dot3{
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  display: inline-block;
+}
 
     /* Buttons */
     .btn{
@@ -212,34 +229,63 @@
       background: rgba(255,255,255,0.04);
     }
 
-    /* ✅ IMPORTANT FIX:
-       Collapse to hamburger EARLIER (<= 1024px) so "in-between sizes" never overlap. */
-    @media (max-width: 1024px){
-      .menu-btn{ display: inline-flex; }
-      .nav-links{
-        display: none; /* hidden inline */
-        position: absolute;
-        left: 14px;
-        right: 14px;
-        top: calc(100% + 10px);
-        padding: 12px;
-        border-radius: 18px;
-        border: 1px solid rgba(255,255,255,0.12);
-        background: rgba(10,16,32,0.92);
-        backdrop-filter: blur(18px);
-        box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-        flex-direction: column;
-        gap: 8px;
-        white-space: normal;
-        z-index: 60;
-      }
-      .nav-links.is-open{ display: flex; }
-      .nav-links a{
-        padding: 12px 12px;
-        border-radius: 14px;
-        background: rgba(255,255,255,0.04);
-      }
-    }
+@media (max-width: 1024px){
+  .menu-btn{ display: inline-flex; }
+
+  .nav-links{
+    /* keep it "present" so it can animate */
+    display: flex;
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: calc(100% + 10px);
+    padding: 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(10,16,32,0.92);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+    flex-direction: column;
+    gap: 8px;
+    white-space: normal;
+    z-index: 60;
+
+    /* animation states (closed) */
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+
+    transition:
+      opacity 200ms ease,
+      transform 220ms ease,
+      max-height 260ms ease,
+      visibility 0ms linear 260ms; /* hides after animation ends */
+  }
+
+  .nav-links.is-open{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 520px; /* enough height for all links */
+    pointer-events: auto;
+    visibility: visible;
+
+    transition:
+      opacity 200ms ease,
+      transform 220ms ease,
+      max-height 260ms ease,
+      visibility 0ms; /* show immediately */
+  }
+
+  .nav-links a{
+    padding: 12px 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+  }
+}
+
 
     /* Layout */
     .grid{
@@ -546,9 +592,9 @@
 
         <!-- Hamburger (will show at <=1024px) -->
         <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+          <span class="dot3"></span>
+          <span class="dot3"></span>
+          <span class="dot3"></span>
         </button>
 
         <div class="nav-links" id="navLinks">
