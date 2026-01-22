@@ -41,6 +41,7 @@
         radial-gradient(900px 600px at 90% 5%, rgba(110,220,255,0.12), transparent 55%),
         radial-gradient(800px 600px at 40% 90%, rgba(120,140,255,0.10), transparent 55%),
         linear-gradient(180deg, #050913 0%, #070d1a 40%, #050913 100%);
+      background-attachment: fixed;
       min-height: 100vh;
     }
 
@@ -55,6 +56,25 @@
       max-width: var(--max);
       margin: 0 auto;
       padding: 22px 18px 80px;
+    }
+
+    /* Floating background glow */
+    .bg-orb{
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      filter: blur(60px);
+      opacity: 0.65;
+      z-index: -1;
+      background:
+        radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.18), transparent 60%),
+        radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
+        radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
+      animation: floaty 14s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
     }
 
     /* NAV */
@@ -207,16 +227,12 @@
         white-space: normal;
         z-index: 60;
       }
-
       .nav-links.is-open{ display: flex; }
-
       .nav-links a{
         padding: 12px 12px;
         border-radius: 14px;
         background: rgba(255,255,255,0.04);
       }
-
-      .nav-actions{ flex-shrink: 0; }
     }
 
     /* Layout */
@@ -287,6 +303,35 @@
       color: rgba(255,255,255,0.82);
       font-weight: 700;
       font-size: 13px;
+    }
+
+    /* Hero stats row */
+    .stats{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .stat{
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .stat b{
+      display:block;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+    .stat span{
+      display:block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      font-weight: 600;
+    }
+    @media (max-width: 960px){
+      .stats{ grid-template-columns: 1fr; }
     }
 
     /* Sections */
@@ -450,10 +495,52 @@
     .anchor{
       scroll-margin-top: calc(var(--navh) + 18px);
     }
+
+    /* Scroll reveal */
+    .reveal{
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+    .reveal.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Back to top */
+    .to-top{
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.9);
+      font-weight: 900;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: 200ms ease;
+      backdrop-filter: blur(12px);
+      z-index: 70;
+    }
+    .to-top.show{
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .to-top:hover{
+      background: rgba(255,255,255,0.10);
+    }
   </style>
 </head>
 
 <body>
+  <div class="bg-orb"></div>
+
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
       <div class="nav-inner">
@@ -489,7 +576,7 @@
 
   <div class="container">
     <div id="home" class="grid anchor">
-      <div class="card">
+      <div class="card reveal">
         <h1>Mohammad Saleem</h1>
         <div class="subtitle">Computer Engineering Graduate | Blockchain | AI | Cybersecurity</div>
         <p class="lead">
@@ -508,9 +595,24 @@
           <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">Download Resume</a>
           <a class="btn btn-ghost" href="#contact">Contact</a>
         </div>
+
+        <div class="stats">
+          <div class="stat">
+            <b>5th Place</b>
+            <span>National Technology Parade</span>
+          </div>
+          <div class="stat">
+            <b>Blockchain</b>
+            <span>Ethereum Voting System</span>
+          </div>
+          <div class="stat">
+            <b>ROS 2</b>
+            <span>CPU Scheduling Simulation</span>
+          </div>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
         <div style="display:flex; flex-wrap:wrap; gap:10px;">
           <a class="btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
@@ -530,7 +632,7 @@
       </div>
     </div>
 
-    <section id="projects" class="anchor">
+    <section id="projects" class="anchor reveal">
       <h2 class="section-title">Projects</h2>
       <p class="section-sub">A few highlights from my recent work.</p>
 
@@ -555,7 +657,7 @@
     </section>
 
     <section class="two-col">
-      <div id="skills" class="card anchor">
+      <div id="skills" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Skills</h2>
         <ul class="list">
           <li><b>Programming:</b> Java, Python, C++, Assembly, JavaScript, Solidity, MATLAB, Node.js, SQL</li>
@@ -567,7 +669,7 @@
         </ul>
       </div>
 
-      <div id="education" class="card anchor">
+      <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
         <div class="item">
@@ -575,7 +677,7 @@
             <p class="title">B.Sc. in Computer Engineering</p>
             <p class="meta">University of Jordan — Amman, Jordan</p>
           </div>
-          <div class="date">2020 – 2025</div>
+          <div class="date">2019 – 2025</div>
         </div>
 
         <div class="item">
@@ -583,7 +685,7 @@
             <p class="title">High School Diploma (Tawjihi)</p>
             <p class="meta">Al-Jazeera School — Amman, Jordan</p>
           </div>
-          <div class="date">2019 – 2020</div>
+          <div class="date">2018 – 2019</div>
         </div>
 
         <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
@@ -596,10 +698,10 @@
       </div>
     </section>
 
-    <section id="experience" class="anchor">
+    <section id="experience" class="anchor reveal">
       <h2 class="section-title">Experience</h2>
 
-      <div class="card">
+      <div class="card reveal">
         <div class="item" style="margin-top: 0;">
           <div class="left">
             <p class="title">Electricity Distribution Co. (EDCO) — Operating Systems Dept. (Internship)</p>
@@ -612,10 +714,10 @@
       </div>
     </section>
 
-    <section id="awards" class="anchor">
+    <section id="awards" class="anchor reveal">
       <h2 class="section-title">Awards and Achievements</h2>
 
-      <div class="card">
+      <div class="card reveal">
         <div class="item" style="margin-top: 0;">
           <div class="left">
             <p class="title">Twelfth National Technology Parade — 5th Place</p>
@@ -634,10 +736,10 @@
       </div>
     </section>
 
-    <section id="certificates" class="anchor">
+    <section id="certificates" class="anchor reveal">
       <h2 class="section-title">Certificates</h2>
 
-      <div class="card">
+      <div class="card reveal">
         <div class="cert-grid">
           <div class="cert">
             <div class="cert-top">
@@ -698,9 +800,9 @@
       </div>
     </section>
 
-    <section id="contact" class="anchor">
+    <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
-      <div class="card">
+      <div class="card reveal">
         <p style="margin:0 0 14px; color: rgba(255,255,255,0.78); line-height: 1.7;">
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
@@ -714,10 +816,12 @@
       </div>
     </section>
 
-    <footer>
+    <footer class="reveal">
       © 2026 Eng. Mohammad Saleem
     </footer>
   </div>
+
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
   <script>
     // Fix: sometimes GitHub Pages loads with a slight scroll offset.
@@ -761,6 +865,35 @@
       // Close on resize back to desktop
       window.addEventListener("resize", () => {
         if (window.innerWidth > 720) closeMenu();
+      });
+    })();
+
+    // Scroll reveal
+    (function () {
+      const els = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add("show");
+        });
+      }, { threshold: 0.15 });
+      els.forEach(el => io.observe(el));
+    })();
+
+    // Back to top button
+    (function(){
+      const btn = document.getElementById("toTop");
+      if (!btn) return;
+
+      const toggleBtn = () => {
+        if (window.scrollY > 600) btn.classList.add("show");
+        else btn.classList.remove("show");
+      };
+
+      window.addEventListener("scroll", toggleBtn, { passive: true });
+      toggleBtn();
+
+      btn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
     })();
   </script>
