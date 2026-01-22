@@ -20,10 +20,6 @@
   <style>
     :root{
       --bg: #060b16;
-      --nav-dropdown-bg: rgba(10,16,32,0.92);   /* dark dropdown */
-      --nav-dropdown-border: rgba(255,255,255,0.12);
-      --nav-dropdown-link-bg: rgba(255,255,255,0.04);
-      --dot3-color: rgba(255,255,255,0.85);
       --panel: rgba(255,255,255,0.06);
       --panel2: rgba(255,255,255,0.08);
       --border: rgba(255,255,255,0.10);
@@ -105,10 +101,7 @@
       --text: rgba(15, 18, 25, 0.95);
       --muted: rgba(15, 18, 25, 0.72);
       --muted2: rgba(15, 18, 25, 0.58);
-      --nav-dropdown-bg: rgba(255,255,255,0.96);        /* light dropdown */
-      --nav-dropdown-border: rgba(15,18,25,0.14);
-      --nav-dropdown-link-bg: rgba(15,18,25,0.05);
-      --dot3-color: rgba(15,18,25,0.75);
+
       --panel: rgba(255,255,255,0.78);
       --panel2: rgba(255,255,255,0.92);
       --border: rgba(15,18,25,0.14);
@@ -124,7 +117,12 @@
       outline-offset: 3px;
     }
 
-
+    /* Make text readable in light mode (including inline-styled paragraphs) */
+    body.light p,
+    body.light span,
+    body.light li{
+      color: var(--muted);
+    }
     body.light h1, body.light h2, body.light h3,
     body.light .title, body.light .cert-name, body.light b{
       color: var(--text) !important;
@@ -227,7 +225,7 @@
       width: 5px;
       height: 5px;
       border-radius: 999px;
-      background: var(--dot3-color);
+      background: rgba(255,255,255,0.85);
       display: inline-block;
     }
     /* ✅ Light mode 3 dots + button */
@@ -304,8 +302,8 @@
         top: calc(100% + 10px);
         padding: 12px;
         border-radius: 18px;
-        border: 1px solid var(--nav-dropdown-border);
-        background: var(--nav-dropdown-bg);
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(10,16,32,0.92);
         backdrop-filter: blur(18px);
         box-shadow: 0 18px 60px rgba(0,0,0,0.55);
         flex-direction: column;
@@ -344,7 +342,7 @@
       .nav-links a{
         padding: 12px 12px;
         border-radius: 14px;
-        background: var(--nav-dropdown-link-bg);
+        background: rgba(255,255,255,0.04);
       }
 
       /* ✅ LIGHT MODE dropdown background + links */
@@ -408,34 +406,12 @@
       margin-bottom: 16px;
     }
     .lead{
-      color: var(--muted);
+      color: rgba(255,255,255,0.78);
       font-size: 16px;
       line-height: 1.7;
       margin: 0 0 18px;
       max-width: 62ch;
     }
-
-    .section-sub { 
-  color: var(--muted2); 
-}
-
-.item .meta { 
-  color: var(--muted); 
-}
-
-.mini p { 
-  color: var(--muted); 
-}
-
-.stat span { 
-  color: var(--muted2); 
-}
-
-footer { 
-  color: var(--muted2); 
-}
-
-    
     body.light .lead{ color: var(--muted) !important; }
 
     .pill-row{
@@ -663,6 +639,39 @@ footer {
     }
 
     *{ -webkit-tap-highlight-color: transparent; }
+    /* ==============================
+       LIGHT MODE TEXT FORCE FIX
+       ============================== */
+    
+    body.light,
+    body.light * {
+      color: var(--text) !important;
+    }
+    
+    /* Secondary text */
+    body.light .subtitle,
+    body.light .lead,
+    body.light .section-sub,
+    body.light .meta,
+    body.light .cert-by,
+    body.light footer,
+    body.light .stat span,
+    body.light .pill,
+    body.light li,
+    body.light p,
+    body.light span {
+      color: var(--muted) !important;
+    }
+    
+    /* Headings stay strong */
+    body.light h1,
+    body.light h2,
+    body.light h3,
+    body.light .title,
+    body.light .cert-name,
+    body.light b {
+      color: var(--text) !important;
+    }
 
     /* ✅ Light mode “frames visible” pack */
     body.light .cert,
@@ -768,7 +777,7 @@ footer {
           <span class="pill">Open to opportunities</span>
         </div>
 
-        <p style="margin: 14px 0 0; color: var(--muted); line-height: 1.7;">
+        <p style="margin: 14px 0 0; color: rgba(255,255,255,0.72); line-height: 1.7;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
       </div>
@@ -833,7 +842,7 @@ footer {
         </div>
 
         <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
-        <p style="margin: 0; color: var(--muted); line-height: 1.7;">
+        <p style="margin: 0; color: rgba(255,255,255,0.75); line-height: 1.7;">
           My research interests focus on <b>secure and trustworthy systems</b>, especially
           <b>blockchain security</b>, <b>network and cloud security</b>, and <b>applied AI for cybersecurity</b>.
           I’m particularly interested in building practical, reliable solutions for identity, integrity, and fraud resistance
@@ -947,7 +956,7 @@ footer {
     <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
       <div class="card reveal">
-        <p style="margin:0 0 14px; color: var(--muted); line-height: 1.7;">
+        <p style="margin:0 0 14px; color: rgba(255,255,255,0.78); line-height: 1.7;">
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
 
