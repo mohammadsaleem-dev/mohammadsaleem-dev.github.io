@@ -687,6 +687,93 @@
       background: rgba(255,255,255,0.88) !important;
       box-shadow: 0 14px 32px rgba(15,18,25,0.10) !important;
     }
+
+    /* ============================================================
+       ✅ ADDITION: NAV TIME + WEATHER (Glassmorphism, animated icon)
+       ============================================================ */
+    .meta-card{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+      max-width: 320px;
+      overflow: hidden;
+    }
+    body.light .meta-card{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(15,18,25,0.16);
+      box-shadow: 0 14px 28px rgba(15,18,25,0.10);
+    }
+
+    .meta-left{
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+      min-width: 0;
+    }
+    .meta-time{
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+    .meta-loc{
+      margin-top: 3px;
+      font-weight: 700;
+      font-size: 12px;
+      color: rgba(255,255,255,0.70);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+    body.light .meta-loc{ color: rgba(15,18,25,0.62) !important; }
+
+    .meta-right{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .weather-icon{
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+      animation: floatIcon 2.6s ease-in-out infinite;
+      transform-origin: 50% 60%;
+    }
+    @keyframes floatIcon{
+      0%,100%{ transform: translateY(0) rotate(-2deg) scale(1); }
+      50%{ transform: translateY(-2px) rotate(2deg) scale(1.03); }
+    }
+    .meta-temp{
+      font-weight: 900;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .meta-desc{
+      font-weight: 700;
+      font-size: 12px;
+      color: rgba(255,255,255,0.68);
+      white-space: nowrap;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body.light .meta-desc{ color: rgba(15,18,25,0.62) !important; }
+
+    /* Make it compact on very small screens */
+    @media (max-width: 520px){
+      .meta-card{ padding: 10px; }
+      .meta-loc, .meta-desc{ display: none; }
+      .weather-icon{ width: 26px; height: 26px; }
+    }
   </style>
 </head>
 
@@ -717,6 +804,21 @@
             <span class="dot3"></span>
             <span class="dot3"></span>
           </button>
+
+          <!-- ✅ ADDITION: Time + Weather Card (Navbar) -->
+          <div class="meta-card" id="metaCard" title="Local time and weather">
+            <div class="meta-left">
+              <div class="meta-time" id="liveTime">--:--</div>
+              <div class="meta-loc" id="liveLoc">Detecting location…</div>
+            </div>
+            <div class="meta-right">
+              <img class="weather-icon" id="weatherIcon" alt="Weather icon" src="" style="display:none;">
+              <div style="display:flex; flex-direction:column; line-height:1.1;">
+                <div class="meta-temp" id="weatherTemp">--°C</div>
+                <div class="meta-desc" id="weatherDesc">Loading…</div>
+              </div>
+            </div>
+          </div>
 
           <button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">🌙</button>
           <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
@@ -1055,6 +1157,116 @@
       toggleBtn();
 
       btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    })();
+
+    /* ============================================================
+       ✅ ADDITION: Live Time + Weather (auto-detect location)
+       - Weather refresh every 10 minutes
+       - Fallback to Amman if location denied/failed
+       Docs:
+       - OpenWeather Current: https://openweathermap.org/current
+       - OpenWeather Icons: https://openweathermap.org/weather-conditions
+       - MDN Geolocation: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+       - MDN Date: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+       ============================================================ */
+    (function () {
+      // 1) Put your NEW key here (do NOT share it publicly)
+      const OPENWEATHER_KEY = "PASTE_YOUR_NEW_KEY_HERE";
+
+      // 2) Elements
+      const elTime = document.getElementById("liveTime");
+      const elLoc  = document.getElementById("liveLoc");
+      const elTemp = document.getElementById("weatherTemp");
+      const elDesc = document.getElementById("weatherDesc");
+      const elIcon = document.getElementById("weatherIcon");
+
+      // 3) Live time (updates every second)
+      const updateClock = () => {
+        const now = new Date();
+        elTime.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      };
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // 4) Weather
+      const AMMAN = { lat: 31.9539, lon: 35.9106, label: "Amman, Jordan" };
+
+      const setWeatherUI = ({ locationLabel, tempC, desc, icon }) => {
+        elLoc.textContent = locationLabel || "Your location";
+        elTemp.textContent = (typeof tempC === "number") ? `${Math.round(tempC)}°C` : "--°C";
+        elDesc.textContent = desc || "—";
+
+        if (icon) {
+          // Official icon endpoint (OpenWeather): https://openweathermap.org/weather-conditions
+          elIcon.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+          elIcon.style.display = "block";
+        } else {
+          elIcon.style.display = "none";
+        }
+      };
+
+      const fetchWeather = async (lat, lon, locationLabel) => {
+        try {
+          if (!OPENWEATHER_KEY || OPENWEATHER_KEY.includes("PASTE_")) {
+            setWeatherUI({ locationLabel: "Set API key", tempC: null, desc: "Missing key", icon: null });
+            return;
+          }
+
+          const url =
+            `https://api.openweathermap.org/data/2.5/weather?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&units=metric&lang=en&appid=${encodeURIComponent(OPENWEATHER_KEY)}`;
+
+          const res = await fetch(url, { cache: "no-store" });
+          const data = await res.json();
+
+          if (!res.ok) {
+            // If you see 401, key may still be activating (OpenWeather FAQ): https://openweathermap.org/faq#error401
+            setWeatherUI({ locationLabel: locationLabel || "Weather", tempC: null, desc: (data && data.message) ? data.message : "Error", icon: null });
+            return;
+          }
+
+          const name = data?.name || locationLabel || "Your city";
+          const country = data?.sys?.country ? `, ${data.sys.country}` : "";
+          const tempC = data?.main?.temp;
+          const desc = data?.weather?.[0]?.description ? data.weather[0].description : "—";
+          const icon = data?.weather?.[0]?.icon || null;
+
+          setWeatherUI({
+            locationLabel: `${name}${country}`,
+            tempC,
+            desc,
+            icon
+          });
+        } catch (err) {
+          setWeatherUI({ locationLabel: locationLabel || "Weather", tempC: null, desc: "Offline", icon: null });
+        }
+      };
+
+      const loadWeatherWithGeo = () => {
+        // Prefer exact location if user allows
+        if (navigator.geolocation) {
+          elLoc.textContent = "Detecting location…";
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const { latitude, longitude } = pos.coords;
+              fetchWeather(latitude, longitude, "Your location");
+            },
+            () => {
+              // Permission denied / failed -> fallback to Amman
+              fetchWeather(AMMAN.lat, AMMAN.lon, AMMAN.label);
+            },
+            { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 }
+          );
+        } else {
+          // No geolocation support -> fallback
+          fetchWeather(AMMAN.lat, AMMAN.lon, AMMAN.label);
+        }
+      };
+
+      // Initial load
+      loadWeatherWithGeo();
+
+      // Auto refresh every 10 minutes
+      setInterval(loadWeatherWithGeo, 10 * 60 * 1000);
     })();
   </script>
 </body>
