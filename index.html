@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="color-scheme" content="dark">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark">
 
   <link rel="icon" sizes="32x32" href="assets/favicon.png">
   <link rel="icon" sizes="192x192" href="assets/favicon.png">
@@ -18,70 +18,86 @@
   <meta name="theme-color" content="#0a1020" />
 
   <style>
-:root{
-  --bg: #060b16;
-  --panel: rgba(255,255,255,0.06);
-  --panel2: rgba(255,255,255,0.08);
-  --border: rgba(255,255,255,0.10);
-  --text: rgba(255,255,255,0.92);
-  --muted: rgba(255,255,255,0.70);
-  --muted2: rgba(255,255,255,0.55);
-  --accent: rgba(120,140,255,0.95);
-  --accent2: rgba(110,220,255,0.95);
-  --shadow: 0 18px 60px rgba(0,0,0,0.55);
-  --radius: 24px;
-  --radius2: 18px;
-  --max: 1120px;
-  --navh: 74px;
+    :root{
+      /* sizing */
+      --navh: 74px;
+      --radius: 24px;
+      --radius2: 18px;
 
-  /* ✅ DARK MODE BLUE BACKGROUND */
-  --page-bg:
-    radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
-    radial-gradient(900px 600px at 90% 5%, rgba(110,220,255,0.12), transparent 55%),
-    radial-gradient(800px 600px at 40% 90%, rgba(120,140,255,0.10), transparent 55%),
-    linear-gradient(180deg, #050913 0%, #070d1a 40%, #050913 100%);
-}
+      /* layout tuning (more empty space left/right like your old version) */
+      --max: 1100px;          /* was 1120px */
+      --padX: 28px;           /* was 18px */
 
+      /* dark theme palette */
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --muted2: rgba(255,255,255,0.58);
+
+      --accent: rgba(120,140,255,0.95);
+      --accent2: rgba(110,220,255,0.95);
+
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+
+      /* backgrounds */
+      --page-bg:
+        radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
+        radial-gradient(900px 600px at 90% 5%, rgba(110,220,255,0.12), transparent 55%),
+        radial-gradient(800px 600px at 40% 90%, rgba(120,140,255,0.10), transparent 55%),
+        linear-gradient(180deg, #050913 0%, #070d1a 40%, #050913 100%);
+    }
+
+    /* LIGHT MODE overrides (clean + consistent) */
+    body.light{
+      --text: rgba(15,18,25,0.95);
+      --muted: rgba(15,18,25,0.72);
+      --muted2: rgba(15,18,25,0.58);
+
+      --panel: rgba(255,255,255,0.86);
+      --panel2: rgba(255,255,255,0.94);
+      --border: rgba(15,18,25,0.16);
+
+      --shadow: 0 14px 32px rgba(15,18,25,0.10);
+
+      --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
+    }
 
     *{ box-sizing: border-box; }
     html{
       scroll-behavior: smooth;
       scroll-padding-top: calc(var(--navh) + 18px);
     }
-  body{
-    margin: 0;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    color: var(--text);
-    background: var(--page-bg);
-    background-attachment: fixed;
-    min-height: 100vh;
-  }
 
-footer p{
-  margin:6px 0;
-}
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: var(--page-bg);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
     a{ color: inherit; text-decoration: none; }
     a:focus-visible, button:focus-visible{
       outline: 2px solid rgba(140,170,255,0.85);
       outline-offset: 3px;
       border-radius: 12px;
     }
-    
-    /* Light mode focus ring (so it’s not too strong/blue) */
     body.light a:focus-visible,
     body.light button:focus-visible{
       outline: 2px solid rgba(120,140,255,0.55);
       outline-offset: 3px;
     }
-    
 
     .container{
       max-width: var(--max);
       margin: 0 auto;
-      padding: 22px 18px 80px;
+      padding: 22px var(--padX) 80px;
     }
 
-    /* Floating background glow */
+    /* Background orb */
     .bg-orb{
       position: fixed;
       inset: -20%;
@@ -94,62 +110,18 @@ footer p{
         radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
         radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
       animation: floaty 14s ease-in-out infinite;
-      body.light .bg-orb{
-      opacity: 0; /* Amazon style = clean background */
+      will-change: transform;
     }
-    }
+    body.light .bg-orb{ opacity: 0; }
+
     @keyframes floaty{
       0%,100% { transform: translate3d(0,0,0) scale(1); }
       50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
     }
-body.light{
-  /* Text */
-  --text: rgba(15, 18, 25, 0.95);
-  --muted: rgba(15, 18, 25, 0.72);
-  --muted2: rgba(15, 18, 25, 0.58);
-
-  /* Panels: neutral (not blue) */
-  --panel: rgba(255,255,255,0.78);
-  --panel2: rgba(255,255,255,0.92);
-  --border: rgba(15,18,25,0.10);
-
-  /* Softer shadow like Amazon */
-  --shadow: 0 14px 32px rgba(15,18,25,0.12);
-
-  /* Light page background: neutral gray-white (no glow) */
-  --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
-}
-
-/* ✅ Make ALL text readable in light mode */
-body.light .subtitle,
-body.light .lead,
-body.light .section-sub,
-body.light .mini p,
-body.light .item .meta,
-body.light .list,
-body.light .cert-by,
-body.light footer,
-body.light .stat span,
-body.light .pill{
-  color: var(--muted) !important;
-}
-
-body.light .mini h3,
-body.light .item .title,
-body.light .cert-name,
-body.light .section-title,
-body.light h1,
-body.light h2,
-body.light h3,
-body.light b{
-  color: var(--text) !important;
-}
-
-/* optional: links slightly darker */
-body.light a{
-  color: var(--text);
-}
-
+    @media (prefers-reduced-motion: reduce){
+      .bg-orb{ animation: none; }
+      .reveal{ transition: none; transform: none; opacity: 1; }
+    }
 
     /* NAV */
     .nav{
@@ -161,7 +133,7 @@ body.light a{
     }
     .nav-inner{
       height: var(--navh);
-      display: grid;                          /* ✅ GRID fixes overlap at "in-between" sizes */
+      display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 14px;
@@ -170,40 +142,22 @@ body.light a{
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
-      position: relative; /* needed for dropdown */
+      position: relative;
     }
-    .brand{
-      display: flex;
-      align-items: center;
-      gap: 0;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      min-width: 0;
-    }
-    .dot{
-      width: 8px; height: 8px;
-      border-radius: 999px;
+
+    .brand{ justify-self: start; min-width: 0; }
+    .nav-links{ justify-self: center; }
+    .nav-actions{ justify-self: end; }
+
+    .brand-initials{
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 1px;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
-      box-shadow: 0 0 0 4px rgba(110,220,255,0.10);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-
-    .brand{
-  min-width: 0; /* important for truncation inside grid */
-}
-
-.brand span:last-child{
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 220px; /* default */
-}
-
-    /* Desktop links */
     .nav-links{
       display: flex;
       align-items: center;
@@ -213,7 +167,7 @@ body.light a{
       font-weight: 600;
       white-space: nowrap;
       min-width: 0;
-      overflow: hidden; /* ✅ prevents overlap with Resume button */
+      overflow: hidden;
     }
     .nav-links a{
       padding: 10px 12px;
@@ -225,10 +179,6 @@ body.light a{
       color: var(--text);
       background: rgba(255,255,255,0.06);
     }
-        .brand{ justify-self: start; }
-    .nav-links{ justify-self: center; }
-    .nav-actions{ justify-self: end; }
-
 
     .nav-actions{
       display: flex;
@@ -236,52 +186,6 @@ body.light a{
       gap: 10px;
       flex-shrink: 0;
     }
-
-    /* Hamburger button hidden on large desktop */
-    .menu-btn{
-      display: none;
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.05);
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .menu-btn:hover{
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-    }
-
-.menu-btn{
-  display: none; /* will be enabled in media query */
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.05);
-  cursor: pointer;
-
-  display: none;               /* keep this as-is; media query turns it on */
-  align-items: center;
-  justify-content: center;
-
-  flex-direction: column;      /* ✅ makes dots vertical */
-  gap: 5px;                    /* spacing between dots */
-}
-
-.menu-btn .dot3{
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.85);
-  display: inline-block;
-}
-
 
     /* Buttons */
     .btn{
@@ -300,103 +204,124 @@ body.light a{
       user-select: none;
       white-space: nowrap;
     }
+    body.light .btn{
+      border-color: rgba(15,18,25,0.18);
+      background: rgba(255,255,255,0.75);
+    }
+
     .btn:hover{
       transform: translateY(-1px);
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
+    body.light .btn:hover{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(15,18,25,0.22);
+      box-shadow: 0 12px 26px rgba(15,18,25,0.12);
+    }
+
+    .btn-ghost{ background: rgba(255,255,255,0.04); }
+
     .btn-primary{
       background: linear-gradient(135deg, rgba(120,140,255,0.95), rgba(110,220,255,0.85));
       border-color: rgba(150,175,255,0.35);
       color: #081026;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-primary:hover{
-      background: linear-gradient(135deg, rgba(135,155,255,1), rgba(125,235,255,0.95));
-      border-color: rgba(170,195,255,0.50);
+    .btn-primary::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.35), transparent 60%);
+      opacity:0;
+      transition: opacity 0.3s ease;
     }
-    .btn-ghost{
-      background: rgba(255,255,255,0.04);
+    .btn-primary:hover::after{ opacity:1; }
+
+    /* 3-dots menu button (only on <=1024px) */
+    .menu-btn{
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .menu-btn:hover{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .menu-btn .dot3{
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      display: inline-block;
     }
 
-    .btn-primary{
-  position: relative;
-  overflow: hidden;
-}
+    @media (max-width: 1024px){
+      .menu-btn{ display: inline-flex; }
 
-.btn-primary::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: radial-gradient(circle at top left,
-    rgba(255,255,255,0.35),
-    transparent 60%);
-  opacity:0;
-  transition: opacity 0.3s ease;
-}
+      .nav-links{
+        display: flex;
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: calc(100% + 10px);
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(10,16,32,0.92);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+        flex-direction: column;
+        gap: 8px;
+        white-space: normal;
+        z-index: 60;
 
-.btn-primary:hover::after{
-  opacity:1;
-}
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+        max-height: 0;
+        overflow: hidden;
+        pointer-events: none;
+        visibility: hidden;
 
+        transition:
+          opacity 200ms ease,
+          transform 220ms ease,
+          max-height 260ms ease,
+          visibility 0ms linear 260ms;
+      }
 
-@media (max-width: 1024px){
-  .menu-btn{ display: inline-flex; }
+      .nav-links.is-open{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        max-height: 520px;
+        pointer-events: auto;
+        visibility: visible;
 
-  .nav-links{
-    /* keep it "present" so it can animate */
-    display: flex;
-    position: absolute;
-    left: 14px;
-    right: 14px;
-    top: calc(100% + 10px);
-    padding: 12px;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(10,16,32,0.92);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-    flex-direction: column;
-    gap: 8px;
-    white-space: normal;
-    z-index: 60;
+        transition:
+          opacity 200ms ease,
+          transform 220ms ease,
+          max-height 260ms ease,
+          visibility 0ms;
+      }
 
-    /* animation states (closed) */
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-    max-height: 0;
-    overflow: hidden;
-    pointer-events: none;
-    visibility: hidden;
-
-    transition:
-      opacity 200ms ease,
-      transform 220ms ease,
-      max-height 260ms ease,
-      visibility 0ms linear 260ms; /* hides after animation ends */
-  }
-
-  .nav-links.is-open{
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    max-height: 520px; /* enough height for all links */
-    pointer-events: auto;
-    visibility: visible;
-
-    transition:
-      opacity 200ms ease,
-      transform 220ms ease,
-      max-height 260ms ease,
-      visibility 0ms; /* show immediately */
-  }
-
-  .nav-links a{
-    padding: 12px 12px;
-    border-radius: 14px;
-    background: rgba(255,255,255,0.04);
-  }
-}
-
+      .nav-links a{
+        padding: 12px 12px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.04);
+      }
+    }
 
     /* Layout */
     .grid{
@@ -426,10 +351,9 @@ body.light a{
         radial-gradient(450px 250px at 20% 10%, rgba(120,140,255,0.14), transparent 60%),
         radial-gradient(380px 240px at 90% 30%, rgba(110,220,255,0.10), transparent 60%);
       pointer-events:none;
-      body.light .card::before{
-      opacity: 0.10; /* kill the blue glow */
+      opacity: 1;
     }
-    }
+    body.light .card::before{ opacity: 0.08; }
     .card > *{ position: relative; z-index: 1; }
 
     h1{
@@ -444,7 +368,7 @@ body.light a{
       margin-bottom: 16px;
     }
     .lead{
-      color: rgba(255,255,255,0.78);
+      color: var(--muted);
       font-size: 16px;
       line-height: 1.7;
       margin: 0 0 18px;
@@ -464,10 +388,11 @@ body.light a{
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.12);
       background: var(--panel);
-      color: rgba(255,255,255,0.82);
+      color: var(--muted);
       font-weight: 700;
       font-size: 13px;
     }
+    body.light .pill{ border-color: rgba(15,18,25,0.16); }
 
     /* Hero stats row */
     .stats{
@@ -482,6 +407,7 @@ body.light a{
       border-radius: 18px;
       padding: 14px;
     }
+    body.light .stat{ border-color: rgba(15,18,25,0.16); }
     .stat b{
       display:block;
       font-size: 16px;
@@ -491,7 +417,7 @@ body.light a{
       display:block;
       margin-top: 4px;
       font-size: 13px;
-      color: rgba(255,255,255,0.65);
+      color: var(--muted2);
       font-weight: 600;
     }
     @media (max-width: 960px){
@@ -526,10 +452,15 @@ body.light a{
       background: var(--panel);
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
+    body.light .mini{ border-color: rgba(15,18,25,0.16); }
     .mini:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
+    }
+    body.light .mini:hover{
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(15,18,25,0.20);
     }
     .mini h3{
       margin: 0 0 8px;
@@ -538,11 +469,11 @@ body.light a{
     }
     .mini p{
       margin: 0;
-      color: rgba(255,255,255,0.74);
+      color: var(--muted);
       line-height: 1.7;
     }
 
-    /* Two-column blocks (Skills/Education etc.) */
+    /* Two-column blocks */
     .two-col{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -555,10 +486,9 @@ body.light a{
     .list{
       margin: 0;
       padding-left: 18px;
-      color: rgba(255,255,255,0.78);
+      color: var(--muted);
       line-height: 1.9;
     }
-    .list b{ color: rgba(255,255,255,0.92); }
 
     /* Timeline items */
     .item{
@@ -570,18 +500,19 @@ body.light a{
       border: 1px solid rgba(255,255,255,0.10);
       background: var(--panel);
     }
+    body.light .item{ border-color: rgba(15,18,25,0.16); }
     .item + .item{ margin-top: 12px; }
     .item .left{ min-width: 0; }
     .item .title{ font-weight: 800; margin: 0 0 4px; }
-    .item .meta{ margin: 0; color: rgba(255,255,255,0.72); line-height: 1.6; }
+    .item .meta{ margin: 0; color: var(--muted); line-height: 1.6; }
     .item .date{
-      color: rgba(255,255,255,0.68);
+      color: var(--muted2);
       font-weight: 800;
       white-space: nowrap;
       padding-left: 10px;
     }
 
-    /* Certificates grid: 3 per row */
+    /* Certificates grid */
     .cert-grid{
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -597,16 +528,21 @@ body.light a{
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.10);
       background: var(--panel);
-      padding: 14px 14px;
+      padding: 14px;
       display:flex;
       flex-direction: column;
       gap: 8px;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
+    body.light .cert{ border-color: rgba(15,18,25,0.16); }
     .cert:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
+    }
+    body.light .cert:hover{
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(15,18,25,0.20);
     }
     .cert-top{
       display:flex;
@@ -616,40 +552,30 @@ body.light a{
     }
     .cert-name{
       font-weight: 850;
-      color: rgba(255,255,255,0.92);
+      color: var(--text);
       line-height: 1.3;
     }
     .cert-date{
-      color: rgba(255,255,255,0.65);
+      color: var(--muted2);
       font-weight: 800;
       white-space: nowrap;
     }
     .cert-by{
-      color: rgba(255,255,255,0.72);
+      color: var(--muted);
       margin: 0;
       line-height: 1.5;
-    }
-    .cert a{
-      text-decoration: underline;
-      text-decoration-color: rgba(255,255,255,0.35);
-      text-underline-offset: 3px;
-    }
-    .cert a:hover{
-      text-decoration-color: rgba(120,140,255,0.85);
     }
 
     /* Footer */
     footer{
       text-align: center;
-      color: rgba(255,255,255,0.55);
+      color: var(--muted2);
       padding: 26px 0 10px;
       margin-top: 26px;
     }
+    footer p{ margin: 6px 0; }
 
-    /* Prevent anchor jump behind sticky nav */
-    .anchor{
-      scroll-margin-top: calc(var(--navh) + 18px);
-    }
+    .anchor{ scroll-margin-top: calc(var(--navh) + 18px); }
 
     /* Scroll reveal */
     .reveal{
@@ -661,6 +587,17 @@ body.light a{
       opacity: 1;
       transform: translateY(0);
     }
+
+    .section-divider{
+      height:1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,.15), transparent);
+      margin: 48px 0;
+    }
+    body.light .section-divider{
+      background: linear-gradient(to right, transparent, rgba(15,18,25,.14), transparent);
+    }
+
+    *{ -webkit-tap-highlight-color: transparent; }
 
     /* Back to top */
     .to-top{
@@ -682,108 +619,18 @@ body.light a{
       backdrop-filter: blur(12px);
       z-index: 70;
     }
+    body.light .to-top{
+      border-color: rgba(15,18,25,0.18);
+      background: rgba(255,255,255,0.80);
+      color: rgba(15,18,25,0.9);
+    }
     .to-top.show{
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
-    .to-top:hover{
-      background: rgba(255,255,255,0.10);
-    }
-.section-divider{
-  height:1px;
-  background: linear-gradient(to right,
-    transparent,
-    rgba(255,255,255,.15),
-    transparent);
-  margin: 48px 0;
-}
-*{
-  -webkit-tap-highlight-color: transparent;
-}
-.brand-initials{
-  font-weight: 900;
-  font-size: 15px;
-  letter-spacing: 1px;
-
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  padding: 0;
-  box-shadow: none;
-}
-
-    /* ===========================
-   LIGHT MODE - Final Fix Pack
-   Put this at END of CSS
-   =========================== */
-
-body.light{
-  /* stronger border so frames are visible */
-  --border: rgba(15,18,25,0.14);
-}
-
-/* Make ANY leftover inline white text readable */
-body.light p,
-body.light span,
-body.light li{
-  color: var(--muted);
-}
-
-/* Headings stay dark */
-body.light h1, body.light h2, body.light h3,
-body.light .title, body.light .cert-name, body.light b{
-  color: var(--text) !important;
-}
-
-/* Fix: dates + small meta texts */
-body.light .cert-date,
-body.light .item .date,
-body.light .stat span,
-body.light .item .meta,
-body.light .section-sub,
-body.light .subtitle,
-body.light .lead,
-body.light footer{
-  color: var(--muted) !important;
-}
-
-/* Fix: “Prefer email…” + “Feel free to reach out…” (inline color override) */
-body.light #contact p,
-body.light #home p,
-body.light .card p{
-  color: var(--muted) !important;
-}
-
-/* ✅ Make certificate boxes/frame visible */
-body.light .cert,
-body.light .mini,
-body.light .item,
-body.light .stat,
-body.light .pill{
-  border-color: rgba(15,18,25,0.16) !important;
-  background: rgba(255,255,255,0.92) !important; /* clean white cards */
-}
-
-/* Keep the big cards looking like Amazon (clean) */
-body.light .card{
-  border-color: rgba(15,18,25,0.14) !important;
-  background: rgba(255,255,255,0.88) !important;
-  box-shadow: 0 14px 32px rgba(15,18,25,0.10) !important;
-}
-
-/* Pills/buttons: make border visible in light mode */
-body.light .btn,
-body.light .pill{
-  border-color: rgba(15,18,25,0.18) !important;
-}
-
-
-
-
-
-    
+    .to-top:hover{ background: rgba(255,255,255,0.10); }
+    body.light .to-top:hover{ background: rgba(255,255,255,0.95); }
   </style>
 </head>
 
@@ -793,31 +640,30 @@ body.light .pill{
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
       <div class="nav-inner">
-<a class="brand" href="#home">
-  <span class="brand-initials">MS</span>
-</a>
+        <a class="brand" href="#home">
+          <span class="brand-initials">MS</span>
+        </a>
 
-<div class="nav-links" id="navLinks">
-  <a href="#home">Home</a>
-  <a href="#projects">Projects</a>
-  <a href="#skills">Skills</a>
-  <a href="#education">Education</a>
-  <a href="#experience">Experience</a>
-  <a href="#awards">Awards</a>
-  <a href="#certificates">Certificates</a>
-  <a href="#contact">Contact</a>
-</div>
+        <div class="nav-links" id="navLinks">
+          <a href="#home">Home</a>
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#experience">Experience</a>
+          <a href="#awards">Awards</a>
+          <a href="#certificates">Certificates</a>
+          <a href="#contact">Contact</a>
+        </div>
 
-<div class="nav-actions">
-  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-    <span class="dot3"></span>
-    <span class="dot3"></span>
-    <span class="dot3"></span>
-  </button>
-  <button class="btn btn-ghost" id="themeToggle">🌙</button>
-  <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
-</div>
-
+        <div class="nav-actions">
+          <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+            <span class="dot3"></span>
+            <span class="dot3"></span>
+            <span class="dot3"></span>
+          </button>
+          <button class="btn btn-ghost" id="themeToggle" type="button">🌙</button>
+          <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
+        </div>
       </div>
     </div>
   </div>
@@ -874,7 +720,8 @@ body.light .pill{
           <span class="pill">Open to opportunities</span>
         </div>
 
-        <p style="margin: 14px 0 0; color: rgba(255,255,255,0.72); line-height: 1.7;">
+        <!-- no inline color (so light mode always works) -->
+        <p style="margin: 14px 0 0; line-height: 1.7; color: var(--muted);">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
       </div>
@@ -903,7 +750,9 @@ body.light .pill{
         </div>
       </div>
     </section>
+
     <div class="section-divider"></div>
+
     <section class="two-col">
       <div id="skills" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Skills</h2>
@@ -937,7 +786,7 @@ body.light .pill{
         </div>
 
         <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
-        <p style="margin: 0; color: rgba(255,255,255,0.75); line-height: 1.7;">
+        <p style="margin: 0; line-height: 1.7; color: var(--muted);">
           My research interests focus on <b>secure and trustworthy systems</b>, especially
           <b>blockchain security</b>, <b>network and cloud security</b>, and <b>applied AI for cybersecurity</b>.
           I’m particularly interested in building practical, reliable solutions for identity, integrity, and fraud resistance
@@ -1051,7 +900,7 @@ body.light .pill{
     <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
       <div class="card reveal">
-        <p style="margin:0 0 14px; color: rgba(255,255,255,0.78); line-height: 1.7;">
+        <p style="margin:0 0 14px; line-height: 1.7; color: var(--muted);">
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
 
@@ -1070,27 +919,20 @@ body.light .pill{
     </footer>
   </div>
 
-  
   <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
   <script>
-
-
+    // theme
     const toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    });
+    if(localStorage.getItem("theme") === "light"){
+      document.body.classList.add("light");
+    }
 
-toggle.addEventListener("click", () => {
-  document.body.classList.toggle("light");
-  localStorage.setItem("theme",
-    document.body.classList.contains("light") ? "light" : "dark"
-  );
-});
-
-if(localStorage.getItem("theme") === "light"){
-  document.body.classList.add("light");
-}
-
-    // Fix: sometimes GitHub Pages loads with a slight scroll offset.
-    // We only force to top when there is NO #hash in the URL.
+    // Fix: load at top if no hash
     (function () {
       const hasHash = window.location.hash && window.location.hash.length > 1;
       if (!hasHash) {
@@ -1099,7 +941,7 @@ if(localStorage.getItem("theme") === "light"){
       }
     })();
 
-    // Mobile/Tablet menu toggle (<=1024px)
+    // Mobile menu
     (function () {
       const btn = document.getElementById("menuBtn");
       const links = document.getElementById("navLinks");
@@ -1115,9 +957,7 @@ if(localStorage.getItem("theme") === "light"){
         btn.setAttribute("aria-expanded", open ? "true" : "false");
       });
 
-      links.querySelectorAll("a").forEach(a => {
-        a.addEventListener("click", closeMenu);
-      });
+      links.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
 
       document.addEventListener("click", (e) => {
         if (!links.classList.contains("is-open")) return;
@@ -1126,7 +966,6 @@ if(localStorage.getItem("theme") === "light"){
       });
 
       window.addEventListener("resize", () => {
-        // if back to desktop, force-close dropdown
         if (window.innerWidth > 1024) closeMenu();
       });
     })();
@@ -1135,14 +974,12 @@ if(localStorage.getItem("theme") === "light"){
     (function () {
       const els = document.querySelectorAll(".reveal");
       const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) e.target.classList.add("show");
-        });
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
       }, { threshold: 0.15 });
       els.forEach(el => io.observe(el));
     })();
 
-    // Back to top button
+    // Back to top
     (function(){
       const btn = document.getElementById("toTop");
       if (!btn) return;
