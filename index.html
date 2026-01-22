@@ -17,6 +17,7 @@
     :root{
       --bg: #060b16;
       --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.08);
       --border: rgba(255,255,255,0.10);
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.70);
@@ -37,7 +38,7 @@
     }
     body{
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background:
         radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
@@ -90,7 +91,8 @@
     }
     .nav-inner{
       height: var(--navh);
-      display: flex;
+      display: grid;                          /* ✅ GRID fixes overlap at "in-between" sizes */
+      grid-template-columns: auto 1fr auto;    /* brand | links | actions */
       align-items: center;
       gap: 14px;
       padding: 0 18px;
@@ -98,10 +100,8 @@
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
-      position: relative;
-      overflow: visible;
+      position: relative; /* needed for dropdown */
     }
-
     .brand{
       display: flex;
       align-items: center;
@@ -110,6 +110,7 @@
       letter-spacing: 0.2px;
       white-space: nowrap;
       flex-shrink: 0;
+      min-width: 0;
     }
     .dot{
       width: 10px; height: 10px;
@@ -118,40 +119,48 @@
       box-shadow: 0 0 0 4px rgba(110,220,255,0.10);
     }
 
-    /* This spacer forces the menu button to the far right ALWAYS */
-    .nav-spacer{ flex: 1; min-width: 8px; }
-
-    /* Desktop links (inline) */
-    .nav-links-desktop{
+    /* Desktop links */
+    .nav-links{
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 12px;
       color: var(--muted);
       font-weight: 600;
       white-space: nowrap;
-      flex-shrink: 0;
+      min-width: 0;
+      overflow: hidden; /* ✅ prevents overlap with Resume button */
     }
-    .nav-links-desktop a{
+    .nav-links a{
       padding: 10px 12px;
       border-radius: 999px;
       transition: 180ms ease;
+      flex: 0 0 auto;
     }
-    .nav-links-desktop a:hover{
+    .nav-links a:hover{
       color: var(--text);
       background: rgba(255,255,255,0.06);
     }
 
-    /* 3 dots button (kept on RIGHT) */
+    .nav-actions{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Hamburger button hidden on large desktop */
     .menu-btn{
+      display: none;
       width: 46px;
       height: 46px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.05);
       cursor: pointer;
-      display: none; /* shown only when needed */
       align-items: center;
       justify-content: center;
+      gap: 6px;
       flex-shrink: 0;
     }
     .menu-btn:hover{
@@ -159,50 +168,78 @@
       border-color: rgba(255,255,255,0.22);
       box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
-    .dots{
-      display: inline-flex;
-      gap: 5px;
-    }
-    .dots span{
-      width: 4px; height: 4px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.85);
+    .menu-btn .bar{
       display: block;
+      width: 18px;
+      height: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 999px;
     }
 
-    /* Dropdown menu */
-    .nav-dropdown{
-      display: none;
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      top: calc(100% + 10px);
-      padding: 12px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(10,16,32,0.92);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
-      flex-direction: column;
-      gap: 8px;
-      z-index: 60;
-      text-align: center;
-    }
-    .nav-dropdown.is-open{ display: flex; }
-    .nav-dropdown a{
-      padding: 12px 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.90);
+    /* Buttons */
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
       font-weight: 700;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      user-select: none;
+      white-space: nowrap;
     }
-    .nav-dropdown a:hover{
+    .btn:hover{
+      transform: translateY(-1px);
       background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(120,140,255,0.95), rgba(110,220,255,0.85));
+      border-color: rgba(150,175,255,0.35);
+      color: #081026;
+    }
+    .btn-primary:hover{
+      background: linear-gradient(135deg, rgba(135,155,255,1), rgba(125,235,255,0.95));
+      border-color: rgba(170,195,255,0.50);
+    }
+    .btn-ghost{
+      background: rgba(255,255,255,0.04);
     }
 
-    /* Collapsed state controlled by JS (not by width only) */
-    .nav-inner.is-collapsed .nav-links-desktop{ display: none; }
-    .nav-inner.is-collapsed .menu-btn{ display: inline-flex; }
+    /* ✅ IMPORTANT FIX:
+       Collapse to hamburger EARLIER (<= 1024px) so "in-between sizes" never overlap. */
+    @media (max-width: 1024px){
+      .menu-btn{ display: inline-flex; }
+      .nav-links{
+        display: none; /* hidden inline */
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: calc(100% + 10px);
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(10,16,32,0.92);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+        flex-direction: column;
+        gap: 8px;
+        white-space: normal;
+        z-index: 60;
+      }
+      .nav-links.is-open{ display: flex; }
+      .nav-links a{
+        padding: 12px 12px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.04);
+      }
+    }
 
     /* Layout */
     .grid{
@@ -272,6 +309,7 @@
       font-size: 13px;
     }
 
+    /* Hero stats row */
     .stats{
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -284,15 +322,34 @@
       border-radius: 18px;
       padding: 14px;
     }
-    .stat b{ display:block; font-size: 16px; letter-spacing: -0.2px; }
-    .stat span{ display:block; margin-top: 4px; font-size: 13px; color: rgba(255,255,255,0.65); font-weight: 600; }
+    .stat b{
+      display:block;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+    .stat span{
+      display:block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      font-weight: 600;
+    }
     @media (max-width: 960px){
       .stats{ grid-template-columns: 1fr; }
     }
 
+    /* Sections */
     section{ margin-top: 28px; }
-    .section-title{ font-size: 28px; margin: 0 0 12px; letter-spacing: -0.2px; }
-    .section-sub{ margin: -4px 0 14px; color: var(--muted2); line-height: 1.6; }
+    .section-title{
+      font-size: 28px;
+      margin: 0 0 12px;
+      letter-spacing: -0.2px;
+    }
+    .section-sub{
+      margin: -4px 0 14px;
+      color: var(--muted2);
+      line-height: 1.6;
+    }
 
     .cards{
       display:grid;
@@ -314,9 +371,18 @@
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
     }
-    .mini h3{ margin: 0 0 8px; font-size: 18px; letter-spacing: -0.2px; }
-    .mini p{ margin: 0; color: rgba(255,255,255,0.74); line-height: 1.7; }
+    .mini h3{
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    .mini p{
+      margin: 0;
+      color: rgba(255,255,255,0.74);
+      line-height: 1.7;
+    }
 
+    /* Two-column blocks (Skills/Education etc.) */
     .two-col{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -334,6 +400,7 @@
     }
     .list b{ color: rgba(255,255,255,0.92); }
 
+    /* Timeline items */
     .item{
       display:flex;
       justify-content: space-between;
@@ -354,6 +421,7 @@
       padding-left: 10px;
     }
 
+    /* Certificates grid: 3 per row */
     .cert-grid{
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -386,10 +454,31 @@
       gap: 10px;
       align-items: baseline;
     }
-    .cert-name{ font-weight: 850; color: rgba(255,255,255,0.92); line-height: 1.3; }
-    .cert-date{ color: rgba(255,255,255,0.65); font-weight: 800; white-space: nowrap; }
-    .cert-by{ color: rgba(255,255,255,0.72); margin: 0; line-height: 1.5; }
+    .cert-name{
+      font-weight: 850;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.3;
+    }
+    .cert-date{
+      color: rgba(255,255,255,0.65);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .cert-by{
+      color: rgba(255,255,255,0.72);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .cert a{
+      text-decoration: underline;
+      text-decoration-color: rgba(255,255,255,0.35);
+      text-underline-offset: 3px;
+    }
+    .cert a:hover{
+      text-decoration-color: rgba(120,140,255,0.85);
+    }
 
+    /* Footer */
     footer{
       text-align: center;
       color: rgba(255,255,255,0.55);
@@ -397,15 +486,23 @@
       margin-top: 26px;
     }
 
-    .anchor{ scroll-margin-top: calc(var(--navh) + 18px); }
+    /* Prevent anchor jump behind sticky nav */
+    .anchor{
+      scroll-margin-top: calc(var(--navh) + 18px);
+    }
 
+    /* Scroll reveal */
     .reveal{
       opacity: 0;
       transform: translateY(12px);
       transition: opacity 500ms ease, transform 500ms ease;
     }
-    .reveal.show{ opacity: 1; transform: translateY(0); }
+    .reveal.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
 
+    /* Back to top */
     .to-top{
       position: fixed;
       right: 22px;
@@ -430,7 +527,9 @@
       transform: translateY(0);
       pointer-events: auto;
     }
-    .to-top:hover{ background: rgba(255,255,255,0.10); }
+    .to-top:hover{
+      background: rgba(255,255,255,0.10);
+    }
   </style>
 </head>
 
@@ -439,36 +538,20 @@
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
-      <div class="nav-inner" id="navInner">
+      <div class="nav-inner">
         <a class="brand" href="#home">
           <span class="dot"></span>
           <span>Mohammad Saleem</span>
         </a>
 
-        <div class="nav-spacer"></div>
-
-        <!-- Desktop list (shows only when space fits) -->
-        <nav class="nav-links-desktop" id="navDesktop" aria-label="Primary navigation">
-          <a href="#home">Home</a>
-          <a href="#projects">Projects</a>
-          <a href="#skills">Skills</a>
-          <a href="#education">Education</a>
-          <a href="#experience">Experience</a>
-          <a href="#awards">Awards</a>
-          <a href="#certificates">Certificates</a>
-          <a href="#contact">Contact</a>
-          <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
-        </nav>
-
-        <!-- 3 dots on the RIGHT -->
+        <!-- Hamburger (will show at <=1024px) -->
         <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-          <span class="dots" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </button>
 
-        <!-- Dropdown (same links) -->
-        <div class="nav-dropdown" id="navDropdown" role="menu" aria-label="Menu">
+        <div class="nav-links" id="navLinks">
           <a href="#home">Home</a>
           <a href="#projects">Projects</a>
           <a href="#skills">Skills</a>
@@ -477,7 +560,10 @@
           <a href="#awards">Awards</a>
           <a href="#certificates">Certificates</a>
           <a href="#contact">Contact</a>
-          <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
+        </div>
+
+        <div class="nav-actions">
+          <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
         </div>
       </div>
     </div>
@@ -609,6 +695,7 @@
 
     <section id="experience" class="anchor reveal">
       <h2 class="section-title">Experience</h2>
+
       <div class="card reveal">
         <div class="item" style="margin-top: 0;">
           <div class="left">
@@ -624,6 +711,7 @@
 
     <section id="awards" class="anchor reveal">
       <h2 class="section-title">Awards and Achievements</h2>
+
       <div class="card reveal">
         <div class="item" style="margin-top: 0;">
           <div class="left">
@@ -645,6 +733,7 @@
 
     <section id="certificates" class="anchor reveal">
       <h2 class="section-title">Certificates</h2>
+
       <div class="card reveal">
         <div class="cert-grid">
           <div class="cert">
@@ -654,6 +743,7 @@
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
+
           <div class="cert">
             <div class="cert-top">
               <div class="cert-name">Introduction to Modern AI (Cisco)</div>
@@ -661,6 +751,7 @@
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
+
           <div class="cert">
             <div class="cert-top">
               <div class="cert-name">Cloud Foundations (AWS Academy)</div>
@@ -668,6 +759,7 @@
             </div>
             <p class="cert-by">Awarded by AWS Academy.</p>
           </div>
+
           <div class="cert">
             <div class="cert-top">
               <div class="cert-name">Introduction to Data Science (Cisco)</div>
@@ -675,6 +767,7 @@
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
+
           <div class="cert">
             <div class="cert-top">
               <div class="cert-name">Introduction to Cybersecurity (Cisco)</div>
@@ -682,6 +775,7 @@
             </div>
             <p class="cert-by">Awarded by Cisco.</p>
           </div>
+
           <div class="cert">
             <div class="cert-top">
               <div class="cert-name">Python Core (Sololearn)</div>
@@ -689,6 +783,7 @@
             </div>
             <p class="cert-by">Awarded by Sololearn.</p>
           </div>
+
           <div class="cert">
             <div class="cert-top">
               <div class="cert-name">Using Databases with Python (Coursera)</div>
@@ -716,13 +811,16 @@
       </div>
     </section>
 
-    <footer class="reveal">© 2026 Eng. Mohammad Saleem</footer>
+    <footer class="reveal">
+      © 2026 Eng. Mohammad Saleem
+    </footer>
   </div>
 
   <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
   <script>
-    // Force top on load when no hash
+    // Fix: sometimes GitHub Pages loads with a slight scroll offset.
+    // We only force to top when there is NO #hash in the URL.
     (function () {
       const hasHash = window.location.hash && window.location.hash.length > 1;
       if (!hasHash) {
@@ -731,77 +829,64 @@
       }
     })();
 
+    // Mobile/Tablet menu toggle (<=1024px)
+    (function () {
+      const btn = document.getElementById("menuBtn");
+      const links = document.getElementById("navLinks");
+      if (!btn || !links) return;
+
+      const closeMenu = () => {
+        links.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      };
+
+      btn.addEventListener("click", () => {
+        const open = links.classList.toggle("is-open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(a => {
+        a.addEventListener("click", closeMenu);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!links.classList.contains("is-open")) return;
+        const clickedInside = links.contains(e.target) || btn.contains(e.target);
+        if (!clickedInside) closeMenu();
+      });
+
+      window.addEventListener("resize", () => {
+        // if back to desktop, force-close dropdown
+        if (window.innerWidth > 1024) closeMenu();
+      });
+    })();
+
     // Scroll reveal
     (function () {
       const els = document.querySelectorAll(".reveal");
       const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add("show");
+        });
       }, { threshold: 0.15 });
       els.forEach(el => io.observe(el));
     })();
 
-    // Back to top
+    // Back to top button
     (function(){
       const btn = document.getElementById("toTop");
       if (!btn) return;
-      const toggleBtn = () => btn.classList.toggle("show", window.scrollY > 600);
+
+      const toggleBtn = () => {
+        if (window.scrollY > 600) btn.classList.add("show");
+        else btn.classList.remove("show");
+      };
+
       window.addEventListener("scroll", toggleBtn, { passive: true });
       toggleBtn();
-      btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    })();
 
-    // ✅ AUTO-COLLAPSE NAV when links don't fit
-    (function () {
-      const navInner = document.getElementById("navInner");
-      const desktop = document.getElementById("navDesktop");
-      const btn = document.getElementById("menuBtn");
-      const dropdown = document.getElementById("navDropdown");
-
-      if (!navInner || !desktop || !btn || !dropdown) return;
-
-      function closeMenu(){
-        dropdown.classList.remove("is-open");
-        btn.setAttribute("aria-expanded", "false");
-      }
-
-      function updateNavMode(){
-        // Temporarily show desktop so we can measure it
-        desktop.style.display = "flex";
-        const fits = desktop.scrollWidth <= desktop.clientWidth + 2; // +2 tolerance
-
-        if (fits) {
-          navInner.classList.remove("is-collapsed");
-          closeMenu();
-        } else {
-          navInner.classList.add("is-collapsed");
-        }
-
-        // Remove inline override so CSS takes over
-        desktop.style.display = "";
-      }
-
-      // initial + resize + font load
-      updateNavMode();
-      window.addEventListener("resize", updateNavMode);
-
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(updateNavMode).catch(()=>{});
-      }
-
-      // menu toggle
       btn.addEventListener("click", () => {
-        const open = dropdown.classList.toggle("is-open");
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-      });
-
-      // close when clicking a link
-      dropdown.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
-
-      // close when clicking outside
-      document.addEventListener("click", (e) => {
-        if (!dropdown.classList.contains("is-open")) return;
-        const clickedInside = dropdown.contains(e.target) || btn.contains(e.target);
-        if (!clickedInside) closeMenu();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
     })();
   </script>
