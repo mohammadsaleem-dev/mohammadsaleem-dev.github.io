@@ -120,6 +120,35 @@ body.light{
   --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
 }
 
+/* ✅ Make ALL text readable in light mode */
+body.light .subtitle,
+body.light .lead,
+body.light .section-sub,
+body.light .mini p,
+body.light .item .meta,
+body.light .list,
+body.light .cert-by,
+body.light footer,
+body.light .stat span,
+body.light .pill{
+  color: var(--muted) !important;
+}
+
+body.light .mini h3,
+body.light .item .title,
+body.light .cert-name,
+body.light .section-title,
+body.light h1,
+body.light h2,
+body.light h3,
+body.light b{
+  color: var(--text) !important;
+}
+
+/* optional: links slightly darker */
+body.light a{
+  color: var(--text);
+}
 
 
     /* NAV */
