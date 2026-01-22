@@ -750,6 +750,47 @@
       margin: 14px 0 6px;
       width: 100%; /* important */
     }
+    
+        /* ✅ Centered Time Card (no weather) */
+    .time-card{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: 6px;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+      min-width: 180px;
+    }
+    
+    .time-label{
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      color: rgba(255,255,255,0.65);
+    }
+    
+    .time-value{
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+    
+    body.light .time-card{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(15,18,25,0.16);
+      box-shadow: 0 14px 28px rgba(15,18,25,0.10);
+    }
+    
+    body.light .time-label{
+      color: rgba(15,18,25,0.62) !important;
+    }
+
 
     .meta-card--wide{
       width: 100%;
@@ -832,22 +873,14 @@
 
   <div class="container">
 
-  <!-- ✅ Time + Weather (between navbar and content) -->
+  <!-- ✅ Time (between navbar and content) -->
   <div class="meta-wrap">
-    <div class="meta-card meta-card--wide" id="metaCard" title="Local time and weather">
-      <div class="meta-left">
-        <div class="meta-time" id="liveTime">--:--</div>
-        <div class="meta-loc" id="liveLoc">Amman, Jordan</div>
-      </div>
-      <div class="meta-right">
-        <img class="weather-icon" id="weatherIcon" alt="Weather icon" src="" style="display:none;">
-        <div style="display:flex; flex-direction:column; line-height:1.1;">
-          <div class="meta-temp" id="weatherTemp">--°C</div>
-          <div class="meta-desc" id="weatherDesc">Loading…</div>
-        </div>
-      </div>
+    <div class="time-card" title="Local time">
+      <div class="time-label">Local Time</div>
+      <div class="time-value" id="liveTime">--:--</div>
     </div>
   </div>
+
 
     
     <div id="home" class="grid anchor">
@@ -1182,64 +1215,14 @@
       btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     })();
 
-    // ===============================
-// LIVE TIME + FIXED AMMAN WEATHER
-// (No geolocation / no popup)
-// ===============================
-const OPENWEATHER_KEY = "39692a69363242ae5a39ef6d11a9e6f4";
-const CITY = "Amman,JO";
-
-// Live clock
+  // ✅ Live Clock (center card)
 function updateTime() {
   const now = new Date();
   const el = document.getElementById("liveTime");
-  if (el) el.innerText = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  if (el) el.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 setInterval(updateTime, 1000);
 updateTime();
-
-// Weather
-async function loadWeather() {
-  const elTemp = document.getElementById("weatherTemp");
-  const elDesc = document.getElementById("weatherDesc");
-  const elLoc  = document.getElementById("liveLoc");
-  const elIcon = document.getElementById("weatherIcon");
-
-  try {
-    if (!OPENWEATHER_KEY || OPENWEATHER_KEY.includes("PASTE_")) {
-      if (elTemp) elTemp.innerText = "--°C";
-      if (elDesc) elDesc.innerText = "Set API key";
-      if (elLoc)  elLoc.innerText  = "Amman, Jordan";
-      return;
-    }
-
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(CITY)}&units=metric&appid=${encodeURIComponent(OPENWEATHER_KEY)}`;
-    const res = await fetch(url, { cache: "no-store" });
-    const data = await res.json();
-
-    if (!res.ok || data.cod !== 200) {
-      if (elTemp) elTemp.innerText = "--°C";
-      if (elDesc) elDesc.innerText = data?.message || "API Error";
-      if (elLoc)  elLoc.innerText  = "Amman, Jordan";
-      return;
-    }
-
-    if (elTemp) elTemp.innerText = Math.round(data.main.temp) + "°C";
-    if (elDesc) elDesc.innerText = data.weather[0].description;
-    if (elLoc)  elLoc.innerText  = "Amman, Jordan";
-
-    const icon = data.weather[0].icon;
-    if (elIcon) {
-      elIcon.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
-      elIcon.style.display = "block";
-    }
-  } catch (e) {
-    if (elDesc) elDesc.innerText = "Offline";
-  }
-}
-
-loadWeather();
-setInterval(loadWeather, 600000);
 
   
   </script>
