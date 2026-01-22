@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="color-scheme" content="dark">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -10,7 +11,10 @@
 
   <title>Mohammad Saleem | Computer Engineer Portfolio</title>
 
-  <meta name="description" content="Mohammad Saleem — Computer Engineering Graduate. Portfolio featuring projects in blockchain, cybersecurity, networking, ROS, and automation, plus resume and contact links." />
+  <meta property="og:title" content="Mohammad Saleem — Computer Engineer Portfolio">
+  <meta property="og:description" content="Blockchain | AI | Cybersecurity | Projects & Resume">
+  <meta property="og:image" content="assets/preview.png">
+  <meta property="og:type" content="website">
   <meta name="theme-color" content="#0a1020" />
 
   <style>
@@ -79,6 +83,11 @@
     @keyframes floaty{
       0%,100% { transform: translate3d(0,0,0) scale(1); }
       50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
+    }
+        body.light{
+      --bg: #f5f7ff;
+      --text: #111;
+      --panel: rgba(0,0,0,.04);
     }
 
     /* NAV */
@@ -250,6 +259,27 @@
     .btn-ghost{
       background: rgba(255,255,255,0.04);
     }
+
+    .btn-primary{
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at top left,
+    rgba(255,255,255,0.35),
+    transparent 60%);
+  opacity:0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::after{
+  opacity:1;
+}
+
 
 @media (max-width: 1024px){
   .menu-btn{ display: inline-flex; }
@@ -598,6 +628,18 @@
     .to-top:hover{
       background: rgba(255,255,255,0.10);
     }
+.section-divider{
+  height:1px;
+  background: linear-gradient(to right,
+    transparent,
+    rgba(255,255,255,.15),
+    transparent);
+  margin: 48px 0;
+}
+*{
+  -webkit-tap-highlight-color: transparent;
+}
+    
   </style>
 </head>
 
@@ -629,7 +671,7 @@
     <span class="dot3"></span>
     <span class="dot3"></span>
   </button>
-
+  <button class="btn btn-ghost" id="themeToggle">🌙</button>
   <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
 </div>
 
@@ -647,8 +689,8 @@
         </p>
 
         <div class="pill-row">
-          <span class="pill">Ethereum / Smart Contracts</span>
-          <span class="pill">ROS 2</span>
+          <span class="pill">Open To Research Assistantships</span>
+          <span class="pill">Blockchain Security Focus</span>
           <span class="pill">Networking & Security</span>
           <span class="pill">Web (HTML/CSS)</span>
         </div>
@@ -718,7 +760,7 @@
         </div>
       </div>
     </section>
-
+    <div class="section-divider"></div>
     <section class="two-col">
       <div id="skills" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Skills</h2>
@@ -880,13 +922,30 @@
     </section>
 
     <footer class="reveal">
-      © 2026 Eng. Mohammad Saleem
+      <p>© 2026 Mohammad Saleem</p>
+      <p>Built with HTML, CSS & JavaScript</p>
     </footer>
   </div>
 
+  
   <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
   <script>
+
+
+    const toggle = document.getElementById("themeToggle");
+
+toggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  localStorage.setItem("theme",
+    document.body.classList.contains("light") ? "light" : "dark"
+  );
+});
+
+if(localStorage.getItem("theme") === "light"){
+  document.body.classList.add("light");
+}
+
     // Fix: sometimes GitHub Pages loads with a slight scroll offset.
     // We only force to top when there is NO #hash in the URL.
     (function () {
@@ -949,7 +1008,9 @@
         if (window.scrollY > 600) btn.classList.add("show");
         else btn.classList.remove("show");
       };
-
+footer p{
+  margin:6px 0;
+}
       window.addEventListener("scroll", toggleBtn, { passive: true });
       toggleBtn();
 
