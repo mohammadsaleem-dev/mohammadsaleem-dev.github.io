@@ -1163,6 +1163,60 @@
       }, { threshold: 0.15 });
       els.forEach(el => io.observe(el));
     })();
+// ===============================
+// LIVE TIME + FIXED AMMAN WEATHER
+// ===============================
+
+const OPENWEATHER_KEY = "YOUR_NEW_KEY_HERE"; // <-- put new key later
+const CITY = "Amman,JO"; // Fixed city (NO location permission)
+
+// -------- LIVE CLOCK ----------
+function updateTime() {
+  const now = new Date();
+  document.getElementById("liveTime").innerText =
+    now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+setInterval(updateTime, 1000);
+updateTime();
+
+// -------- WEATHER FETCH ----------
+async function loadWeather() {
+  try {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${OPENWEATHER_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.cod !== 200) {
+      document.getElementById("weatherTemp").innerText = "--°C";
+      document.getElementById("weatherDesc").innerText = "API Error";
+      return;
+    }
+
+    document.getElementById("weatherTemp").innerText =
+      Math.round(data.main.temp) + "°C";
+
+    document.getElementById("weatherDesc").innerText =
+      data.weather[0].description;
+
+    document.getElementById("liveLoc").innerText = "Amman, Jordan";
+
+    const icon = data.weather[0].icon;
+    document.getElementById("weatherIcon").src =
+      `https://openweathermap.org/img/wn/${icon}@2x.png`;
+
+    document.getElementById("weatherIcon").style.display = "block";
+
+  } catch (err) {
+    console.error("Weather error:", err);
+  }
+}
+
+// Load immediately
+loadWeather();
+
+// Refresh every 10 minutes
+setInterval(loadWeather, 600000);
 
     // Back to top button
     (function(){
@@ -1191,7 +1245,7 @@
        ============================================================ */
     (function () {
       // 1) Put your NEW key here (do NOT share it publicly)
-      const OPENWEATHER_KEY = "9915c043d2cb579c866c5b26d6e99262";
+      const OPENWEATHER_KEY = "1a1adbf093307b6f4c28c51dd6de3078";
 
       // 2) Elements
       const elTime = document.getElementById("liveTime");
@@ -1263,24 +1317,8 @@
 
       const loadWeatherWithGeo = () => {
         // Prefer exact location if user allows
-        if (navigator.geolocation) {
-          elLoc.textContent = "Detecting location…";
-          navigator.geolocation.getCurrentPosition(
-            (pos) => {
-              const { latitude, longitude } = pos.coords;
-              fetchWeather(latitude, longitude, "Your location");
-            },
-            () => {
-              // Permission denied / failed -> fallback to Amman
-              fetchWeather(AMMAN.lat, AMMAN.lon, AMMAN.label);
-            },
-            { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 }
-          );
-        } else {
-          // No geolocation support -> fallback
-          fetchWeather(AMMAN.lat, AMMAN.lon, AMMAN.label);
-        }
-      };
+fetchWeatherByCity("Amman,JO");
+
 
       // Initial load
       loadWeatherWithGeo();
