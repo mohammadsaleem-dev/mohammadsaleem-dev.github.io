@@ -639,6 +639,39 @@
     }
 
     *{ -webkit-tap-highlight-color: transparent; }
+    /* ==============================
+       LIGHT MODE TEXT FORCE FIX
+       ============================== */
+    
+    body.light,
+    body.light * {
+      color: var(--text) !important;
+    }
+    
+    /* Secondary text */
+    body.light .subtitle,
+    body.light .lead,
+    body.light .section-sub,
+    body.light .meta,
+    body.light .cert-by,
+    body.light footer,
+    body.light .stat span,
+    body.light .pill,
+    body.light li,
+    body.light p,
+    body.light span {
+      color: var(--muted) !important;
+    }
+    
+    /* Headings stay strong */
+    body.light h1,
+    body.light h2,
+    body.light h3,
+    body.light .title,
+    body.light .cert-name,
+    body.light b {
+      color: var(--text) !important;
+    }
 
     /* ✅ Light mode “frames visible” pack */
     body.light .cert,
