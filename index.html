@@ -741,6 +741,21 @@
       gap: 8px;
       flex-shrink: 0;
     }
+    
+    /* ✅ Place widget between navbar and hero */
+    .meta-wrap{
+      display: flex;
+      justify-content: center;
+      margin: 14px 0 6px;
+    }
+    
+    .meta-card--wide{
+      width: 100%;
+      max-width: var(--max);
+      justify-content: space-between;
+    }
+
+    
     .weather-icon{
       width: 28px;
       height: 28px;
@@ -805,20 +820,6 @@
             <span class="dot3"></span>
           </button>
 
-          <!-- ✅ ADDITION: Time + Weather Card (Navbar) -->
-          <div class="meta-card" id="metaCard" title="Local time and weather">
-            <div class="meta-left">
-              <div class="meta-time" id="liveTime">--:--</div>
-              <div class="meta-loc" id="liveLoc">Detecting location…</div>
-            </div>
-            <div class="meta-right">
-              <img class="weather-icon" id="weatherIcon" alt="Weather icon" src="" style="display:none;">
-              <div style="display:flex; flex-direction:column; line-height:1.1;">
-                <div class="meta-temp" id="weatherTemp">--°C</div>
-                <div class="meta-desc" id="weatherDesc">Loading…</div>
-              </div>
-            </div>
-          </div>
 
           <button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">🌙</button>
           <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
@@ -828,6 +829,25 @@
   </div>
 
   <div class="container">
+
+  <!-- ✅ Time + Weather (between navbar and content) -->
+  <div class="meta-wrap">
+    <div class="meta-card meta-card--wide" id="metaCard" title="Local time and weather">
+      <div class="meta-left">
+        <div class="meta-time" id="liveTime">--:--</div>
+        <div class="meta-loc" id="liveLoc">Detecting location…</div>
+      </div>
+      <div class="meta-right">
+        <img class="weather-icon" id="weatherIcon" alt="Weather icon" src="" style="display:none;">
+        <div style="display:flex; flex-direction:column; line-height:1.1;">
+          <div class="meta-temp" id="weatherTemp">--°C</div>
+          <div class="meta-desc" id="weatherDesc">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
     <div id="home" class="grid anchor">
       <div class="card reveal">
         <h1>Mohammad Saleem</h1>
