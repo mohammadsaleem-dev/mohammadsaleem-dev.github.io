@@ -692,7 +692,7 @@
        ✅ ADDITION: NAV TIME + WEATHER (Glassmorphism, animated icon)
        ============================================================ */
     .meta-card{
-      display: inline-flex;
+      display: flex; /* was inline-flex */
       align-items: center;
       gap: 10px;
       padding: 10px 12px;
@@ -705,6 +705,7 @@
       max-width: 320px;
       overflow: hidden;
     }
+
     body.light .meta-card{
       background: rgba(255,255,255,0.92);
       border-color: rgba(15,18,25,0.16);
@@ -747,8 +748,9 @@
       display: flex;
       justify-content: center;
       margin: 14px 0 6px;
+      width: 100%; /* important */
     }
-    
+
     .meta-card--wide{
       width: 100%;
       max-width: var(--max);
@@ -835,7 +837,7 @@
     <div class="meta-card meta-card--wide" id="metaCard" title="Local time and weather">
       <div class="meta-left">
         <div class="meta-time" id="liveTime">--:--</div>
-        <div class="meta-loc" id="liveLoc">Detecting location…</div>
+        <div class="meta-loc" id="liveLoc">Amman, Jordan</div>
       </div>
       <div class="meta-right">
         <img class="weather-icon" id="weatherIcon" alt="Weather icon" src="" style="display:none;">
@@ -1163,60 +1165,69 @@
       }, { threshold: 0.15 });
       els.forEach(el => io.observe(el));
     })();
-// ===============================
-// LIVE TIME + FIXED AMMAN WEATHER
-// ===============================
 
-const OPENWEATHER_KEY = "YOUR_NEW_KEY_HERE"; // <-- put new key later
-const CITY = "Amman,JO"; // Fixed city (NO location permission)
-
-// -------- LIVE CLOCK ----------
-function updateTime() {
-  const now = new Date();
-  document.getElementById("liveTime").innerText =
-    now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-setInterval(updateTime, 1000);
-updateTime();
-
-// -------- WEATHER FETCH ----------
-async function loadWeather() {
-  try {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${OPENWEATHER_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (data.cod !== 200) {
-      document.getElementById("weatherTemp").innerText = "--°C";
-      document.getElementById("weatherDesc").innerText = "API Error";
-      return;
+        // ===============================
+    // LIVE TIME + FIXED AMMAN WEATHER
+    // (No geolocation / no popup)
+    // ===============================
+    const OPENWEATHER_KEY = "PASTE_NEW_KEY_HERE";
+    const CITY = "Amman,JO";
+    
+    // Live clock
+    function updateTime() {
+      const now = new Date();
+      const el = document.getElementById("liveTime");
+      if (el) {
+        el.innerText = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
     }
-
-    document.getElementById("weatherTemp").innerText =
-      Math.round(data.main.temp) + "°C";
-
-    document.getElementById("weatherDesc").innerText =
-      data.weather[0].description;
-
-    document.getElementById("liveLoc").innerText = "Amman, Jordan";
-
-    const icon = data.weather[0].icon;
-    document.getElementById("weatherIcon").src =
-      `https://openweathermap.org/img/wn/${icon}@2x.png`;
-
-    document.getElementById("weatherIcon").style.display = "block";
-
-  } catch (err) {
-    console.error("Weather error:", err);
-  }
-}
-
-// Load immediately
-loadWeather();
-
-// Refresh every 10 minutes
-setInterval(loadWeather, 600000);
+    setInterval(updateTime, 1000);
+    updateTime();
+    
+    // Weather
+    async function loadWeather() {
+      try {
+        const elTemp = document.getElementById("weatherTemp");
+        const elDesc = document.getElementById("weatherDesc");
+        const elLoc  = document.getElementById("liveLoc");
+        const elIcon = document.getElementById("weatherIcon");
+    
+        if (!OPENWEATHER_KEY || OPENWEATHER_KEY.includes("PASTE_")) {
+          if (elTemp) elTemp.innerText = "--°C";
+          if (elDesc) elDesc.innerText = "Set API key";
+          if (elLoc)  elLoc.innerText  = "Amman, Jordan";
+          return;
+        }
+    
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(CITY)}&units=metric&appid=${encodeURIComponent(OPENWEATHER_KEY)}`;
+        const res = await fetch(url, { cache: "no-store" });
+        const data = await res.json();
+    
+        if (!res.ok || data.cod !== 200) {
+          if (elTemp) elTemp.innerText = "--°C";
+          if (elDesc) elDesc.innerText = (data && data.message) ? data.message : "API Error";
+          if (elLoc)  elLoc.innerText  = "Amman, Jordan";
+          return;
+        }
+    
+        if (elTemp) elTemp.innerText = Math.round(data.main.temp) + "°C";
+        if (elDesc) elDesc.innerText = data.weather[0].description;
+        if (elLoc)  elLoc.innerText  = "Amman, Jordan";
+    
+        const icon = data.weather[0].icon;
+        if (elIcon) {
+          elIcon.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+          elIcon.style.display = "block";
+        }
+      } catch (e) {
+        const elDesc = document.getElementById("weatherDesc");
+        if (elDesc) elDesc.innerText = "Offline";
+      }
+    }
+    
+    loadWeather();
+    setInterval(loadWeather, 600000); // every 10 minutes
+    
 
     // Back to top button
     (function(){
