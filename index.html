@@ -91,16 +91,15 @@
     }
     .nav-inner{
       height: var(--navh);
-      display: flex;
+      display: grid;                          /* ✅ GRID fixes overlap at "in-between" sizes */
+      grid-template-columns: auto 1fr auto;    /* brand | links | actions */
       align-items: center;
-      justify-content: space-between;
-      gap: 18px;
+      gap: 14px;
       padding: 0 18px;
       border: 1px solid var(--border);
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
-      flex-wrap: nowrap;
       position: relative; /* needed for dropdown */
     }
     .brand{
@@ -111,6 +110,7 @@
       letter-spacing: 0.2px;
       white-space: nowrap;
       flex-shrink: 0;
+      min-width: 0;
     }
     .dot{
       width: 10px; height: 10px;
@@ -123,16 +123,19 @@
     .nav-links{
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 12px;
       color: var(--muted);
       font-weight: 600;
       white-space: nowrap;
       min-width: 0;
+      overflow: hidden; /* ✅ prevents overlap with Resume button */
     }
     .nav-links a{
       padding: 10px 12px;
       border-radius: 999px;
       transition: 180ms ease;
+      flex: 0 0 auto;
     }
     .nav-links a:hover{
       color: var(--text);
@@ -146,7 +149,7 @@
       flex-shrink: 0;
     }
 
-    /* Hamburger button hidden on desktop */
+    /* Hamburger button hidden on large desktop */
     .menu-btn{
       display: none;
       width: 46px;
@@ -209,13 +212,12 @@
       background: rgba(255,255,255,0.04);
     }
 
-    /* Mobile dropdown behavior */
-    @media (max-width: 720px){
+    /* ✅ IMPORTANT FIX:
+       Collapse to hamburger EARLIER (<= 1024px) so "in-between sizes" never overlap. */
+    @media (max-width: 1024px){
       .menu-btn{ display: inline-flex; }
-
-      /* Hide inline links on mobile */
       .nav-links{
-        display: none;
+        display: none; /* hidden inline */
         position: absolute;
         left: 14px;
         right: 14px;
@@ -248,8 +250,6 @@
     }
     @media (max-width: 960px){
       .grid{ grid-template-columns: 1fr; }
-      .nav-inner{ border-radius: 22px; height: auto; padding: 14px; }
-      .nav-actions{ justify-content: center; width: auto; }
     }
 
     .card{
@@ -411,18 +411,9 @@
       background: rgba(255,255,255,0.04);
     }
     .item + .item{ margin-top: 12px; }
-    .item .left{
-      min-width: 0;
-    }
-    .item .title{
-      font-weight: 800;
-      margin: 0 0 4px;
-    }
-    .item .meta{
-      margin: 0;
-      color: rgba(255,255,255,0.72);
-      line-height: 1.6;
-    }
+    .item .left{ min-width: 0; }
+    .item .title{ font-weight: 800; margin: 0 0 4px; }
+    .item .meta{ margin: 0; color: rgba(255,255,255,0.72); line-height: 1.6; }
     .item .date{
       color: rgba(255,255,255,0.68);
       font-weight: 800;
@@ -553,7 +544,7 @@
           <span>Mohammad Saleem</span>
         </a>
 
-        <!-- Hamburger for mobile -->
+        <!-- Hamburger (will show at <=1024px) -->
         <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
           <span class="bar"></span>
           <span class="bar"></span>
@@ -838,7 +829,7 @@
       }
     })();
 
-    // Mobile menu toggle
+    // Mobile/Tablet menu toggle (<=1024px)
     (function () {
       const btn = document.getElementById("menuBtn");
       const links = document.getElementById("navLinks");
@@ -854,21 +845,19 @@
         btn.setAttribute("aria-expanded", open ? "true" : "false");
       });
 
-      // Close when clicking a link
       links.querySelectorAll("a").forEach(a => {
         a.addEventListener("click", closeMenu);
       });
 
-      // Close when clicking outside
       document.addEventListener("click", (e) => {
         if (!links.classList.contains("is-open")) return;
         const clickedInside = links.contains(e.target) || btn.contains(e.target);
         if (!clickedInside) closeMenu();
       });
 
-      // Close on resize back to desktop
       window.addEventListener("resize", () => {
-        if (window.innerWidth > 720) closeMenu();
+        // if back to desktop, force-close dropdown
+        if (window.innerWidth > 1024) closeMenu();
       });
     })();
 
