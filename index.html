@@ -38,6 +38,7 @@
       --accent: rgba(120,140,255,0.95);
       --accent2: rgba(110,220,255,0.95);
       --shadow: 0 18px 60px rgba(0,0,0,0.55);
+      --border2: rgba(255,255,255,0.16);
       --radius: 24px;
       --radius2: 18px;
       --max: 1120px;
@@ -153,7 +154,8 @@
       --text: rgba(12, 14, 20, 0.95);
       --muted: rgba(12, 14, 20, 0.72);
       --muted2: rgba(12, 14, 20, 0.58);
-
+      border: 1px solid rgba(255,255,255,0.10);
+      background: var(--panel);
       --panel: rgba(255,255,255,0.78);
       --panel2: rgba(255,255,255,0.92);
       --border: rgba(12,14,20,0.14);
@@ -572,7 +574,8 @@
     }
     .icon-chip i{
       font-size: 16px;
-      color: rgba(140,170,255,0.95);
+      border: 1px solid var(--border);
+      background: var(--panel);
     }
     body.light .icon-chip{ color: rgba(12,14,20,0.92); }
     body.light .icon-chip i{ color: rgba(70,110,255,0.95); }
@@ -598,7 +601,7 @@
       margin-top: 20px;
     }
     .stat{
-      border: 1px solid rgba(255,255,255,0.10);
+      border: 1px solid var(--border);
       background: var(--panel);
       border-radius: 18px;
       padding: 14px;
@@ -793,7 +796,7 @@
       font-weight: 900;
       padding: 8px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid var(--border);
       background: rgba(255,255,255,0.05);
       color: rgba(255,255,255,0.86);
     }
@@ -1101,6 +1104,33 @@ body.light .verify-card{
       justify-content:center;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
+
+    /* ============================================================
+   FIX #1: Keep BRAND social buttons colorful in LIGHT mode
+   (override the generic body.light .icon-btn rules)
+   ============================================================ */
+body.light .icon-btn.brand{
+  background: var(--brand, rgba(12,14,20,0.08)) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 28px rgba(12,14,20,0.12);
+}
+
+body.light .icon-btn.brand i{
+  color: #fff !important;
+}
+
+/* Keep Instagram gradient in light mode too */
+body.light .icon-btn.instagram{
+  background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
+}
+
+/* Optional: hover still nice */
+body.light .icon-btn.brand:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 38px rgba(12,14,20,0.16);
+}
+
 
   /* =========================
    SOCIAL ICON COLORS (like photo #1)
