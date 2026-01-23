@@ -17,40 +17,25 @@
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#0a1020" />
 
-  <!-- Icons -->
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <!-- Icons (Logos) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    /* ============================================================
-       🔥 ZOOM-PERFORMANCE FIX (REAL SOLUTION)
-       - During zoom/resize: disable blur, fixed effects, animations,
-         big shadows, complex gradients, transitions.
-       - Re-enable automatically after zoom stops.
-       ============================================================ */
-
     :root{
-      --max: 1120px;
-      --navh: 74px;
-
-      --radius: 26px;
-      --radius2: 18px;
-
+      --bg: #060b16;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.10);
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.70);
       --muted2: rgba(255,255,255,0.55);
-
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.09);
-      --border: rgba(255,255,255,0.10);
-
       --accent: rgba(120,140,255,0.95);
       --accent2: rgba(110,220,255,0.95);
-
-      --shadow: 0 14px 42px rgba(0,0,0,0.45);
-      --shadow2: 0 10px 28px rgba(0,0,0,0.28);
-
-      --glass-blur: 12px;
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+      --radius: 24px;
+      --radius2: 18px;
+      --max: 1120px;
+      --navh: 74px;
 
       --page-bg:
         radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
@@ -59,121 +44,28 @@
         linear-gradient(180deg, #050913 0%, #070d1a 40%, #050913 100%);
     }
 
-    /* Light mode */
-    body.light{
-      --text: rgba(12, 14, 20, 0.95);
-      --muted: rgba(12, 14, 20, 0.72);
-      --muted2: rgba(12, 14, 20, 0.58);
-
-      --panel: rgba(255,255,255,0.82);
-      --panel2: rgba(255,255,255,0.95);
-      --border: rgba(12,14,20,0.14);
-
-      --shadow: 0 16px 34px rgba(12,14,20,0.10);
-      --shadow2: 0 10px 22px rgba(12,14,20,0.08);
-
-      --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
-    }
-
     *{ box-sizing: border-box; }
     html{
       scroll-behavior: smooth;
       scroll-padding-top: calc(var(--navh) + 18px);
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
     body{
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background: var(--page-bg);
-      background-attachment: scroll; /* ✅ fixed causes zoom lag */
+      background-attachment: fixed;
       min-height: 100vh;
-      overflow-x: hidden;
     }
     a{ color: inherit; text-decoration: none; }
-    p{ margin: 0; }
-    *{ -webkit-tap-highlight-color: transparent; }
+    footer p{ margin: 6px 0; }
 
-    /* ============================================================
-       ✅ BEAUTY: subtle noise overlay (very cheap)
-       ============================================================ */
-    .noise{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.06;
-      z-index: -1;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
-      background-size: 220px 220px;
-      mix-blend-mode: overlay;
-    }
-    body.light .noise{ opacity: 0.045; }
-
-    /* ============================================================
-       ✅ Background orb (pretty but heavy) → we will DISABLE on zoom
-       ============================================================ */
-    .bg-orb{
-      position: fixed;
-      inset: -20%;
-      pointer-events: none;
-      z-index: -2;
-      filter: blur(34px);
-      opacity: 0.55;
-      background:
-        radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.16), transparent 60%),
-        radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.16), transparent 60%),
-        radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.08), transparent 60%);
-      animation: floaty 16s ease-in-out infinite;
-      will-change: transform;
-      transform: translateZ(0);
-    }
-    @keyframes floaty{
-      0%,100% { transform: translate3d(0,0,0) scale(1); }
-      50% { transform: translate3d(1.2%, -1.2%, 0) scale(1.02); }
-    }
-    body.light .bg-orb{ opacity: 0; }
-
-    /* ============================================================
-       ✅ Zoom-performance mode: disable expensive stuff
-       ============================================================ */
-    body.perf-zoom *{
-      transition: none !important;
-      animation: none !important;
-      scroll-behavior: auto !important;
-    }
-    body.perf-zoom{
-      /* simplify background during zoom */
-      background: linear-gradient(180deg, #050913 0%, #050913 100%) !important;
-    }
-    body.light.perf-zoom{
-      background: linear-gradient(180deg, #f6f7f9 0%, #f6f7f9 100%) !important;
-    }
-    body.perf-zoom .bg-orb,
-    body.perf-zoom .noise{
-      display: none !important;
-    }
-    body.perf-zoom .card,
-    body.perf-zoom .nav-inner,
-    body.perf-zoom .time-card,
-    body.perf-zoom .mini,
-    body.perf-zoom .cert,
-    body.perf-zoom .item{
-      box-shadow: none !important;
-    }
-    body.perf-zoom .nav,
-    body.perf-zoom .nav-inner,
-    body.perf-zoom .time-card{
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-    }
-    body.perf-zoom .card::before{
-      opacity: 0 !important;
+    a:focus-visible, button:focus-visible{
+      outline: 2px solid rgba(140,170,255,0.85);
+      outline-offset: 3px;
+      border-radius: 12px;
     }
 
-    /* Container */
     .container{
       max-width: var(--max);
       margin: 0 auto;
@@ -183,22 +75,54 @@
       .container{ padding-left: 28px; padding-right: 28px; }
     }
 
-    /* Focus */
-    a:focus-visible, button:focus-visible{
-      outline: 2px solid rgba(140,170,255,0.85);
-      outline-offset: 3px;
-      border-radius: 12px;
+    .bg-orb{
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      filter: blur(60px);
+      opacity: 0.65;
+      z-index: -1;
+      background:
+        radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.18), transparent 60%),
+        radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
+        radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
+      animation: floaty 14s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
     }
 
-    /* ============================================================
-       NAV
-       ============================================================ */
+    /* =========================
+       LIGHT MODE (FIXED)
+       ========================= */
+    body.light{
+      --text: rgba(12, 14, 20, 0.95);
+      --muted: rgba(12, 14, 20, 0.72);
+      --muted2: rgba(12, 14, 20, 0.58);
+
+      --panel: rgba(255,255,255,0.78);
+      --panel2: rgba(255,255,255,0.92);
+      --border: rgba(12,14,20,0.14);
+      --shadow: 0 14px 32px rgba(12,14,20,0.12);
+
+      --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
+    }
+    body.light .bg-orb{ opacity: 0; }
+
+    body.light, body.light *{ color: var(--text); }
+    body.light p, body.light li, body.light .subtitle, body.light .section-sub,
+    body.light .item .meta, body.light .cert-by, body.light footer, body.light .stat span{
+      color: var(--muted);
+    }
+
+    /* NAV */
     .nav{
       position: sticky;
       top: 0;
       z-index: 50;
       padding-top: 14px;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(16px);
     }
     .nav-inner{
       height: var(--navh);
@@ -209,19 +133,30 @@
       padding: 0 18px;
       border: 1px solid var(--border);
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-      box-shadow: var(--shadow2);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
       position: relative;
-      contain: paint;
     }
     body.light .nav-inner{
-      background: rgba(255,255,255,0.94);
-      box-shadow: var(--shadow2);
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 14px 30px rgba(12,14,20,0.10);
     }
 
-    .brand{ justify-self: start; display:flex; align-items:center; gap:10px; }
+    .brand{ justify-self: start; }
+    .nav-links{ justify-self: center; }
+    .nav-actions{ justify-self: end; }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 0;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      min-width: 0;
+    }
     .brand-initials{
-      font-weight: 950;
+      font-weight: 900;
       font-size: 15px;
       letter-spacing: 1px;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
@@ -230,13 +165,12 @@
     }
 
     .nav-links{
-      justify-self: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 600;
       white-space: nowrap;
       min-width: 0;
       overflow: hidden;
@@ -244,7 +178,7 @@
     .nav-links a{
       padding: 10px 12px;
       border-radius: 999px;
-      transition: 160ms ease;
+      transition: 180ms ease;
       flex: 0 0 auto;
     }
     .nav-links a:hover{
@@ -254,145 +188,158 @@
     body.light .nav-links a:hover{ background: rgba(12,14,20,0.06); }
 
     .nav-actions{
-      justify-self: end;
-      display:flex;
-      align-items:center;
-      gap:10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       flex-shrink: 0;
     }
 
-    /* Hamburger */
+    /* Hamburger (3 dots) */
     .menu-btn{
-      display:none;
-      width:46px; height:46px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.05);
-      cursor:pointer;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap:5px;
-      flex-shrink:0;
-      transition: 160ms ease;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      flex-shrink: 0;
     }
     .menu-btn:hover{
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
-      box-shadow: var(--shadow2);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
     .menu-btn .dot3{
-      width:5px;height:5px;border-radius:999px;
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
       background: rgba(255,255,255,0.85);
-      display:inline-block;
+      display: inline-block;
     }
     body.light .menu-btn{
-      background: rgba(255,255,255,0.94);
+      background: rgba(255,255,255,0.92);
       border-color: rgba(12,14,20,0.18);
-      box-shadow: var(--shadow2);
+      box-shadow: 0 12px 26px rgba(12,14,20,0.10);
     }
     body.light .menu-btn .dot3{ background: rgba(12,14,20,0.75); }
 
     /* Buttons */
     .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:12px 16px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.05);
       color: var(--text);
-      font-weight: 900;
-      cursor:pointer;
-      transition: 160ms ease;
-      user-select:none;
-      white-space:nowrap;
-      transform: translateZ(0);
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      user-select: none;
+      white-space: nowrap;
     }
     .btn:hover{
       transform: translateY(-1px);
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
-      box-shadow: var(--shadow2);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
     .btn-ghost{ background: rgba(255,255,255,0.04); }
 
     .btn-primary{
       background: linear-gradient(135deg, rgba(120,140,255,0.95), rgba(110,220,255,0.85));
       border-color: rgba(150,175,255,0.35);
-      color:#081026;
-      position:relative;
-      overflow:hidden;
+      color: #081026;
+      position: relative;
+      overflow: hidden;
     }
     .btn-primary::after{
       content:"";
       position:absolute;
       inset:0;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.30), transparent 60%);
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.35), transparent 60%);
       opacity:0;
-      transition: opacity .25s ease;
+      transition: opacity 0.3s ease;
     }
-    .btn-primary:hover::after{ opacity:1; }
+    .btn-primary:hover::after{ opacity: 1; }
 
     body.light .btn{
       background: rgba(255,255,255,0.94);
       border-color: rgba(12,14,20,0.18);
-      box-shadow: var(--shadow2);
+      box-shadow: 0 10px 20px rgba(12,14,20,0.08);
     }
     body.light .btn:hover{ background: rgba(255,255,255,0.99); }
 
-    /* Mobile dropdown */
+    /* Mobile/Tablet dropdown */
     @media (max-width: 1024px){
-      .menu-btn{ display:inline-flex; }
+      .menu-btn{ display: inline-flex; }
 
       .nav-links{
-        display:flex;
-        position:absolute;
-        left:14px; right:14px;
+        display: flex;
+        position: absolute;
+        left: 14px;
+        right: 14px;
         top: calc(100% + 10px);
-        padding:12px;
-        border-radius:18px;
-        border:1px solid rgba(255,255,255,0.12);
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.12);
         background: rgba(10,16,32,0.92);
-        backdrop-filter: blur(10px);
-        box-shadow: var(--shadow);
-        flex-direction:column;
-        gap:8px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+        flex-direction: column;
+        gap: 8px;
         white-space: normal;
-        z-index:60;
+        z-index: 60;
 
-        opacity:0;
+        opacity: 0;
         transform: translateY(-8px) scale(0.98);
-        max-height:0;
-        overflow:hidden;
-        pointer-events:none;
-        visibility:hidden;
+        max-height: 0;
+        overflow: hidden;
+        pointer-events: none;
+        visibility: hidden;
 
-        transition: 200ms ease;
+        transition:
+          opacity 200ms ease,
+          transform 220ms ease,
+          max-height 260ms ease,
+          visibility 0ms linear 260ms;
       }
+
       .nav-links.is-open{
-        opacity:1;
+        opacity: 1;
         transform: translateY(0) scale(1);
-        max-height:520px;
-        pointer-events:auto;
-        visibility:visible;
+        max-height: 520px;
+        pointer-events: auto;
+        visibility: visible;
+
+        transition:
+          opacity 200ms ease,
+          transform 220ms ease,
+          max-height 260ms ease,
+          visibility 0ms;
       }
+
       .nav-links a{
-        padding:12px 12px;
-        border-radius:14px;
+        padding: 12px 12px;
+        border-radius: 14px;
         background: rgba(255,255,255,0.04);
       }
+
       body.light .nav-links{
-        background: rgba(255,255,255,0.98);
+        background: rgba(255,255,255,0.97);
         border-color: rgba(12,14,20,0.14);
-        box-shadow: var(--shadow2);
-        backdrop-filter: none;
+        box-shadow: 0 18px 50px rgba(12,14,20,0.12);
       }
       body.light .nav-links a{
         background: rgba(12,14,20,0.04);
-        color: rgba(12,14,20,0.92);
+        color: rgba(12,14,20,0.90);
       }
       body.light .nav-links a:hover{
         background: rgba(12,14,20,0.08);
@@ -400,17 +347,15 @@
       }
     }
 
-    /* ============================================================
-       Layout / Cards
-       ============================================================ */
+    /* Layout */
     .grid{
-      display:grid;
+      display: grid;
       grid-template-columns: 1.25fr 0.75fr;
-      gap:18px;
-      margin-top:18px;
+      gap: 18px;
+      margin-top: 18px;
     }
     @media (max-width: 960px){
-      .grid{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns: 1fr; }
     }
 
     .card{
@@ -421,86 +366,43 @@
       padding: 26px;
       position: relative;
       overflow: hidden;
-      contain: content;
     }
     .card::before{
       content:"";
       position:absolute;
       inset:-2px;
       background:
-        radial-gradient(450px 250px at 20% 10%, rgba(120,140,255,0.12), transparent 60%),
-        radial-gradient(380px 240px at 90% 30%, rgba(110,220,255,0.08), transparent 60%);
+        radial-gradient(450px 250px at 20% 10%, rgba(120,140,255,0.14), transparent 60%),
+        radial-gradient(380px 240px at 90% 30%, rgba(110,220,255,0.10), transparent 60%);
       pointer-events:none;
       opacity: 1;
     }
     body.light .card::before{ opacity: 0.08; }
-    .card > *{ position:relative; z-index:1; }
+    .card > *{ position: relative; z-index: 1; }
 
-    /* Time widget */
-    .meta-wrap{
-      display:flex;
-      justify-content:center;
-      margin: 14px 0 6px;
-      width:100%;
-    }
-    .time-card{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      padding: 14px 18px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(var(--glass-blur));
-      -webkit-backdrop-filter: blur(var(--glass-blur));
-      box-shadow: var(--shadow2);
-      min-width: 190px;
-      contain: paint;
-    }
-    body.light .time-card{
-      background: rgba(255,255,255,0.94);
-      border-color: rgba(12,14,20,0.16);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-    .time-label{
-      font-size:12px;
-      font-weight: 950;
-      letter-spacing: .4px;
-      color: var(--muted2);
-    }
-    .time-value{
-      font-size:22px;
-      font-weight: 950;
-      letter-spacing: .3px;
-      color: var(--text);
-    }
-
-    /* Hero title */
+    /* Hero title with colorful computer logo */
     .hero-title{
       display:flex;
       align-items: baseline;
       gap: 14px;
       flex-wrap: wrap;
     }
-    h1{
-      margin: 0 0 10px;
-      font-size: clamp(40px, 5vw, 58px);
-      letter-spacing: -0.9px;
-      line-height: 1.02;
+    .hero-title h1{
+      margin: 0 0 8px;
+      font-size: clamp(40px, 5vw, 56px);
+      letter-spacing: -0.6px;
     }
     .pc-logo{
-      width: 44px; height: 44px;
-      border-radius: 16px;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      background: linear-gradient(135deg, rgba(255,120,200,0.18), rgba(120,140,255,0.16), rgba(110,220,255,0.14));
-      border: 1px solid rgba(150,175,255,0.28);
-      box-shadow: var(--shadow2);
-      transform: translateY(6px);
+      background: linear-gradient(135deg, rgba(110,220,255,0.22), rgba(120,140,255,0.16));
+      border: 1px solid rgba(150,175,255,0.30);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      transform: translateY(4px);
     }
     .pc-logo i{
       font-size: 20px;
@@ -508,20 +410,24 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    body.light .pc-logo{
+      background: linear-gradient(135deg, rgba(110,220,255,0.18), rgba(120,140,255,0.12));
+      box-shadow: 0 14px 30px rgba(12,14,20,0.10);
+    }
 
     .subtitle{
       color: var(--muted);
       font-size: 16px;
-      font-weight: 800;
+      font-weight: 600;
       margin-bottom: 10px;
     }
 
     .locline{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap: 10px;
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 800;
       margin: 0 0 14px;
     }
     .locline i{ color: rgba(140,170,255,0.95); }
@@ -531,11 +437,10 @@
       font-size: 16px;
       line-height: 1.7;
       margin: 0 0 18px;
-      max-width: 72ch;
-      font-weight: 650;
+      max-width: 70ch;
     }
 
-    /* Objectives */
+    /* Objective block */
     .objective{
       margin-top: 12px;
       padding: 14px 16px;
@@ -544,60 +449,57 @@
       background: rgba(255,255,255,0.05);
     }
     body.light .objective{
-      background: rgba(255,255,255,0.94);
+      background: rgba(255,255,255,0.92);
       border-color: rgba(12,14,20,0.14);
     }
     .objective h3{
       margin: 0 0 8px;
       font-size: 16px;
-      font-weight: 950;
       letter-spacing: -0.1px;
     }
     .objective p{
       margin: 0;
       color: var(--muted);
       line-height: 1.7;
-      font-weight: 650;
+      font-weight: 600;
     }
 
-    /* Pills */
     .pill-row{
       display:flex;
       flex-wrap: wrap;
-      gap:10px;
+      gap: 10px;
       margin-top: 14px;
     }
     .pill{
       display:inline-flex;
       align-items:center;
-      gap:8px;
       padding: 9px 12px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.86);
-      font-weight: 900;
+      background: var(--panel);
+      color: rgba(255,255,255,0.82);
+      font-weight: 800;
       font-size: 13px;
+      gap: 8px;
     }
     body.light .pill{ color: rgba(12,14,20,0.92); }
 
-    /* Skill icons chips */
     .skill-icons{
       display:flex;
       flex-wrap:wrap;
-      gap:10px;
-      margin: 12px 0 4px;
+      gap: 10px;
+      margin: 14px 0 2px;
     }
     .icon-chip{
       display:inline-flex;
       align-items:center;
-      gap:8px;
+      gap: 8px;
       padding: 10px 12px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      font-weight: 900;
-      color: rgba(255,255,255,0.88);
+      background: var(--panel);
+      font-weight: 800;
+      color: rgba(255,255,255,0.86);
     }
     .icon-chip i{
       font-size: 16px;
@@ -613,59 +515,54 @@
       align-items:center;
       justify-content:center;
       font-size: 11px;
-      font-weight: 950;
+      font-weight: 900;
       background: rgba(140,170,255,0.22);
       border: 1px solid rgba(140,170,255,0.28);
       color: rgba(255,255,255,0.92);
     }
     body.light .cpp-badge{ color: rgba(12,14,20,0.95); }
 
-    /* Stats */
     .stats{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:12px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
       margin-top: 20px;
-    }
-    @media (max-width: 960px){
-      .stats{ grid-template-columns: 1fr; }
     }
     .stat{
       border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
+      background: var(--panel);
       border-radius: 18px;
       padding: 14px;
     }
     .stat b{
       display:block;
       font-size: 16px;
-      font-weight: 950;
       letter-spacing: -0.2px;
+      font-weight: 900;
     }
     .stat span{
       display:block;
       margin-top: 4px;
       font-size: 13px;
-      color: var(--muted2);
-      font-weight: 850;
+      color: rgba(255,255,255,0.65);
+      font-weight: 800;
+    }
+    @media (max-width: 960px){
+      .stats{ grid-template-columns: 1fr; }
     }
 
-    /* Sections */
     section{ margin-top: 28px; }
     .section-title{
       font-size: 28px;
       margin: 0 0 12px;
       letter-spacing: -0.2px;
-      font-weight: 950;
     }
     .section-sub{
       margin: -4px 0 14px;
       color: var(--muted2);
       line-height: 1.6;
-      font-weight: 650;
     }
 
-    /* Projects cards */
     .cards{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -678,49 +575,41 @@
       border-radius: var(--radius2);
       padding: 18px;
       border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      transition: 160ms ease;
-      transform: translateZ(0);
+      background: var(--panel);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
     .mini:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
-      box-shadow: var(--shadow2);
     }
     .mini h3{
       margin: 0 0 8px;
       font-size: 18px;
-      font-weight: 950;
       letter-spacing: -0.2px;
     }
     .mini p{
       margin: 0;
       color: var(--muted);
       line-height: 1.7;
-      font-weight: 650;
     }
 
-    /* Two columns */
     .two-col{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:16px;
+      gap: 16px;
     }
     @media (max-width: 900px){
       .two-col{ grid-template-columns: 1fr; }
     }
 
-    /* List */
     .list{
       margin: 0;
       padding-left: 18px;
       color: var(--muted);
       line-height: 1.9;
-      font-weight: 650;
     }
 
-    /* Items (Education/Experience/Awards) */
     .item{
       display:flex;
       justify-content: space-between;
@@ -728,7 +617,7 @@
       padding: 14px 16px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
+      background: var(--panel);
     }
     .item + .item{ margin-top: 12px; }
 
@@ -738,6 +627,7 @@
       gap: 12px;
       align-items: flex-start;
     }
+
     .logo{
       width: 46px;
       height: 46px;
@@ -752,25 +642,17 @@
       background: rgba(12,14,20,0.04);
       border-color: rgba(12,14,20,0.14);
     }
+
     .item .textblock{ min-width:0; }
-    .item .title{
-      font-weight: 950;
-      margin: 0 0 4px;
-    }
-    .item .meta{
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
-      font-weight: 650;
-    }
+    .item .title{ font-weight: 900; margin: 0 0 4px; }
+    .item .meta{ margin: 0; color: var(--muted); line-height: 1.6; }
     .item .date{
       color: var(--muted2);
-      font-weight: 950;
+      font-weight: 900;
       white-space: nowrap;
       padding-left: 10px;
     }
 
-    /* Certificates */
     .cert-grid{
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -785,33 +667,34 @@
     .cert{
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
+      background: var(--panel);
       padding: 14px 14px;
       display:flex;
       flex-direction: column;
       gap: 10px;
-      transition: 160ms ease;
-      transform: translateZ(0);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
     .cert:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
-      box-shadow: var(--shadow2);
     }
+
     .cert-top{
       display:flex;
       justify-content: space-between;
       gap: 10px;
       align-items: baseline;
     }
-    .cert-name{ font-weight: 950; line-height: 1.3; }
-    .cert-date{ color: var(--muted2); font-weight: 950; white-space: nowrap; }
+    .cert-name{ font-weight: 900; line-height: 1.3; }
+    .cert-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; }
+    .cert-by{ color: var(--muted); margin: 0; line-height: 1.5; }
 
     .issuer-row{
       display:flex;
       align-items:center;
       gap: 10px;
+      margin-top: 4px;
     }
     .issuer-logo{
       width: 40px;
@@ -827,45 +710,26 @@
       background: rgba(12,14,20,0.04);
       border-color: rgba(12,14,20,0.14);
     }
-    .cert-by{
-      color: var(--muted);
-      line-height: 1.5;
-      font-weight: 650;
+
+    footer{
+      text-align: center;
+      color: var(--muted2);
+      padding: 26px 0 10px;
+      margin-top: 26px;
     }
 
-    /* Contact icon row */
-    .icon-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 10px;
-    }
-    .icon-btn{
-      width: 46px; height: 46px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      transition: 160ms ease;
-      transform: translateZ(0);
-    }
-    .icon-btn i{ font-size: 18px; color: rgba(255,255,255,0.90); }
-    .icon-btn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
-      box-shadow: var(--shadow2);
-    }
-    body.light .icon-btn{
-      background: rgba(255,255,255,0.94);
-      border-color: rgba(12,14,20,0.18);
-      box-shadow: var(--shadow2);
-    }
-    body.light .icon-btn i{ color: rgba(12,14,20,0.90); }
+    .anchor{ scroll-margin-top: calc(var(--navh) + 18px); }
 
-    /* Divider */
+    .reveal{
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+    .reveal.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .section-divider{
       height:1px;
       background: linear-gradient(to right, transparent, rgba(255,255,255,.15), transparent);
@@ -875,25 +739,79 @@
       background: linear-gradient(to right, transparent, rgba(12,14,20,.12), transparent);
     }
 
-    /* Reveal */
-    .reveal{
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 420ms ease, transform 420ms ease;
+    *{ -webkit-tap-highlight-color: transparent; }
+
+    /* Time widget */
+    .meta-wrap{
+      display: flex;
+      justify-content: center;
+      margin: 14px 0 6px;
+      width: 100%;
     }
-    .reveal.show{
-      opacity: 1;
-      transform: translateY(0);
+    .time-card{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: 6px;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+      min-width: 190px;
+    }
+    .time-label{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      color: var(--muted2);
+    }
+    .time-value{
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      color: var(--text);
+    }
+    body.light .time-card{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(12,14,20,0.16);
+      box-shadow: 0 14px 28px rgba(12,14,20,0.10);
     }
 
-    /* Footer */
-    footer{
-      text-align:center;
-      color: var(--muted2);
-      padding: 26px 0 10px;
-      margin-top: 26px;
-      font-weight: 650;
+    /* Icon buttons */
+    .icon-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 8px;
     }
+    .icon-btn{
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .icon-btn i{ font-size: 18px; color: rgba(255,255,255,0.90); }
+    .icon-btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.30);
+    }
+    body.light .icon-btn{
+      background: rgba(255,255,255,0.94);
+      border-color: rgba(12,14,20,0.18);
+      box-shadow: 0 10px 20px rgba(12,14,20,0.08);
+    }
+    body.light .icon-btn i{ color: rgba(12,14,20,0.90); }
 
     /* ✅ Blue Back-to-top only */
     .to-top{
@@ -906,37 +824,26 @@
       border: 1px solid rgba(150,175,255,0.55);
       background: rgba(60,110,255,0.95);
       color: white;
-      font-weight: 950;
+      font-weight: 900;
       cursor: pointer;
       opacity: 0;
       transform: translateY(10px);
       pointer-events: none;
       transition: 200ms ease;
-      box-shadow: var(--shadow2);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.30);
       z-index: 70;
-      display:flex;
-      align-items:center;
-      justify-content:center;
     }
     .to-top.show{
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
-    .to-top:hover{ filter: brightness(1.06); }
-
-    /* Reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      html{ scroll-behavior: auto; }
-      .bg-orb{ animation: none; }
-      .reveal{ transition: none; }
-    }
+    .to-top:hover{ filter: brightness(1.05); }
   </style>
 </head>
 
 <body>
   <div class="bg-orb"></div>
-  <div class="noise"></div>
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
@@ -958,7 +865,9 @@
 
         <div class="nav-actions">
           <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-            <span class="dot3"></span><span class="dot3"></span><span class="dot3"></span>
+            <span class="dot3"></span>
+            <span class="dot3"></span>
+            <span class="dot3"></span>
           </button>
 
           <button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">🌙</button>
@@ -969,7 +878,7 @@
   </div>
 
   <div class="container">
-    <div id="top"></div>
+    <div id="top" class="anchor"></div>
 
     <!-- Time -->
     <div class="meta-wrap">
@@ -979,8 +888,7 @@
       </div>
     </div>
 
-    <div id="home" class="grid">
-      <!-- LEFT HERO -->
+    <div id="home" class="grid anchor">
       <div class="card reveal">
         <div class="hero-title">
           <h1>Mohammad Saleem</h1>
@@ -1000,6 +908,7 @@
           Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
         </p>
 
+        <!-- ✅ Objectives -->
         <div class="objective">
           <h3>Objectives</h3>
           <p>
@@ -1011,10 +920,10 @@
         <div class="skill-icons" aria-label="Key technologies">
           <span class="icon-chip"><i class="fa-brands fa-java"></i>Java</span>
           <span class="icon-chip"><span class="cpp-badge">C++</span> C++</span>
-          <span class="icon-chip"><i class="fa-brands fa-python"></i>Python</span>
-          <span class="icon-chip"><i class="fa-brands fa-js"></i>JavaScript</span>
           <span class="icon-chip"><i class="fa-brands fa-ethereum"></i>Ethereum</span>
           <span class="icon-chip"><i class="fa-solid fa-link"></i>Blockchain</span>
+          <span class="icon-chip"><i class="fa-brands fa-js"></i>JavaScript</span>
+          <span class="icon-chip"><i class="fa-brands fa-python"></i>Python</span>
         </div>
 
         <div class="pill-row">
@@ -1031,15 +940,24 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><b>5th Place</b><span>National Technology Parade</span></div>
-          <div class="stat"><b>Blockchain</b><span>Ethereum Voting System</span></div>
-          <div class="stat"><b>ROS 2</b><span>CPU Scheduling Simulation</span></div>
+          <div class="stat">
+            <b>5th Place</b>
+            <span>National Technology Parade</span>
+          </div>
+          <div class="stat">
+            <b>Blockchain</b>
+            <span>Ethereum Voting System</span>
+          </div>
+          <div class="stat">
+            <b>ROS 2</b>
+            <span>CPU Scheduling Simulation</span>
+          </div>
         </div>
       </div>
 
-      <!-- RIGHT QUICK LINKS -->
+      <!-- Quick Links: change GitHub + LinkedIn to LOGO buttons -->
       <div class="card reveal">
-        <h2 style="margin:0 0 14px; font-size: 26px; font-weight: 950;">Quick Links</h2>
+        <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
 
         <div class="icon-row" aria-label="Quick links icons">
           <a class="icon-btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
@@ -1057,13 +975,13 @@
           <span class="pill">Open to opportunities</span>
         </div>
 
-        <p class="lead" style="margin-top: 14px;">
+        <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
       </div>
     </div>
 
-    <section id="projects" class="reveal">
+    <section id="projects" class="anchor reveal">
       <h2 class="section-title">Projects</h2>
       <p class="section-sub">A few highlights from my recent work.</p>
 
@@ -1090,7 +1008,7 @@
     <div class="section-divider"></div>
 
     <section class="two-col">
-      <div id="skills" class="card reveal">
+      <div id="skills" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Skills</h2>
 
         <div class="skill-icons" style="margin-top: 0;">
@@ -1112,12 +1030,16 @@
         </ul>
       </div>
 
-      <div id="education" class="card reveal">
+      <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
+        <!-- ✅ IMPORTANT for High School logo:
+             Make sure file name EXACTLY matches (case-sensitive on GitHub):
+             assets/al-jazeera.png  OR change the src below to your real name.
+        -->
         <div class="item">
           <div class="left">
-            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo" loading="lazy" decoding="async">
+            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo">
             <div class="textblock">
               <p class="title">B.Sc. in Computer Engineering</p>
               <p class="meta">University of Jordan — Amman, Jordan</p>
@@ -1128,7 +1050,8 @@
 
         <div class="item">
           <div class="left">
-            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo" loading="lazy" decoding="async"
+            <!-- ✅ if your logo file is different, rename it OR edit this src -->
+            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo"
                  onerror="this.onerror=null; this.src='assets/al-jazeera.png';">
             <div class="textblock">
               <p class="title">High School Diploma (Tawjihi)</p>
@@ -1138,7 +1061,7 @@
           <div class="date">2018 – 2019</div>
         </div>
 
-        <h3 style="margin: 18px 0 8px; font-size: 18px; font-weight: 950;">Research Interests</h3>
+        <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
         <p class="lead" style="margin: 0;">
           My research interests focus on <b>secure and trustworthy systems</b>, especially
           <b>blockchain security</b>, <b>network and cloud security</b>, and <b>applied AI for cybersecurity</b>.
@@ -1148,13 +1071,13 @@
       </div>
     </section>
 
-    <section id="experience" class="reveal">
+    <section id="experience" class="anchor reveal">
       <h2 class="section-title">Experience</h2>
 
       <div class="card reveal">
         <div class="item" style="margin-top: 0;">
           <div class="left">
-            <img class="logo" src="assets/edco.png" alt="EDCO logo" loading="lazy" decoding="async"
+            <img class="logo" src="assets/edco.png" alt="EDCO logo"
                  onerror="this.style.display='none'">
             <div class="textblock">
               <p class="title">Electricity Distribution Co. (EDCO) — Operating Systems Dept. (Internship)</p>
@@ -1168,7 +1091,7 @@
       </div>
     </section>
 
-    <section id="awards" class="reveal">
+    <section id="awards" class="anchor reveal">
       <h2 class="section-title">Awards and Achievements</h2>
 
       <div class="card reveal">
@@ -1194,7 +1117,7 @@
       </div>
     </section>
 
-    <section id="certificates" class="reveal">
+    <section id="certificates" class="anchor reveal">
       <h2 class="section-title">Certificates</h2>
 
       <div class="card reveal">
@@ -1205,8 +1128,7 @@
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1217,8 +1139,7 @@
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1229,8 +1150,7 @@
               <div class="cert-date">Nov 2024</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/aws.png" alt="AWS logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/aws.png" alt="AWS logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by AWS Academy.</p>
             </div>
           </div>
@@ -1241,8 +1161,7 @@
               <div class="cert-date">May 2023</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1253,8 +1172,7 @@
               <div class="cert-date">Jul 2022</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1265,8 +1183,7 @@
               <div class="cert-date">Apr 2022</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/sololearn.png" alt="Sololearn logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/sololearn.png" alt="Sololearn logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Sololearn.</p>
             </div>
           </div>
@@ -1277,8 +1194,7 @@
               <div class="cert-date">Oct 2021</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/coursera.png" alt="Coursera logo" loading="lazy" decoding="async"
-                   onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/coursera.png" alt="Coursera logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Coursera.</p>
             </div>
           </div>
@@ -1286,10 +1202,10 @@
       </div>
     </section>
 
-    <section id="contact" class="reveal">
+    <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
       <div class="card reveal">
-        <p class="lead" style="margin-bottom: 14px;">
+        <p class="lead" style="margin:0 0 14px;">
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
 
@@ -1348,7 +1264,16 @@
     }
     setIcon();
 
-    // Mobile menu
+    // Scroll-to-top fix (only when no hash)
+    (function () {
+      const hasHash = window.location.hash && window.location.hash.length > 1;
+      if (!hasHash) {
+        window.scrollTo(0, 0);
+        window.addEventListener("load", () => window.scrollTo(0, 0), { once: true });
+      }
+    })();
+
+    // Mobile/Tablet menu toggle (<=1024px)
     (function () {
       const btn = document.getElementById("menuBtn");
       const links = document.getElementById("navLinks");
@@ -1377,28 +1302,16 @@
       });
     })();
 
-    // Scroll reveal (unobserve after reveal = faster)
+    // Scroll reveal
     (function () {
       const els = document.querySelectorAll(".reveal");
-      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduced) {
-        els.forEach(el => el.classList.add("show"));
-        return;
-      }
-
       const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add("show");
-            io.unobserve(e.target);
-          }
-        }
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
       }, { threshold: 0.15 });
-
       els.forEach(el => io.observe(el));
     })();
 
-    // Back to top
+    // Back to top button
     (function(){
       const btn = document.getElementById("toTop");
       if (!btn) return;
@@ -1418,36 +1331,15 @@
       const now = new Date();
       const el = document.getElementById("liveTime");
       if (!el) return;
-      el.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      el.textContent = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
     }
     setInterval(updateTime, 1000);
     updateTime();
-
-    /* ============================================================
-       ✅ THE REAL ZOOM LAG FIX:
-       When zooming, Chrome triggers resize events rapidly.
-       We temporarily add "perf-zoom" class to disable heavy effects.
-       ============================================================ */
-    (function () {
-      let t = null;
-
-      const enablePerfZoom = () => {
-        document.body.classList.add("perf-zoom");
-        clearTimeout(t);
-        t = setTimeout(() => {
-          document.body.classList.remove("perf-zoom");
-        }, 280); // restore shortly after zoom stops
-      };
-
-      window.addEventListener("resize", enablePerfZoom, { passive: true });
-
-      // Some browsers also fire "wheel+ctrl" for zoom; this helps instantly.
-      window.addEventListener("wheel", (e) => {
-        if (e.ctrlKey) enablePerfZoom();
-      }, { passive: true });
-    })();
   </script>
 </body>
 </html>
-
-
