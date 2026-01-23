@@ -53,7 +53,7 @@
       --leading: 1.75;
 
       /* subtle hover glow */
-      --glow: 0 0 0 1px rgba(140,170,255,0.16), 0 20px 70px rgba(0,0,0,0.55);
+      --glow: 0 20px 70px rgba(0,0,0,0.55);
 
       --page-bg:
         radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
@@ -1347,6 +1347,12 @@ body.perf-mode .to-top{
    NO BORDERS (Inner boxes) — Dark + Light
    =========================================== */
 
+/* remove the 1px "outline" that comes from box-shadow glow */
+.card:hover, .mini:hover, .cert:hover, .item:hover, .project-card:hover, .timeline-item:hover,
+.verify-card:hover, .icon-btn:hover, .btn:hover{
+  box-shadow: none !important;
+}
+    
 /* remove any border from common inner boxes */
 .card,
 .item,
@@ -1895,7 +1901,7 @@ html{ scrollbar-gutter: stable; }
     </section>
 
     <footer class="reveal">
-      <p>© 2026 Mohammad Saleem</p>
+      <p>Copyright © 2026 Mohammad Saleem All rights reserved.</p>
       <p>Built with HTML, CSS & JavaScript</p>
     </footer>
   </div>
