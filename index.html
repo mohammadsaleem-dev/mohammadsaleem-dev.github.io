@@ -1013,6 +1013,76 @@
       box-shadow: 0 14px 28px rgba(12,14,20,0.10);
     }
 
+    /* =========================
+   VERIFICATION (Quick Links)
+   ========================= */
+.verify{
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+}
+body.light .verify{
+  border-top-color: rgba(12,14,20,0.10);
+}
+
+.verify h3{
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: -0.2px;
+}
+.verify p{
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.verify-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 560px){
+  .verify-grid{ grid-template-columns: 1fr; }
+}
+
+.verify-card{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  gap: 6px;
+  min-height: 92px;
+  transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+.verify-card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+  border-color: rgba(150,175,255,0.22);
+}
+
+.verify-num{
+  font-size: 34px;
+  font-weight: 950;
+  letter-spacing: -0.6px;
+  line-height: 1;
+}
+.verify-label{
+  color: var(--muted);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.verify-card small{
+  color: var(--muted2);
+  font-weight: 800;
+}
+
+body.light .verify-card{
+  background: rgba(255,255,255,0.92);
+  border-color: rgba(12,14,20,0.14);
+}
+
     /* Icon buttons */
     .icon-row{
       display:flex;
@@ -1217,36 +1287,6 @@ body.perf-mode .to-top{
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
 
-
-    // =========================
-// PERF MODE: auto-disable heavy effects during zoom/scroll
-// =========================
-(function () {
-  const root = document.body;
-  let t = null;
-
-  const enable = () => {
-    root.classList.add("perf-mode");
-    if (t) clearTimeout(t);
-    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
-  };
-
-  // Detect browser zoom: Ctrl + Wheel
-  window.addEventListener("wheel", (e) => {
-    if (e.ctrlKey) enable();
-  }, { passive: true });
-
-  // Detect fast scrolling (helps on some machines)
-  window.addEventListener("scroll", () => {
-    enable();
-  }, { passive: true });
-
-  // Trackpad pinch zoom (Safari / some browsers)
-  window.addEventListener("gesturestart", enable, { passive: true });
-  window.addEventListener("gesturechange", enable, { passive: true });
-  window.addEventListener("gestureend", enable, { passive: true });
-})();
-
     
   </style>
 </head>
@@ -1398,6 +1438,27 @@ html{ scrollbar-gutter: stable; }
         <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
+        <div class="verify">
+  <h3>Verification</h3>
+  <p>Quick proof signals: badges and awards.</p>
+
+  <div class="verify-grid">
+    <!-- Credly -->
+    <a class="verify-card" href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly" target="_blank" rel="noopener">
+      <div class="verify-num js-count" data-target="7" data-suffix="+">0</div>
+      <div class="verify-label">Credly Badges</div>
+      <small>Open Credly profile</small>
+    </a>
+
+    <!-- Awards -->
+    <a class="verify-card" href="#awards">
+      <div class="verify-num js-count" data-target="2" data-suffix="">0</div>
+      <div class="verify-label">Awards</div>
+      <small>Jump to awards section</small>
+    </a>
+  </div>
+</div>
+
       </div>
     </div>
 
@@ -1956,6 +2017,92 @@ html{ scrollbar-gutter: stable; }
         }
       });
     })();
+
+
+
+    // =========================
+// PERF MODE: auto-disable heavy effects during zoom/scroll
+// =========================
+(function () {
+  const root = document.body;
+  let t = null;
+
+  const enable = () => {
+    root.classList.add("perf-mode");
+    if (t) clearTimeout(t);
+    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
+  };
+
+  // Detect browser zoom: Ctrl + Wheel
+  window.addEventListener("wheel", (e) => {
+    if (e.ctrlKey) enable();
+  }, { passive: true });
+
+  // Detect fast scrolling (helps on some machines)
+  window.addEventListener("scroll", () => {
+    enable();
+  }, { passive: true });
+
+  // Trackpad pinch zoom (Safari / some browsers)
+  window.addEventListener("gesturestart", enable, { passive: true });
+  window.addEventListener("gesturechange", enable, { passive: true });
+  window.addEventListener("gestureend", enable, { passive: true });
+})();
+
+    // =========================
+// Verification counters (animate when visible)
+// Uses IntersectionObserver + requestAnimationFrame
+// =========================
+(function () {
+  const counters = document.querySelectorAll(".js-count");
+  if (!counters.length) return;
+
+  const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const animate = (el) => {
+    if (el.dataset.done === "1") return;
+    el.dataset.done = "1";
+
+    const target = Number(el.getAttribute("data-target") || "0");
+    const suffix = el.getAttribute("data-suffix") || "";
+    if (prefersReduced) {
+      el.textContent = `${target}${suffix}`;
+      return;
+    }
+
+    const duration = 900; // ms
+    const start = performance.now();
+
+    const step = (t) => {
+      const p = Math.min(1, (t - start) / duration);
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(eased * target);
+      el.textContent = `${val}${suffix}`;
+      if (p < 1) requestAnimationFrame(step);
+    };
+
+    requestAnimationFrame(step);
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    counters.forEach(animate);
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        animate(e.target);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.35 });
+
+  counters.forEach((el) => io.observe(el));
+})();
+
+    
   </script>
 </body>
 </html>
