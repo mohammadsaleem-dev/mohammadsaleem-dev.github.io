@@ -1343,17 +1343,12 @@ body.perf-mode .to-top{
   box-shadow: none !important;
 }
   
- /* ===========================================
-   NO BORDERS (Inner boxes) — Dark + Light
+/* ===========================================
+   BORDERLESS STYLE (but KEEP premium hover)
+   Fix: missing hover + timeline borders + dark/light consistency
    =========================================== */
 
-/* remove the 1px "outline" that comes from box-shadow glow */
-.card:hover, .mini:hover, .cert:hover, .item:hover, .project-card:hover, .timeline-item:hover,
-.verify-card:hover, .icon-btn:hover, .btn:hover{
-  box-shadow: none !important;
-}
-    
-/* remove any border from common inner boxes */
+/* Remove borders everywhere you want it borderless */
 .card,
 .item,
 .project-card,
@@ -1375,20 +1370,103 @@ body.perf-mode .to-top{
 .thumb-icon,
 .btn,
 .menu-btn,
-.icon-btn{
+.icon-btn,
+.timeline-item {
   border: 0 !important;
 }
 
-/* also remove border-top divider in Verification */
+/* Remove timeline dot ring (keep dot) */
+.timeline-item::before{
+  border: 0 !important;
+}
+
+/* Remove the divider line in Verification (you requested no borders) */
 .verify{
   border-top: 0 !important;
 }
 
-/* remove the timeline dot border ring */
-.timeline-item::before{
-  border: 0 !important;
+/* -------------------------------------------
+   NEW: Premium hover “surface lift”
+   (bigger, more noticeable, works in dark & light)
+   ------------------------------------------- */
+:root{
+  --hover-lift: translateY(-2px);
+  --hover-shadow: 0 18px 55px rgba(0,0,0,0.35);
+  --hover-stroke: inset 0 0 0 1px rgba(150,175,255,0.20);
+  --hover-bg: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
 }
-   
+
+body.light{
+  --hover-shadow: 0 18px 55px rgba(12,14,20,0.12);
+  --hover-stroke: inset 0 0 0 1px rgba(70,110,255,0.16);
+  --hover-bg: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+}
+
+/* Apply the hover to ALL key boxes */
+.item,
+.timeline-item,
+.verify-card,
+.cert,
+.project-card,
+.stat,
+.time-card,
+.objective,
+.icon-chip,
+.pill,
+.tag,
+.btn,
+.icon-btn{
+  transition: transform 180ms ease, box-shadow 220ms ease, filter 220ms ease, background 220ms ease;
+}
+
+/* BIGGER hover (your main issue) */
+.item:hover,
+.timeline-item:hover,
+.verify-card:hover,
+.cert:hover,
+.project-card:hover,
+.stat:hover,
+.time-card:hover,
+.objective:hover{
+  transform: var(--hover-lift);
+  box-shadow: var(--hover-shadow), var(--hover-stroke);
+  background: var(--hover-bg);
+}
+
+/* Chips / pills hover (make it feel larger & clickable) */
+.pill,
+.icon-chip,
+.tag{
+  cursor: default;
+}
+
+.pill:hover,
+.icon-chip:hover,
+.tag:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.22), var(--hover-stroke);
+  filter: brightness(1.03);
+}
+
+/* Buttons + icon buttons hover (keep brand colors) */
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.28), var(--hover-stroke);
+}
+
+/* IMPORTANT: brand icon hover should stay colorful */
+.icon-btn.brand:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.30);
+  filter: brightness(1.06);
+}
+
+/* Ensure Experience/Awards “inner card” matches dark/light properly */
+#experience .card,
+#awards .card{
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+}
+
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
 
