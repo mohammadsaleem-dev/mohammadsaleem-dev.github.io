@@ -2021,35 +2021,6 @@ html{ scrollbar-gutter: stable; }
 
 
     // =========================
-// PERF MODE: auto-disable heavy effects during zoom/scroll
-// =========================
-(function () {
-  const root = document.body;
-  let t = null;
-
-  const enable = () => {
-    root.classList.add("perf-mode");
-    if (t) clearTimeout(t);
-    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
-  };
-
-  // Detect browser zoom: Ctrl + Wheel
-  window.addEventListener("wheel", (e) => {
-    if (e.ctrlKey) enable();
-  }, { passive: true });
-
-  // Detect fast scrolling (helps on some machines)
-  window.addEventListener("scroll", () => {
-    enable();
-  }, { passive: true });
-
-  // Trackpad pinch zoom (Safari / some browsers)
-  window.addEventListener("gesturestart", enable, { passive: true });
-  window.addEventListener("gesturechange", enable, { passive: true });
-  window.addEventListener("gestureend", enable, { passive: true });
-})();
-
-    // =========================
 // Verification counters (animate when visible)
 // Uses IntersectionObserver + requestAnimationFrame
 // =========================
