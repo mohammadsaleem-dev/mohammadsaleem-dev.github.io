@@ -1554,6 +1554,26 @@ body{
   100% { opacity: 0; transform: scale(1.15); }
 }
 
+    /* =========================
+   Smooth Theme Crossfade
+   ========================= */
+
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: inherit;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  z-index: 9998;
+}
+
+/* When switching theme */
+body.theme-transition::before{
+  opacity: 1;
+}
+
 
     
   </style>
@@ -2077,8 +2097,7 @@ body{
   </button>
 
   <script>
-    // Theme toggle
-// Theme toggle (smooth + animated icon)
+// Theme toggle with smooth transition + icon animation
 const toggle = document.getElementById("themeToggle");
 
 const setIcon = () => {
@@ -2091,22 +2110,34 @@ const setIcon = () => {
   setIcon();
 
   toggle.addEventListener("click", () => {
-    // animate icon
-    toggle.classList.remove("icon-swap"); // reset if spam clicked
-    void toggle.offsetWidth;             // reflow to restart animation
+
+    // Start fade animation
+    document.body.classList.add("theme-transition");
+
+    // Icon animation
+    toggle.classList.remove("icon-swap");
+    void toggle.offsetWidth;
     toggle.classList.add("icon-swap");
 
-    // toggle theme
-    document.body.classList.toggle("light");
-    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    // Toggle theme slightly AFTER fade starts
+    setTimeout(() => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme",
+        document.body.classList.contains("light") ? "light" : "dark"
+      );
+      setIcon();
+    }, 80);
 
-    // update icon AFTER a tiny delay so it feels like it flips
-    setTimeout(setIcon, 120);
+    // Remove transition layer
+    setTimeout(() => {
+      document.body.classList.remove("theme-transition");
+      toggle.classList.remove("icon-swap");
+    }, 350);
 
-    // cleanup class after animation
-    setTimeout(() => toggle.classList.remove("icon-swap"), 420);
   }, { passive: true });
+
 })();
+
 
 
     // Optimize background orb on slow devices
