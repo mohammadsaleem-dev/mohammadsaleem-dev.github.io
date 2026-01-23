@@ -43,6 +43,7 @@
       --radius2: 18px;
       --max: 1120px;
       --navh: 74px;
+      --ease: cubic-bezier(.22,.61,.36,1);
 
       /* Typography scale */
       --font: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
@@ -429,7 +430,11 @@
       position: relative;
       overflow: hidden;
       contain: content;
-      transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition: 
+        transform 260ms var(--ease),
+        box-shadow 300ms var(--ease),
+        border-color 240ms var(--ease),
+        background 260ms var(--ease);
     }
     .card::before{
       content:"";
@@ -664,7 +669,10 @@
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.10);
       background: var(--panel);
-      transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition:     
+        transform 260ms var(--ease),
+        box-shadow 300ms var(--ease),
+        border-color 240ms var(--ease);
     }
     .item + .item{ margin-top: 12px; }
 
@@ -719,7 +727,10 @@
       overflow: hidden;
       display: grid;
       grid-template-rows: 150px auto;
-      transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition:     
+        transform 260ms var(--ease),
+        box-shadow 320ms var(--ease),
+        border-color 260ms var(--ease);
     }
     body.light .project-card{
       background: rgba(255,255,255,0.92);
@@ -854,7 +865,10 @@
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px;
-      transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition:     
+        transform 260ms var(--ease),
+        box-shadow 320ms var(--ease),
+        border-color 260ms var(--ease);
     }
     body.light .timeline-item{
       background: rgba(255,255,255,0.92);
@@ -916,9 +930,12 @@
       display:flex;
       flex-direction: column;
       gap: 10px;
-      transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition: 
+        transform 260ms var(--ease),
+        box-shadow 300ms var(--ease),
+        border-color 240ms var(--ease);
     }
-    .cert:hover{ transform: translateY(-2px); }
+    .cert:hover{ transform: translateY(-3px); }
 
     .cert-top{
       display:flex;
@@ -1107,7 +1124,17 @@ body.light .verify-card{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      transition:
+        transform 220ms var(--ease),
+        background 220ms var(--ease),
+        border-color 220ms var(--ease),
+        box-shadow 300ms var(--ease);
+
+          .icon-btn:hover i{
+      transform: scale(1.08);
+      transition: transform 240ms var(--ease);
+    }
+
     }
 
 
@@ -1501,6 +1528,7 @@ body,
     border-color var(--theme-dur) var(--theme-ease),
     box-shadow var(--theme-dur) var(--theme-ease),
     filter var(--theme-dur) var(--theme-ease);
+    transform 240ms var(--ease);
 }
 
 /* Also animate your big page background */
