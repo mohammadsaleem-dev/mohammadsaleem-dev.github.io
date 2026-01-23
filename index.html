@@ -161,11 +161,18 @@
       --border: rgba(12,14,20,0.14);
       --shadow: 0 14px 32px rgba(12,14,20,0.12);
 
-      --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
+      --page-bg:
+      radial-gradient(900px 520px at 15% 10%, rgba(120,140,255,0.18), transparent 55%),
+      radial-gradient(820px 520px at 85% 0%, rgba(110,220,255,0.14), transparent 55%),
+      radial-gradient(900px 700px at 50% 95%, rgba(160,120,255,0.10), transparent 60%),
+      linear-gradient(180deg, #f7f8fb 0%, #eef2f7 60%, #f7f8fb 100%);
+
       --glow: 0 0 0 1px rgba(70,110,255,0.14), 0 18px 55px rgba(12,14,20,0.12);
     }
     body.light .bg-orb{ opacity: 0; }
-    body.light::after{ opacity: 0.04; }
+    body.light::after{   
+    opacity: 0.025;
+    mix-blend-mode: multiply; }
 
     body.light, body.light *{ color: var(--text); }
     body.light p, body.light li, body.light .subtitle, body.light .section-sub,
