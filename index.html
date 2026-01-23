@@ -67,6 +67,125 @@
       scroll-padding-top: calc(var(--navh) + 18px);
     }
 
+    /* =========================
+   FLOATING ACHIEVEMENT BADGE
+   ========================= */
+.float-badge{
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 80;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(150,175,255,0.28);
+  background: rgba(10,16,32,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 46px rgba(0,0,0,0.35);
+  transform: translateY(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 220ms ease;
+  max-width: min(360px, calc(100vw - 36px));
+}
+.float-badge.show{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.fb-icon{
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.fb-text{
+  display:flex;
+  flex-direction:column;
+  line-height: 1.1;
+  min-width: 0;
+}
+.fb-text b{
+  font-weight: 900;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.fb-text span{
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fb-x{
+  margin-left: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-weight: 900;
+  font-size: 12px;
+}
+.float-badge:hover{ box-shadow: var(--glow); }
+
+body.light .float-badge{
+  background: rgba(255,255,255,0.92);
+  border-color: rgba(12,14,20,0.14);
+}
+
+@media (max-width: 520px){
+  .float-badge{ left: 12px; bottom: 12px; }
+}
+
+/* Also disable badge blur in perf-mode */
+body.perf-mode .float-badge{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+
+    /* =========================
+   FULL-BLEED SECTION BANDS
+   ========================= */
+.band{
+  /* full-bleed trick */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+  padding-top: 26px;
+  padding-bottom: 26px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  background:
+    radial-gradient(900px 260px at 15% 20%, rgba(110,220,255,0.10), transparent 55%),
+    radial-gradient(800px 260px at 85% 30%, rgba(120,140,255,0.10), transparent 55%),
+    rgba(255,255,255,0.02);
+}
+
+body.light .band{
+  border-top-color: rgba(12,14,20,0.10);
+  border-bottom-color: rgba(12,14,20,0.10);
+  background:
+    radial-gradient(900px 260px at 15% 20%, rgba(70,110,255,0.08), transparent 55%),
+    radial-gradient(800px 260px at 85% 30%, rgba(70,110,255,0.07), transparent 55%),
+    rgba(12,14,20,0.02);
+}
+
+
     body{
       margin: 0;
       font-family: var(--font);
@@ -112,6 +231,47 @@
       position: relative;
       z-index: 2; /* above noise */
     }
+
+/* =========================
+   VERIFICATION COUNTERS
+   ========================= */
+.verify-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 520px){
+  .verify-grid{ grid-template-columns: 1fr; }
+}
+.verify-box{
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 12px 12px;
+  transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+.verify-box:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+  border-color: rgba(150,175,255,0.22);
+}
+body.light .verify-box{
+  background: rgba(255,255,255,0.92);
+  border-color: rgba(12,14,20,0.14);
+}
+.v-num{
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.2px;
+}
+.v-label{
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+    
     @media (min-width: 1200px){
       .container{ padding-left: 28px; padding-right: 28px; }
     }
@@ -1216,37 +1376,6 @@ body.perf-mode .to-top{
 
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
-
-
-    // =========================
-// PERF MODE: auto-disable heavy effects during zoom/scroll
-// =========================
-(function () {
-  const root = document.body;
-  let t = null;
-
-  const enable = () => {
-    root.classList.add("perf-mode");
-    if (t) clearTimeout(t);
-    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
-  };
-
-  // Detect browser zoom: Ctrl + Wheel
-  window.addEventListener("wheel", (e) => {
-    if (e.ctrlKey) enable();
-  }, { passive: true });
-
-  // Detect fast scrolling (helps on some machines)
-  window.addEventListener("scroll", () => {
-    enable();
-  }, { passive: true });
-
-  // Trackpad pinch zoom (Safari / some browsers)
-  window.addEventListener("gesturestart", enable, { passive: true });
-  window.addEventListener("gesturechange", enable, { passive: true });
-  window.addEventListener("gestureend", enable, { passive: true });
-})();
-
     
   </style>
 </head>
@@ -1398,10 +1527,40 @@ html{ scrollbar-gutter: stable; }
         <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
+
+        <div class="section-divider" style="margin:18px 0;"></div>
+
+<h3 style="margin:0 0 10px; font-size:18px;">Verification</h3>
+<p class="section-sub" style="margin:0 0 12px;">
+  Quick proof signals: badges, repos, and awards.
+</p>
+
+<div class="verify-grid" aria-label="Verification counters">
+  <a class="verify-box" href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly" target="_blank" rel="noopener">
+    <div class="v-num" data-count="12" data-suffix="+">0</div>
+    <div class="v-label">Credly Badges</div>
+  </a>
+
+  <a class="verify-box" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">
+    <div class="v-num" data-count="8" data-suffix="+">0</div>
+    <div class="v-label">Pinned / Top Repos</div>
+  </a>
+
+  <a class="verify-box" href="#awards">
+    <div class="v-num" data-count="2" data-suffix="">0</div>
+    <div class="v-label">Awards</div>
+  </a>
+</div>
+
+<p class="section-sub" style="margin:12px 0 0;">
+  Tip: update the numbers anytime (data-count).
+</p>
+
       </div>
     </div>
 
     <!-- PROJECTS (Upgraded) -->
+    <div class="band">
     <section id="projects" class="anchor reveal">
       <h2 class="section-title">Projects</h2>
       <p class="section-sub">Selected projects with tech tags and quick actions.</p>
@@ -1560,6 +1719,7 @@ html{ scrollbar-gutter: stable; }
     </section>
 
     <!-- EXPERIENCE (Timeline) -->
+      <div class="band">
     <section id="experience" class="anchor reveal">
       <h2 class="section-title">Experience</h2>
       <p class="section-sub">Timeline view for quick scanning.</p>
@@ -1578,9 +1738,11 @@ html{ scrollbar-gutter: stable; }
         <div class="t-date">Jun – Sep 2024</div>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- AWARDS (Timeline) -->
+      <div class="band">
     <section id="awards" class="anchor reveal">
       <h2 class="section-title">Awards and Achievements</h2>
       <p class="section-sub">Highlights and placements.</p>
@@ -1594,7 +1756,7 @@ html{ scrollbar-gutter: stable; }
             </div>
             <div class="t-date">Jul 2025</div>
           </div>
-
+      
           <div class="timeline-item">
             <div>
               <p class="t-title">Jordan Math Competition — 2nd Place</p>
@@ -1604,8 +1766,9 @@ html{ scrollbar-gutter: stable; }
           </div>
         </div>
       </div>
+      </div>
     </section>
-
+   <div class="band"> 
     <section id="certificates" class="anchor reveal">
       <h2 class="section-title">Certificates</h2>
 
@@ -1689,8 +1852,9 @@ html{ scrollbar-gutter: stable; }
           </div>
         </div>
       </div>
+   </div>
     </section>
-
+    <div class="band">
     <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
       <div class="card reveal">
@@ -1723,6 +1887,7 @@ html{ scrollbar-gutter: stable; }
           <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
         </div>
       </div>
+    </div>
     </section>
 
     <footer class="reveal">
@@ -1730,6 +1895,16 @@ html{ scrollbar-gutter: stable; }
       <p>Built with HTML, CSS & JavaScript</p>
     </footer>
   </div>
+
+    <a class="float-badge" id="floatBadge" href="#awards" aria-label="Achievement badge">
+  <span class="fb-icon">🏆</span>
+  <span class="fb-text">
+    <b>5th Place</b>
+    <span>National Technology Parade</span>
+  </span>
+  <span class="fb-x" id="fbClose" aria-label="Dismiss badge">✕</span>
+</a>
+
 
   <button class="to-top" id="toTop" aria-label="Back to top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -1753,6 +1928,64 @@ html{ scrollbar-gutter: stable; }
         setIcon();
       }, { passive: true });
     })();
+
+// =========================
+// Floating achievement badge (show + dismiss)
+// =========================
+(function () {
+  const badge = document.getElementById("floatBadge");
+  const close = document.getElementById("fbClose");
+  if (!badge || !close) return;
+
+  const KEY = "hideFloatBadge";
+  if (localStorage.getItem(KEY) === "1") return;
+
+  const show = () => badge.classList.add("show");
+
+  // show after the intro finishes (safe delay)
+  window.addEventListener("load", () => {
+    setTimeout(show, 1600);
+  }, { once: true });
+
+  close.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    badge.classList.remove("show");
+    localStorage.setItem(KEY, "1");
+  });
+})();
+
+
+    
+    // =========================
+// PERF MODE: auto-disable heavy effects during zoom/scroll
+// =========================
+(function () {
+  const root = document.body;
+  let t = null;
+
+  const enable = () => {
+    root.classList.add("perf-mode");
+    if (t) clearTimeout(t);
+    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
+  };
+
+  // Detect browser zoom: Ctrl + Wheel
+  window.addEventListener("wheel", (e) => {
+    if (e.ctrlKey) enable();
+  }, { passive: true });
+
+  // Detect fast scrolling
+  window.addEventListener("scroll", () => {
+    enable();
+  }, { passive: true });
+
+  // Trackpad pinch zoom (Safari / some browsers)
+  window.addEventListener("gesturestart", enable, { passive: true });
+  window.addEventListener("gesturechange", enable, { passive: true });
+  window.addEventListener("gestureend", enable, { passive: true });
+})();
+
 
     // Optimize background orb on slow devices
     (function optimizeBackground(){
@@ -1804,6 +2037,50 @@ html{ scrollbar-gutter: stable; }
         if (window.innerWidth > 1024) closeMenu();
       }, { passive: true });
     })();
+
+    // =========================
+// Animated counters (Verification)
+// =========================
+(function () {
+  const nodes = document.querySelectorAll(".v-num[data-count]");
+  if (!nodes.length) return;
+
+  const animate = (el) => {
+    const target = Number(el.getAttribute("data-count")) || 0;
+    const suffix = el.getAttribute("data-suffix") || "";
+    const start = 0;
+    const dur = 900;
+    const t0 = performance.now();
+
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      const val = Math.round(start + (target - start) * eased);
+      el.textContent = `${val}${suffix}`;
+      if (p < 1) requestAnimationFrame(step);
+    };
+
+    requestAnimationFrame(step);
+  };
+
+  // Run only when visible
+  if (!("IntersectionObserver" in window)) {
+    nodes.forEach(animate);
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        animate(e.target);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  nodes.forEach(n => io.observe(n));
+})();
+
 
     // Scroll reveal (disconnect once done)
     (function () {
