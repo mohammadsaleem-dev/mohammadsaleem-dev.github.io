@@ -1574,6 +1574,28 @@ body.theme-transition::before{
   opacity: 1;
 }
 
+    /* =========================
+   Theme switch overlay (no white flash)
+   ========================= */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9997; /* below intro overlay (9999), above everything else */
+  transition: opacity 320ms ease;
+  will-change: opacity;
+}
+
+/* Smooth icon animation */
+#themeToggle{
+  transition: transform 260ms ease, filter 260ms ease;
+}
+#themeToggle.icon-swap{
+  transform: rotate(180deg) scale(1.08);
+  filter: brightness(1.05);
+}
+
 
     
   </style>
@@ -1581,6 +1603,7 @@ body.theme-transition::before{
 
 <body>
   <!-- Intro typing overlay -->
+  <div id="themeFade" aria-hidden="true"></div>
   <div id="introOverlay" aria-hidden="false">
     <div class="intro-box">
       <div class="intro-title">Welcome</div>
@@ -2097,8 +2120,9 @@ body.theme-transition::before{
   </button>
 
   <script>
-// Theme toggle with smooth transition + icon animation
+// Theme toggle (no white flash) + smooth icon
 const toggle = document.getElementById("themeToggle");
+const fade = document.getElementById("themeFade");
 
 const setIcon = () => {
   toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
@@ -2110,33 +2134,40 @@ const setIcon = () => {
   setIcon();
 
   toggle.addEventListener("click", () => {
+    // 1) Freeze CURRENT background into overlay (pre-toggle)
+    const cs = getComputedStyle(document.body);
+    fade.style.backgroundColor = cs.backgroundColor;
+    fade.style.backgroundImage = cs.backgroundImage;
+    fade.style.backgroundSize = cs.backgroundSize;
+    fade.style.backgroundPosition = cs.backgroundPosition;
+    fade.style.backgroundRepeat = cs.backgroundRepeat;
 
-    // Start fade animation
-    document.body.classList.add("theme-transition");
+    // show overlay instantly (covers while switching)
+    fade.style.transition = "none";
+    fade.style.opacity = "1";
+    void fade.offsetHeight; // force reflow
+    fade.style.transition = "opacity 320ms ease";
 
-    // Icon animation
+    // 2) Animate icon
     toggle.classList.remove("icon-swap");
     void toggle.offsetWidth;
     toggle.classList.add("icon-swap");
 
-    // Toggle theme slightly AFTER fade starts
-    setTimeout(() => {
-      document.body.classList.toggle("light");
-      localStorage.setItem("theme",
-        document.body.classList.contains("light") ? "light" : "dark"
-      );
-      setIcon();
-    }, 80);
+    // 3) Toggle theme
+    document.body.classList.toggle("light");
+    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    setIcon();
 
-    // Remove transition layer
-    setTimeout(() => {
-      document.body.classList.remove("theme-transition");
-      toggle.classList.remove("icon-swap");
-    }, 350);
+    // 4) Fade overlay OUT (reveals new theme smoothly)
+    requestAnimationFrame(() => {
+      fade.style.opacity = "0";
+    });
 
+    // cleanup icon class
+    setTimeout(() => toggle.classList.remove("icon-swap"), 320);
   }, { passive: true });
-
 })();
+
 
 
 
