@@ -1470,6 +1470,91 @@ body.light{
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
 
+
+    /* =========================
+   Smooth theme transitions
+   ========================= */
+:root{
+  --theme-dur: 260ms;
+  --theme-ease: cubic-bezier(.2,.8,.2,1);
+}
+
+/* Smoothly animate common visual properties */
+body,
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
+
+/* Also animate your big page background */
+body{
+  transition:
+    background var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
+}
+
+/* Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce){
+  :root{ --theme-dur: 0ms; }
+}
+
+/* =========================
+   Theme icon animation
+   ========================= */
+#themeToggle{
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a little animated “pulse” ring */
+#themeToggle::after{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:999px;
+  background: radial-gradient(circle, rgba(140,170,255,0.35), transparent 60%);
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events:none;
+}
+
+/* When toggling, we add .icon-swap briefly */
+#themeToggle.icon-swap{
+  animation: iconSpin 380ms cubic-bezier(.2,.9,.2,1);
+}
+#themeToggle.icon-swap::after{
+  animation: iconPulse 380ms cubic-bezier(.2,.9,.2,1);
+}
+
+@keyframes iconSpin{
+  0%   { transform: translateY(0) rotate(0deg) scale(1); }
+  45%  { transform: translateY(-1px) rotate(120deg) scale(1.12); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
+}
+@keyframes iconPulse{
+  0%   { opacity: 0; transform: scale(0.7); }
+  45%  { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+
+
     
   </style>
 </head>
@@ -1993,22 +2078,36 @@ html{ scrollbar-gutter: stable; }
 
   <script>
     // Theme toggle
-    const toggle = document.getElementById("themeToggle");
-    const setIcon = () => {
-      toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
-    };
+// Theme toggle (smooth + animated icon)
+const toggle = document.getElementById("themeToggle");
 
-    (function initTheme(){
-      const saved = localStorage.getItem("theme");
-      if (saved === "light") document.body.classList.add("light");
-      setIcon();
+const setIcon = () => {
+  toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+};
 
-      toggle.addEventListener("click", () => {
-        document.body.classList.toggle("light");
-        localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
-        setIcon();
-      }, { passive: true });
-    })();
+(function initTheme(){
+  const saved = localStorage.getItem("theme");
+  if (saved === "light") document.body.classList.add("light");
+  setIcon();
+
+  toggle.addEventListener("click", () => {
+    // animate icon
+    toggle.classList.remove("icon-swap"); // reset if spam clicked
+    void toggle.offsetWidth;             // reflow to restart animation
+    toggle.classList.add("icon-swap");
+
+    // toggle theme
+    document.body.classList.toggle("light");
+    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+
+    // update icon AFTER a tiny delay so it feels like it flips
+    setTimeout(setIcon, 120);
+
+    // cleanup class after animation
+    setTimeout(() => toggle.classList.remove("icon-swap"), 420);
+  }, { passive: true });
+})();
+
 
     // Optimize background orb on slow devices
     (function optimizeBackground(){
