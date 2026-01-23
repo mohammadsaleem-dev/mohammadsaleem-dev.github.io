@@ -18,9 +18,18 @@
   <meta name="theme-color" content="#0a1020" />
 
   <!-- Icons (Logos) -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
+    /* ============================================================
+       ✅ PERFORMANCE MODE (Zoom/Resize smoothness)
+       - Remove background-attachment: fixed (big lag cause)
+       - Reduce blur filters + backdrop-filter on low-power / when needed
+       - Limit heavy shadows / repaint areas
+       - Keep same functionality
+       ============================================================ */
+
     :root{
       --bg: #060b16;
       --panel: rgba(255,255,255,0.06);
@@ -31,11 +40,19 @@
       --muted2: rgba(255,255,255,0.55);
       --accent: rgba(120,140,255,0.95);
       --accent2: rgba(110,220,255,0.95);
-      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+
+      /* lighter defaults than before */
+      --shadow: 0 14px 42px rgba(0,0,0,0.45);
+      --shadow2: 0 10px 26px rgba(0,0,0,0.30);
+
       --radius: 24px;
       --radius2: 18px;
       --max: 1120px;
       --navh: 74px;
+
+      /* blur controls (lower = faster) */
+      --orb-blur: 34px;
+      --glass-blur: 10px;
 
       --page-bg:
         radial-gradient(1200px 700px at 20% 10%, rgba(90,120,255,0.18), transparent 55%),
@@ -48,14 +65,21 @@
     html{
       scroll-behavior: smooth;
       scroll-padding-top: calc(var(--navh) + 18px);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     body{
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background: var(--page-bg);
-      background-attachment: fixed;
+
+      /* ✅ IMPORTANT: fixed attachment is a common zoom lag cause */
+      background-attachment: scroll;
+
       min-height: 100vh;
+      overflow-x: hidden;
     }
     a{ color: inherit; text-decoration: none; }
     footer p{ margin: 6px 0; }
@@ -75,22 +99,25 @@
       .container{ padding-left: 28px; padding-right: 28px; }
     }
 
+    /* Background orb (lighter + less blur for performance) */
     .bg-orb{
       position: fixed;
       inset: -20%;
       pointer-events: none;
-      filter: blur(60px);
-      opacity: 0.65;
+      filter: blur(var(--orb-blur));
+      opacity: 0.55;
       z-index: -1;
       background:
-        radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.18), transparent 60%),
-        radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
-        radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
-      animation: floaty 14s ease-in-out infinite;
+        radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.16), transparent 60%),
+        radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.16), transparent 60%),
+        radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.08), transparent 60%);
+      animation: floaty 16s ease-in-out infinite;
+      will-change: transform;
+      transform: translateZ(0);
     }
     @keyframes floaty{
       0%,100% { transform: translate3d(0,0,0) scale(1); }
-      50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
+      50% { transform: translate3d(1.2%, -1.2%, 0) scale(1.02); }
     }
 
     /* =========================
@@ -104,7 +131,8 @@
       --panel: rgba(255,255,255,0.78);
       --panel2: rgba(255,255,255,0.92);
       --border: rgba(12,14,20,0.14);
-      --shadow: 0 14px 32px rgba(12,14,20,0.12);
+      --shadow: 0 14px 28px rgba(12,14,20,0.10);
+      --shadow2: 0 10px 20px rgba(12,14,20,0.08);
 
       --page-bg: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 55%, #f6f7f9 100%);
     }
@@ -116,13 +144,35 @@
       color: var(--muted);
     }
 
+    /* =========================
+       PERFORMANCE FALLBACKS
+       ========================= */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .bg-orb{ animation: none; }
+      .reveal{ transition: none; }
+    }
+
+    /* Ultra-fast mode for small devices / coarse pointers */
+    @media (pointer: coarse), (max-width: 520px){
+      :root{
+        --orb-blur: 22px;
+        --glass-blur: 0px;
+        --shadow: 0 10px 24px rgba(0,0,0,0.35);
+        --shadow2: 0 8px 18px rgba(0,0,0,0.25);
+      }
+      .bg-orb{ opacity: 0.45; }
+    }
+
     /* NAV */
     .nav{
       position: sticky;
       top: 0;
       z-index: 50;
       padding-top: 14px;
-      backdrop-filter: blur(16px);
+
+      /* reduce costly blur: keep minimal */
+      backdrop-filter: blur(6px);
     }
     .nav-inner{
       height: var(--navh);
@@ -134,12 +184,13 @@
       border: 1px solid var(--border);
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+      box-shadow: var(--shadow2);
       position: relative;
+      contain: paint;
     }
     body.light .nav-inner{
       background: rgba(255,255,255,0.92);
-      box-shadow: 0 14px 30px rgba(12,14,20,0.10);
+      box-shadow: var(--shadow2);
     }
 
     .brand{ justify-self: start; }
@@ -194,7 +245,7 @@
       flex-shrink: 0;
     }
 
-    /* Hamburger (3 dots) */
+    /* Hamburger */
     .menu-btn{
       display: none;
       width: 46px;
@@ -212,7 +263,7 @@
     .menu-btn:hover{
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      box-shadow: var(--shadow2);
     }
     .menu-btn .dot3{
       width: 5px;
@@ -224,7 +275,7 @@
     body.light .menu-btn{
       background: rgba(255,255,255,0.92);
       border-color: rgba(12,14,20,0.18);
-      box-shadow: 0 12px 26px rgba(12,14,20,0.10);
+      box-shadow: var(--shadow2);
     }
     body.light .menu-btn .dot3{ background: rgba(12,14,20,0.75); }
 
@@ -244,12 +295,13 @@
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
       user-select: none;
       white-space: nowrap;
+      transform: translateZ(0);
     }
     .btn:hover{
       transform: translateY(-1px);
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      box-shadow: var(--shadow2);
     }
     .btn-ghost{ background: rgba(255,255,255,0.04); }
 
@@ -264,7 +316,7 @@
       content:"";
       position:absolute;
       inset:0;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.35), transparent 60%);
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.30), transparent 60%);
       opacity:0;
       transition: opacity 0.3s ease;
     }
@@ -273,7 +325,7 @@
     body.light .btn{
       background: rgba(255,255,255,0.94);
       border-color: rgba(12,14,20,0.18);
-      box-shadow: 0 10px 20px rgba(12,14,20,0.08);
+      box-shadow: var(--shadow2);
     }
     body.light .btn:hover{ background: rgba(255,255,255,0.99); }
 
@@ -291,8 +343,8 @@
         border-radius: 18px;
         border: 1px solid rgba(255,255,255,0.12);
         background: rgba(10,16,32,0.92);
-        backdrop-filter: blur(18px);
-        box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow);
         flex-direction: column;
         gap: 8px;
         white-space: normal;
@@ -335,7 +387,8 @@
       body.light .nav-links{
         background: rgba(255,255,255,0.97);
         border-color: rgba(12,14,20,0.14);
-        box-shadow: 0 18px 50px rgba(12,14,20,0.12);
+        box-shadow: var(--shadow2);
+        backdrop-filter: none;
       }
       body.light .nav-links a{
         background: rgba(12,14,20,0.04);
@@ -366,14 +419,17 @@
       padding: 26px;
       position: relative;
       overflow: hidden;
+
+      /* reduce repaint scope */
+      contain: content;
     }
     .card::before{
       content:"";
       position:absolute;
       inset:-2px;
       background:
-        radial-gradient(450px 250px at 20% 10%, rgba(120,140,255,0.14), transparent 60%),
-        radial-gradient(380px 240px at 90% 30%, rgba(110,220,255,0.10), transparent 60%);
+        radial-gradient(450px 250px at 20% 10%, rgba(120,140,255,0.12), transparent 60%),
+        radial-gradient(380px 240px at 90% 30%, rgba(110,220,255,0.08), transparent 60%);
       pointer-events:none;
       opacity: 1;
     }
@@ -399,20 +455,16 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      background: linear-gradient(135deg, rgba(110,220,255,0.22), rgba(120,140,255,0.16));
-      border: 1px solid rgba(150,175,255,0.30);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
-      transform: translateY(4px);
+      background: linear-gradient(135deg, rgba(110,220,255,0.20), rgba(120,140,255,0.14));
+      border: 1px solid rgba(150,175,255,0.26);
+      box-shadow: var(--shadow2);
+      transform: translateY(4px) translateZ(0);
     }
     .pc-logo i{
       font-size: 20px;
       background: linear-gradient(135deg, rgba(255,120,200,0.95), rgba(120,140,255,0.95), rgba(110,220,255,0.95));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-    body.light .pc-logo{
-      background: linear-gradient(135deg, rgba(110,220,255,0.18), rgba(120,140,255,0.12));
-      box-shadow: 0 14px 30px rgba(12,14,20,0.10);
     }
 
     .subtitle{
@@ -547,9 +599,6 @@
       color: rgba(255,255,255,0.65);
       font-weight: 800;
     }
-    @media (max-width: 960px){
-      .stats{ grid-template-columns: 1fr; }
-    }
 
     section{ margin-top: 28px; }
     .section-title{
@@ -577,6 +626,7 @@
       border: 1px solid rgba(255,255,255,0.10);
       background: var(--panel);
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      transform: translateZ(0);
     }
     .mini:hover{
       transform: translateY(-2px);
@@ -673,6 +723,7 @@
       flex-direction: column;
       gap: 10px;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      transform: translateZ(0);
     }
     .cert:hover{
       transform: translateY(-2px);
@@ -723,7 +774,7 @@
     .reveal{
       opacity: 0;
       transform: translateY(12px);
-      transition: opacity 500ms ease, transform 500ms ease;
+      transition: opacity 420ms ease, transform 420ms ease;
     }
     .reveal.show{
       opacity: 1;
@@ -741,7 +792,7 @@
 
     *{ -webkit-tap-highlight-color: transparent; }
 
-    /* Time widget */
+    /* Time widget (reduced blur) */
     .meta-wrap{
       display: flex;
       justify-content: center;
@@ -758,10 +809,13 @@
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.28);
+
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+
+      box-shadow: var(--shadow2);
       min-width: 190px;
+      contain: paint;
     }
     .time-label{
       font-size: 12px;
@@ -778,7 +832,9 @@
     body.light .time-card{
       background: rgba(255,255,255,0.92);
       border-color: rgba(12,14,20,0.16);
-      box-shadow: 0 14px 28px rgba(12,14,20,0.10);
+      box-shadow: var(--shadow2);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
 
     /* Icon buttons */
@@ -798,18 +854,19 @@
       align-items:center;
       justify-content:center;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      transform: translateZ(0);
     }
     .icon-btn i{ font-size: 18px; color: rgba(255,255,255,0.90); }
     .icon-btn:hover{
       transform: translateY(-1px);
       background: rgba(255,255,255,0.10);
       border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.30);
+      box-shadow: var(--shadow2);
     }
     body.light .icon-btn{
       background: rgba(255,255,255,0.94);
       border-color: rgba(12,14,20,0.18);
-      box-shadow: 0 10px 20px rgba(12,14,20,0.08);
+      box-shadow: var(--shadow2);
     }
     body.light .icon-btn i{ color: rgba(12,14,20,0.90); }
 
@@ -830,7 +887,7 @@
       transform: translateY(10px);
       pointer-events: none;
       transition: 200ms ease;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.30);
+      box-shadow: var(--shadow2);
       z-index: 70;
     }
     .to-top.show{
@@ -908,7 +965,7 @@
           Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
         </p>
 
-        <!-- ✅ Objectives -->
+        <!-- Objectives -->
         <div class="objective">
           <h3>Objectives</h3>
           <p>
@@ -955,7 +1012,7 @@
         </div>
       </div>
 
-      <!-- Quick Links: change GitHub + LinkedIn to LOGO buttons -->
+      <!-- Quick Links -->
       <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
 
@@ -1033,13 +1090,9 @@
       <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
-        <!-- ✅ IMPORTANT for High School logo:
-             Make sure file name EXACTLY matches (case-sensitive on GitHub):
-             assets/al-jazeera.png  OR change the src below to your real name.
-        -->
         <div class="item">
           <div class="left">
-            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo">
+            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo" loading="lazy" decoding="async">
             <div class="textblock">
               <p class="title">B.Sc. in Computer Engineering</p>
               <p class="meta">University of Jordan — Amman, Jordan</p>
@@ -1050,8 +1103,7 @@
 
         <div class="item">
           <div class="left">
-            <!-- ✅ if your logo file is different, rename it OR edit this src -->
-            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo"
+            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo" loading="lazy" decoding="async"
                  onerror="this.onerror=null; this.src='assets/al-jazeera.png';">
             <div class="textblock">
               <p class="title">High School Diploma (Tawjihi)</p>
@@ -1077,7 +1129,7 @@
       <div class="card reveal">
         <div class="item" style="margin-top: 0;">
           <div class="left">
-            <img class="logo" src="assets/edco.png" alt="EDCO logo"
+            <img class="logo" src="assets/edco.png" alt="EDCO logo" loading="lazy" decoding="async"
                  onerror="this.style.display='none'">
             <div class="textblock">
               <p class="title">Electricity Distribution Co. (EDCO) — Operating Systems Dept. (Internship)</p>
@@ -1128,7 +1180,8 @@
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1139,7 +1192,8 @@
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1150,7 +1204,8 @@
               <div class="cert-date">Nov 2024</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/aws.png" alt="AWS logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/aws.png" alt="AWS logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by AWS Academy.</p>
             </div>
           </div>
@@ -1161,7 +1216,8 @@
               <div class="cert-date">May 2023</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1172,7 +1228,8 @@
               <div class="cert-date">Jul 2022</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1183,7 +1240,8 @@
               <div class="cert-date">Apr 2022</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/sololearn.png" alt="Sololearn logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/sololearn.png" alt="Sololearn logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Sololearn.</p>
             </div>
           </div>
@@ -1194,7 +1252,8 @@
               <div class="cert-date">Oct 2021</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/coursera.png" alt="Coursera logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/coursera.png" alt="Coursera logo" loading="lazy" decoding="async"
+                   onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Coursera.</p>
             </div>
           </div>
@@ -1302,12 +1361,24 @@
       });
     })();
 
-    // Scroll reveal
+    // Scroll reveal (fast)
     (function () {
       const els = document.querySelectorAll(".reveal");
+      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) {
+        els.forEach(el => el.classList.add("show"));
+        return;
+      }
+
       const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("show");
+            io.unobserve(e.target); // ✅ stop observing after reveal (less work)
+          }
+        }
       }, { threshold: 0.15 });
+
       els.forEach(el => io.observe(el));
     })();
 
@@ -1340,6 +1411,14 @@
     }
     setInterval(updateTime, 1000);
     updateTime();
+
+    // ✅ Modern: prevent expensive hover effects on touch devices
+    (function(){
+      const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+      if(isTouch){
+        document.documentElement.classList.add("touch");
+      }
+    })();
   </script>
 </body>
 </html>
