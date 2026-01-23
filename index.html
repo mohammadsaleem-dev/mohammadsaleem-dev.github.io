@@ -1087,7 +1087,7 @@ body.light .verify{
   transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 .verify-card:hover{
-  transform: translateY(-2px);
+  transform: translateY(-8px);
   box-shadow: var(--glow);
   border-color: rgba(150,175,255,0.22);
 }
@@ -1145,7 +1145,7 @@ body.light .verify-card{
 }
 
 .icon-btn:hover{
-  transform: translateY(-2px);
+  transform: translateY(-6px);
   background: rgba(255,255,255,0.10);
   border-color: rgba(255,255,255,0.22);
   box-shadow: 0 12px 28px rgba(0,0,0,0.30);
@@ -1193,12 +1193,7 @@ body.light .icon-btn.brand{
 
     
     .icon-btn i{ font-size: 18px; color: rgba(255,255,255,0.90); }
-    .icon-btn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.30);
-    }
+
     body.light .icon-btn{
       background: rgba(255,255,255,0.94);
       border-color: rgba(12,14,20,0.18);
@@ -1436,7 +1431,7 @@ body.perf-mode .to-top{
    (bigger, more noticeable, works in dark & light)
    ------------------------------------------- */
 :root{
-  --hover-lift: translateY(-2px);
+  --hover-lift: translateY(-8px);
   --hover-shadow: 0 18px 55px rgba(0,0,0,0.35);
   --hover-stroke: inset 0 0 0 1px rgba(150,175,255,0.20);
   --hover-bg: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
@@ -1462,7 +1457,10 @@ body.light{
 .tag,
 .btn,
 .icon-btn{
-  transition: transform 180ms ease, box-shadow 220ms ease, filter 220ms ease, background 220ms ease;
+    transform 520ms var(--ease),
+    box-shadow 520ms var(--ease),
+    filter 520ms var(--ease),
+    background 520ms var(--ease);
 }
 
 /* BIGGER hover (your main issue) */
