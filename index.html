@@ -49,14 +49,18 @@
       scroll-behavior: smooth;
       scroll-padding-top: calc(var(--navh) + 18px);
     }
+
     body{
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background: var(--page-bg);
-      background-attachment: fixed;
+      /* ✅ PERF: remove background-attachment: fixed; (major cause of jank) */
       min-height: 100vh;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
     }
+
     a{ color: inherit; text-decoration: none; }
     footer p{ margin: 6px 0; }
 
@@ -75,22 +79,43 @@
       .container{ padding-left: 28px; padding-right: 28px; }
     }
 
+    /* ✅ PERF: heavy blurred background orb optimized */
     .bg-orb{
       position: fixed;
       inset: -20%;
       pointer-events: none;
-      filter: blur(60px);
       opacity: 0.65;
       z-index: -1;
       background:
         radial-gradient(500px 350px at 20% 30%, rgba(110,220,255,0.18), transparent 60%),
         radial-gradient(520px 360px at 70% 35%, rgba(120,140,255,0.18), transparent 60%),
         radial-gradient(520px 420px at 50% 75%, rgba(160,120,255,0.10), transparent 60%);
+
+      /* blur is expensive, keep but lighter on mobile */
+      filter: blur(56px);
+
+      /* GPU hints */
+      will-change: transform;
+      transform: translate3d(0,0,0);
+      backface-visibility: hidden;
+
       animation: floaty 14s ease-in-out infinite;
     }
     @keyframes floaty{
       0%,100% { transform: translate3d(0,0,0) scale(1); }
       50% { transform: translate3d(2%, -2%, 0) scale(1.03); }
+    }
+
+    /* ✅ PERF: reduce blur on smaller devices */
+    @media (max-width: 700px){
+      .bg-orb{ filter: blur(42px); opacity: 0.58; }
+    }
+
+    /* ✅ PERF: auto-disable animation for reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .bg-orb{ animation: none !important; }
+      .reveal{ transition: none !important; transform: none !important; opacity: 1 !important; }
     }
 
     /* =========================
@@ -366,6 +391,9 @@
       padding: 26px;
       position: relative;
       overflow: hidden;
+
+      /* ✅ PERF: isolate paint/layout */
+      contain: content;
     }
     .card::before{
       content:"";
@@ -380,7 +408,13 @@
     body.light .card::before{ opacity: 0.08; }
     .card > *{ position: relative; z-index: 1; }
 
-    /* Hero title with colorful computer logo */
+    /* ✅ PERF: don’t render offscreen sections until needed */
+    section, footer{
+      content-visibility: auto;
+      contain-intrinsic-size: 800px;
+    }
+
+    /* Hero title */
     .hero-title{
       display:flex;
       align-items: baseline;
@@ -440,7 +474,6 @@
       max-width: 70ch;
     }
 
-    /* Objective block */
     .objective{
       margin-top: 12px;
       padding: 14px 16px;
@@ -813,7 +846,7 @@
     }
     body.light .icon-btn i{ color: rgba(12,14,20,0.90); }
 
-    /* ✅ Blue Back-to-top only */
+    /* Blue Back-to-top only */
     .to-top{
       position: fixed;
       right: 18px;
@@ -843,7 +876,7 @@
 </head>
 
 <body>
-  <div class="bg-orb"></div>
+  <div class="bg-orb" id="bgOrb"></div>
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
@@ -880,7 +913,6 @@
   <div class="container">
     <div id="top" class="anchor"></div>
 
-    <!-- Time -->
     <div class="meta-wrap">
       <div class="time-card" title="Local time">
         <div class="time-label">My Local Time</div>
@@ -908,7 +940,6 @@
           Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
         </p>
 
-        <!-- ✅ Objectives -->
         <div class="objective">
           <h3>Objectives</h3>
           <p>
@@ -955,7 +986,6 @@
         </div>
       </div>
 
-      <!-- Quick Links: change GitHub + LinkedIn to LOGO buttons -->
       <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
 
@@ -1033,10 +1063,6 @@
       <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
-        <!-- ✅ IMPORTANT for High School logo:
-             Make sure file name EXACTLY matches (case-sensitive on GitHub):
-             assets/al-jazeera.png  OR change the src below to your real name.
-        -->
         <div class="item">
           <div class="left">
             <img class="logo" src="assets/uoj.png" alt="University of Jordan logo">
@@ -1050,7 +1076,6 @@
 
         <div class="item">
           <div class="left">
-            <!-- ✅ if your logo file is different, rename it OR edit this src -->
             <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo"
                  onerror="this.onerror=null; this.src='assets/al-jazeera.png';">
             <div class="textblock">
@@ -1253,23 +1278,39 @@
       toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
     };
 
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("light");
-      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    (function initTheme(){
+      const saved = localStorage.getItem("theme");
+      if (saved === "light") document.body.classList.add("light");
       setIcon();
-    });
 
-    if (localStorage.getItem("theme") === "light") {
-      document.body.classList.add("light");
-    }
-    setIcon();
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("light");
+        localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+        setIcon();
+      }, { passive: true });
+    })();
+
+    // ✅ PERF: auto-disable heavy orb animation on slow devices
+    (function optimizeBackground(){
+      const orb = document.getElementById("bgOrb");
+      if (!orb) return;
+
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const lowEnd =
+        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+
+      if (reduceMotion || lowEnd) {
+        orb.style.animation = "none";
+      }
+    })();
 
     // Scroll-to-top fix (only when no hash)
     (function () {
       const hasHash = window.location.hash && window.location.hash.length > 1;
       if (!hasHash) {
         window.scrollTo(0, 0);
-        window.addEventListener("load", () => window.scrollTo(0, 0), { once: true });
+        window.addEventListener("load", () => window.scrollTo(0, 0), { once: true, passive: true });
       }
     })();
 
@@ -1299,15 +1340,26 @@
 
       window.addEventListener("resize", () => {
         if (window.innerWidth > 1024) closeMenu();
-      });
+      }, { passive: true });
     })();
 
-    // Scroll reveal
+    // ✅ PERF: Scroll reveal (disconnect once done)
     (function () {
       const els = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        els.forEach(el => el.classList.add("show"));
+        return;
+      }
+
       const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
-      }, { threshold: 0.15 });
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add("show");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
       els.forEach(el => io.observe(el));
     })();
 
@@ -1326,20 +1378,28 @@
       btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     })();
 
-    // Live Clock
-    function updateTime() {
-      const now = new Date();
+    // ✅ PERF: Live Clock aligned to second boundaries (less drift)
+    (function(){
       const el = document.getElementById("liveTime");
       if (!el) return;
 
-      el.textContent = now.toLocaleTimeString([], {
+      const fmt = () => new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit"
       });
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+
+      const tick = () => { el.textContent = fmt(); };
+
+      tick();
+      const now = Date.now();
+      const delay = 1000 - (now % 1000);
+
+      setTimeout(() => {
+        tick();
+        setInterval(tick, 1000);
+      }, delay);
+    })();
   </script>
 </body>
 </html>
