@@ -304,12 +304,18 @@
       color: var(--text);
       font-weight: 800;
       cursor: pointer;
-      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      transition:     
+        transform 320ms var(--ease),
+        background-color 320ms var(--ease),
+        background 320ms var(--ease),
+        border-color 320ms var(--ease),
+        box-shadow 360ms var(--ease),
+        filter 360ms var(--ease);
       user-select: none;
       white-space: nowrap;
     }
     .btn:hover{
-      transform: translateY(-1px);
+      transform: translateY(-2px);
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.22);
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
@@ -1115,27 +1121,40 @@ body.light .verify-card{
       gap: 10px;
       margin-top: 8px;
     }
-    .icon-btn{
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      transition:
-        transform 220ms var(--ease),
-        background 220ms var(--ease),
-        border-color 220ms var(--ease),
-        box-shadow 300ms var(--ease);
+.icon-btn{
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:
+    transform 320ms var(--ease),
+    background 320ms var(--ease),
+    border-color 320ms var(--ease),
+    box-shadow 380ms var(--ease),
+    filter 380ms var(--ease);
+}
 
-          .icon-btn:hover i{
-      transform: scale(1.08);
-      transition: transform 240ms var(--ease);
-    }
+.icon-btn i{
+  font-size: 18px;
+  color: rgba(255,255,255,0.90);
+  transition: transform 320ms var(--ease);
+}
 
-    }
+.icon-btn:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.22);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.30);
+}
+
+.icon-btn:hover i{
+  transform: scale(1.10);
+}
+
 
 
   /* =========================
