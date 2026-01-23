@@ -2409,18 +2409,37 @@ const setIcon = () => {
         }
 
         let i = 0;
-        typingTimer = setInterval(() => {
-          introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
-          i++;
-          if (i >= FULL_TEXT.length) {
-            clearInterval(typingTimer);
-            typingTimer = null;
-            stageTimer = setTimeout(() => {
-              hideOverlay();
-              isRunning = false;
-            }, 700);
+      // HAPTIC (only during intro typing)
+      const canVibrate = "vibrate" in navigator;
+      let lastVibe = 0;
+      
+      typingTimer = setInterval(() => {
+        introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
+        i++;
+      
+        // vibrate lightly while typing (throttled so it feels smooth, not spammy)
+        if (canVibrate) {
+          const now = performance.now();
+          if (now - lastVibe > 85) {          // vibration every ~85ms max
+            navigator.vibrate(8);             // light tap
+            lastVibe = now;
           }
-        }, 55);
+        }
+      
+        if (i >= FULL_TEXT.length) {
+          clearInterval(typingTimer);
+          typingTimer = null;
+      
+          // small "finish" haptic
+          if (canVibrate) navigator.vibrate([12, 8, 12]);
+      
+          stageTimer = setTimeout(() => {
+            hideOverlay();
+            isRunning = false;
+          }, 700);
+        }
+      }, 55);
+
       };
 
       // Skip intro
