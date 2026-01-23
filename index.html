@@ -154,8 +154,6 @@
       --text: rgba(12, 14, 20, 0.95);
       --muted: rgba(12, 14, 20, 0.72);
       --muted2: rgba(12, 14, 20, 0.58);
-      border: 1px solid rgba(255,255,255,0.10);
-      background: var(--panel);
       --panel: rgba(255,255,255,0.78);
       --panel2: rgba(255,255,255,0.92);
       --border: rgba(12,14,20,0.14);
@@ -1344,42 +1342,47 @@ body.perf-mode .icon-btn,
 body.perf-mode .to-top{
   box-shadow: none !important;
 }
+  
+ /* ===========================================
+   NO BORDERS (Inner boxes) — Dark + Light
+   =========================================== */
 
-/* ============================================================
-   FIX #2: Restore OUTLINE / BORDERS in LIGHT mode
-   for Certificates, Education items, Skills chips
-   ============================================================ */
-
-/* Education items */
-body.light .item{
-  border-color: rgba(12,14,20,0.14) !important;
-  background: rgba(255,255,255,0.92) !important;
+/* remove any border from common inner boxes */
+.card,
+.item,
+.project-card,
+.project-thumb,
+.tag,
+.cert,
+.stat,
+.icon-chip,
+.logo,
+.issuer-logo,
+.verify,
+.verify-card,
+.time-card,
+.objective,
+.nav-inner,
+.intro-box,
+.intro-type,
+.thumb-badge,
+.thumb-icon,
+.btn,
+.menu-btn,
+.icon-btn{
+  border: 0 !important;
 }
 
-/* Certificates boxes */
-body.light .cert{
-  border-color: rgba(12,14,20,0.14) !important;
-  background: rgba(255,255,255,0.92) !important;
+/* also remove border-top divider in Verification */
+.verify{
+  border-top: 0 !important;
 }
 
-/* Skills chips (Java/Python/etc) */
-body.light .icon-chip{
-  border-color: rgba(12,14,20,0.14) !important;
-  background: rgba(255,255,255,0.92) !important;
+/* remove the timeline dot border ring */
+.timeline-item::before{
+  border: 0 !important;
 }
-
-/* Stats boxes */
-body.light .stat{
-  border-color: rgba(12,14,20,0.14) !important;
-  background: rgba(255,255,255,0.92) !important;
-}
-
-/* Tags in projects */
-body.light .tag{
-  border-color: rgba(12,14,20,0.12) !important;
-}
-
-    
+   
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
 
