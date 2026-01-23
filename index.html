@@ -1425,6 +1425,23 @@ body.perf-mode .to-top{
 .verify{
   border-top: 0 !important;
 }
+  
+      /* ✅ Smooth hover: force GPU */
+  .item,
+  .timeline-item,
+  .verify-card,
+  .cert,
+  .project-card,
+  .stat,
+  .time-card,
+  .objective,
+  .btn,
+  .icon-btn{
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
 
 /* -------------------------------------------
    NEW: Premium hover “surface lift”
@@ -1462,6 +1479,20 @@ body.light{
     filter 520ms var(--ease),
     background 520ms var(--ease);
 }
+    /* ✅ Override fast transitions (make it slower + smoother) */
+.item,
+.timeline-item,
+.verify-card,
+.cert,
+.project-card,
+.stat,
+.time-card,
+.objective,
+.btn,
+.icon-btn{
+  transition: transform 650ms cubic-bezier(.22,.61,.36,1) !important;
+}
+
 
 /* BIGGER hover (your main issue) */
 .item:hover,
@@ -1474,7 +1505,6 @@ body.light{
 .objective:hover{
   transform: var(--hover-lift);
   box-shadow: var(--hover-shadow), var(--hover-stroke);
-  background: var(--hover-bg);
 }
 
 /* Chips / pills hover (make it feel larger & clickable) */
