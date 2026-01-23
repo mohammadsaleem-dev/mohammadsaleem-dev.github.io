@@ -1105,32 +1105,6 @@ body.light .verify-card{
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
 
-    /* ============================================================
-   FIX #1: Keep BRAND social buttons colorful in LIGHT mode
-   (override the generic body.light .icon-btn rules)
-   ============================================================ */
-body.light .icon-btn.brand{
-  background: var(--brand, rgba(12,14,20,0.08)) !important;
-  border: 0 !important;
-  box-shadow: 0 12px 28px rgba(12,14,20,0.12);
-}
-
-body.light .icon-btn.brand i{
-  color: #fff !important;
-}
-
-/* Keep Instagram gradient in light mode too */
-body.light .icon-btn.instagram{
-  background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
-}
-
-/* Optional: hover still nice */
-body.light .icon-btn.brand:hover{
-  transform: translateY(-2px);
-  filter: brightness(1.05);
-  box-shadow: 0 16px 38px rgba(12,14,20,0.16);
-}
-
 
   /* =========================
    SOCIAL ICON COLORS (like photo #1)
@@ -1180,6 +1154,20 @@ body.light .icon-btn.brand{
       box-shadow: 0 10px 20px rgba(12,14,20,0.08);
     }
     body.light .icon-btn i{ color: rgba(12,14,20,0.90); }
+    
+    /* ✅ IMPORTANT: Keep BRAND icons colorful in light mode */
+    body.light .icon-btn.brand{
+      background: var(--brand) !important;
+      border: 0 !important;
+      box-shadow: 0 12px 28px rgba(12,14,20,0.12) !important;
+    }
+    body.light .icon-btn.brand i{
+      color: #fff !important;
+    }
+    body.light .icon-btn.instagram{
+      background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
+    }
+
 
     /* Back-to-top */
     .to-top{
@@ -1350,6 +1338,41 @@ body.perf-mode .to-top{
   box-shadow: none !important;
 }
 
+/* ============================================================
+   FIX #2: Restore OUTLINE / BORDERS in LIGHT mode
+   for Certificates, Education items, Skills chips
+   ============================================================ */
+
+/* Education items */
+body.light .item{
+  border-color: rgba(12,14,20,0.14) !important;
+  background: rgba(255,255,255,0.92) !important;
+}
+
+/* Certificates boxes */
+body.light .cert{
+  border-color: rgba(12,14,20,0.14) !important;
+  background: rgba(255,255,255,0.92) !important;
+}
+
+/* Skills chips (Java/Python/etc) */
+body.light .icon-chip{
+  border-color: rgba(12,14,20,0.14) !important;
+  background: rgba(255,255,255,0.92) !important;
+}
+
+/* Stats boxes */
+body.light .stat{
+  border-color: rgba(12,14,20,0.14) !important;
+  background: rgba(255,255,255,0.92) !important;
+}
+
+/* Tags in projects */
+body.light .tag{
+  border-color: rgba(12,14,20,0.12) !important;
+}
+
+    
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
 
