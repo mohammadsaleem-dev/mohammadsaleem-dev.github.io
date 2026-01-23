@@ -1013,6 +1013,172 @@
       box-shadow: 0 14px 28px rgba(12,14,20,0.10);
     }
 
+    /* =========================
+   VERIFICATION (Animated Counters)
+   ========================= */
+.verify-block{
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+}
+body.light .verify-block{
+  border-top-color: rgba(12,14,20,0.10);
+}
+
+.verify-title{
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+
+.verify-sub{
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-weight: 650;
+  line-height: 1.6;
+}
+
+.verify-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 520px){
+  .verify-grid{ grid-template-columns: 1fr; }
+}
+
+.verify-mini{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+  padding: 14px 14px 12px;
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  text-decoration: none;
+}
+.verify-mini:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+  border-color: rgba(150,175,255,0.22);
+}
+body.light .verify-mini{
+  background: rgba(255,255,255,0.92);
+  border-color: rgba(12,14,20,0.14);
+}
+
+.verify-num{
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  display:flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.verify-num .plus{
+  font-size: 16px;
+  opacity: 0.85;
+  font-weight: 900;
+}
+.verify-label{
+  font-size: 13px;
+  font-weight: 850;
+  color: rgba(255,255,255,0.70);
+  line-height: 1.2;
+}
+body.light .verify-label{
+  color: rgba(12,14,20,0.70);
+}
+
+/* =========================
+   FLOATING ACHIEVEMENT BADGE
+   ========================= */
+.floating-badge{
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 80;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(10,16,32,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.30);
+  cursor: pointer;
+  user-select: none;
+  transform: translate3d(0,0,0);
+  transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+.floating-badge:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+  border-color: rgba(150,175,255,0.25);
+}
+
+.floating-badge .fb-icon{
+  width: 34px;
+  height: 34px;
+  border-radius: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.floating-badge .fb-icon i{
+  color: rgba(255,255,255,0.92);
+  font-size: 16px;
+}
+.floating-badge .fb-text{
+  display:flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.floating-badge .fb-text b{
+  font-size: 13px;
+  font-weight: 900;
+}
+.floating-badge .fb-text span{
+  font-size: 12px;
+  color: rgba(255,255,255,0.70);
+  font-weight: 750;
+}
+
+body.light .floating-badge{
+  background: rgba(255,255,255,0.94);
+  border-color: rgba(12,14,20,0.16);
+  box-shadow: 0 14px 30px rgba(12,14,20,0.12);
+}
+body.light .floating-badge .fb-icon{
+  background: rgba(12,14,20,0.04);
+  border-color: rgba(12,14,20,0.10);
+}
+body.light .floating-badge .fb-icon i{
+  color: rgba(12,14,20,0.90);
+}
+body.light .floating-badge .fb-text span{
+  color: rgba(12,14,20,0.65);
+}
+
+/* gentle float */
+@keyframes badgeFloat{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-3px); }
+}
+.floating-badge{
+  animation: badgeFloat 3.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce){
+  .floating-badge{ animation: none !important; }
+}
+
+
     /* Icon buttons */
     .icon-row{
       display:flex;
@@ -1218,34 +1384,6 @@ body.perf-mode .to-top{
 html{ scrollbar-gutter: stable; }
 
 
-    // =========================
-// PERF MODE: auto-disable heavy effects during zoom/scroll
-// =========================
-(function () {
-  const root = document.body;
-  let t = null;
-
-  const enable = () => {
-    root.classList.add("perf-mode");
-    if (t) clearTimeout(t);
-    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
-  };
-
-  // Detect browser zoom: Ctrl + Wheel
-  window.addEventListener("wheel", (e) => {
-    if (e.ctrlKey) enable();
-  }, { passive: true });
-
-  // Detect fast scrolling (helps on some machines)
-  window.addEventListener("scroll", () => {
-    enable();
-  }, { passive: true });
-
-  // Trackpad pinch zoom (Safari / some browsers)
-  window.addEventListener("gesturestart", enable, { passive: true });
-  window.addEventListener("gesturechange", enable, { passive: true });
-  window.addEventListener("gestureend", enable, { passive: true });
-})();
 
     
   </style>
@@ -1398,6 +1536,37 @@ html{ scrollbar-gutter: stable; }
         <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
+        <div class="verify-block">
+  <h2 class="verify-title">Verification</h2>
+  <p class="verify-sub">Quick proof signals: badges, repos, and awards.</p>
+
+  <div class="verify-grid" id="verifyGrid">
+    <!-- Credly -->
+    <a class="verify-mini" href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly" target="_blank" rel="noopener">
+      <div class="verify-num">
+        <span class="counter" data-count="7">0</span><span class="plus">+</span>
+      </div>
+      <div class="verify-label">Credly<br>Badges</div>
+    </a>
+
+    <!-- GitHub -->
+    <a class="verify-mini" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">
+      <div class="verify-num">
+        <span class="counter" data-count="8">0</span><span class="plus">+</span>
+      </div>
+      <div class="verify-label">GitHub<br>Repos</div>
+    </a>
+
+    <!-- Awards -->
+    <a class="verify-mini" href="#awards">
+      <div class="verify-num">
+        <span class="counter" data-count="2">0</span>
+      </div>
+      <div class="verify-label">Awards</div>
+    </a>
+  </div>
+</div>
+
       </div>
     </div>
 
@@ -1730,6 +1899,13 @@ html{ scrollbar-gutter: stable; }
       <p>Built with HTML, CSS & JavaScript</p>
     </footer>
   </div>
+  <a class="floating-badge" href="#awards" aria-label="View achievement" title="Jump to Awards">
+    <span class="fb-icon"><i class="fa-solid fa-trophy"></i></span>
+    <span class="fb-text">
+      <b>5th Place</b>
+      <span>National Tech Parade</span>
+    </span>
+  </a>
 
   <button class="to-top" id="toTop" aria-label="Back to top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -1753,6 +1929,85 @@ html{ scrollbar-gutter: stable; }
         setIcon();
       }, { passive: true });
     })();
+
+    // =========================
+// PERF MODE: auto-disable heavy effects during zoom/scroll (FIXED LOCATION)
+// =========================
+(function () {
+  const root = document.body;
+  let t = null;
+
+  const enable = () => {
+    root.classList.add("perf-mode");
+    if (t) clearTimeout(t);
+    t = setTimeout(() => root.classList.remove("perf-mode"), 180);
+  };
+
+  window.addEventListener("wheel", (e) => {
+    if (e.ctrlKey) enable();
+  }, { passive: true });
+
+  window.addEventListener("scroll", () => {
+    enable();
+  }, { passive: true });
+
+  window.addEventListener("gesturestart", enable, { passive: true });
+  window.addEventListener("gesturechange", enable, { passive: true });
+  window.addEventListener("gestureend", enable, { passive: true });
+})();
+
+// =========================
+// Animated counters (Verification)
+// =========================
+(function(){
+  const counters = Array.from(document.querySelectorAll(".counter"));
+  if (!counters.length) return;
+
+  const animate = (el, to) => {
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) { el.textContent = String(to); return; }
+
+    const from = 0;
+    const duration = 900; // ms
+    const start = performance.now();
+    el.textContent = "0";
+
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / duration);
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(from + (to - from) * eased);
+      el.textContent = String(val);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = String(to);
+    };
+    requestAnimationFrame(step);
+  };
+
+  const runOnce = (entry) => {
+    if (!entry.isIntersecting) return;
+    counters.forEach(el => {
+      if (el.dataset.done === "1") return;
+      el.dataset.done = "1";
+      const to = Number(el.getAttribute("data-count") || "0");
+      animate(el, to);
+    });
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    // fallback
+    counters.forEach(el => animate(el, Number(el.getAttribute("data-count") || "0")));
+    return;
+  }
+
+  const target = document.getElementById("verifyGrid") || counters[0];
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(runOnce);
+  }, { threshold: 0.35 });
+
+  io.observe(target);
+})();
+
 
     // Optimize background orb on slow devices
     (function optimizeBackground(){
