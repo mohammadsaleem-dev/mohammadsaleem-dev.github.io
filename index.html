@@ -110,7 +110,6 @@
     }
     body.light .bg-orb{ opacity: 0; }
 
-    /* Make sure ALL text is readable in light mode */
     body.light, body.light *{ color: var(--text); }
     body.light p, body.light li, body.light .subtitle, body.light .section-sub,
     body.light .item .meta, body.light .cert-by, body.light footer, body.light .stat span{
@@ -240,7 +239,7 @@
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.05);
       color: var(--text);
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
       user-select: none;
@@ -381,11 +380,41 @@
     body.light .card::before{ opacity: 0.08; }
     .card > *{ position: relative; z-index: 1; }
 
-    h1{
+    /* Hero title with colorful computer logo */
+    .hero-title{
+      display:flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .hero-title h1{
       margin: 0 0 8px;
       font-size: clamp(40px, 5vw, 56px);
       letter-spacing: -0.6px;
     }
+    .pc-logo{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, rgba(110,220,255,0.22), rgba(120,140,255,0.16));
+      border: 1px solid rgba(150,175,255,0.30);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      transform: translateY(4px);
+    }
+    .pc-logo i{
+      font-size: 20px;
+      background: linear-gradient(135deg, rgba(255,120,200,0.95), rgba(120,140,255,0.95), rgba(110,220,255,0.95));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    body.light .pc-logo{
+      background: linear-gradient(135deg, rgba(110,220,255,0.18), rgba(120,140,255,0.12));
+      box-shadow: 0 14px 30px rgba(12,14,20,0.10);
+    }
+
     .subtitle{
       color: var(--muted);
       font-size: 16px;
@@ -393,13 +422,12 @@
       margin-bottom: 10px;
     }
 
-    /* Location line under subtitle */
     .locline{
       display:flex;
       align-items:center;
       gap: 10px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
       margin: 0 0 14px;
     }
     .locline i{ color: rgba(140,170,255,0.95); }
@@ -409,7 +437,31 @@
       font-size: 16px;
       line-height: 1.7;
       margin: 0 0 18px;
-      max-width: 62ch;
+      max-width: 70ch;
+    }
+
+    /* Objective block */
+    .objective{
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+    }
+    body.light .objective{
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(12,14,20,0.14);
+    }
+    .objective h3{
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: -0.1px;
+    }
+    .objective p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 600;
     }
 
     .pill-row{
@@ -432,7 +484,6 @@
     }
     body.light .pill{ color: rgba(12,14,20,0.92); }
 
-    /* Skill icons row */
     .skill-icons{
       display:flex;
       flex-wrap:wrap;
@@ -457,7 +508,6 @@
     body.light .icon-chip{ color: rgba(12,14,20,0.92); }
     body.light .icon-chip i{ color: rgba(70,110,255,0.95); }
 
-    /* C++ chip */
     .cpp-badge{
       width: 18px; height: 18px;
       border-radius: 6px;
@@ -488,13 +538,14 @@
       display:block;
       font-size: 16px;
       letter-spacing: -0.2px;
+      font-weight: 900;
     }
     .stat span{
       display:block;
       margin-top: 4px;
       font-size: 13px;
       color: rgba(255,255,255,0.65);
-      font-weight: 700;
+      font-weight: 800;
     }
     @media (max-width: 960px){
       .stats{ grid-template-columns: 1fr; }
@@ -559,7 +610,6 @@
       line-height: 1.9;
     }
 
-    /* Items (Education/Experience/Awards) + Logos */
     .item{
       display:flex;
       justify-content: space-between;
@@ -638,7 +688,6 @@
     }
     .cert-name{ font-weight: 900; line-height: 1.3; }
     .cert-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; }
-
     .cert-by{ color: var(--muted); margin: 0; line-height: 1.5; }
 
     .issuer-row{
@@ -732,7 +781,7 @@
       box-shadow: 0 14px 28px rgba(12,14,20,0.10);
     }
 
-    /* Contact icon buttons */
+    /* Icon buttons */
     .icon-row{
       display:flex;
       flex-wrap:wrap;
@@ -764,7 +813,7 @@
     }
     body.light .icon-btn i{ color: rgba(12,14,20,0.90); }
 
-    /* ✅ Only BLUE back-to-top button (no slider) */
+    /* ✅ Blue Back-to-top only */
     .to-top{
       position: fixed;
       right: 18px;
@@ -831,7 +880,7 @@
   <div class="container">
     <div id="top" class="anchor"></div>
 
-    <!-- Time (between navbar and content) -->
+    <!-- Time -->
     <div class="meta-wrap">
       <div class="time-card" title="Local time">
         <div class="time-label">My Local Time</div>
@@ -841,10 +890,15 @@
 
     <div id="home" class="grid anchor">
       <div class="card reveal">
-        <h1>Mohammad Saleem</h1>
+        <div class="hero-title">
+          <h1>Mohammad Saleem</h1>
+          <span class="pc-logo" title="Computer Engineering">
+            <i class="fa-solid fa-computer" aria-hidden="true"></i>
+          </span>
+        </div>
+
         <div class="subtitle">Computer Engineering Graduate | Blockchain | AI | Cybersecurity</div>
 
-        <!-- Location line with icon -->
         <div class="locline">
           <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
           <span>Amman, Jordan</span>
@@ -854,7 +908,15 @@
           Welcome to my personal website. This page presents my academic background, technical projects, and professional interests.
         </p>
 
-        <!-- Skill logos/chips -->
+        <!-- ✅ Objectives -->
+        <div class="objective">
+          <h3>Objectives</h3>
+          <p>
+            I aim to refine my AI skills along with programming skills, increase my skills in object-oriented problem solving,
+            and pursue a career where I can solve real-world problems and be an effective team member.
+          </p>
+        </div>
+
         <div class="skill-icons" aria-label="Key technologies">
           <span class="icon-chip"><i class="fa-brands fa-java"></i>Java</span>
           <span class="icon-chip"><span class="cpp-badge">C++</span> C++</span>
@@ -893,11 +955,17 @@
         </div>
       </div>
 
+      <!-- Quick Links: change GitHub + LinkedIn to LOGO buttons -->
       <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
-        <div style="display:flex; flex-wrap:wrap; gap:10px;">
-          <a class="btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener">GitHub Profile</a>
-          <a class="btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener">LinkedIn</a>
+
+        <div class="icon-row" aria-label="Quick links icons">
+          <a class="icon-btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
+            <i class="fa-brands fa-github"></i>
+          </a>
+          <a class="icon-btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
           <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
         </div>
 
@@ -907,7 +975,7 @@
           <span class="pill">Open to opportunities</span>
         </div>
 
-        <p class="lead" style="margin-top: 14px;">
+        <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
       </div>
@@ -943,7 +1011,6 @@
       <div id="skills" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Skills</h2>
 
-        <!-- Logos inside Skills box -->
         <div class="skill-icons" style="margin-top: 0;">
           <span class="icon-chip"><i class="fa-brands fa-java"></i>Java</span>
           <span class="icon-chip"><span class="cpp-badge">C++</span> C++</span>
@@ -966,13 +1033,13 @@
       <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
-        <!-- ✅ Add your logos here:
-             assets/uoj.png
-             assets/aljazeera.png
+        <!-- ✅ IMPORTANT for High School logo:
+             Make sure file name EXACTLY matches (case-sensitive on GitHub):
+             assets/al-jazeera.png  OR change the src below to your real name.
         -->
         <div class="item">
           <div class="left">
-            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo" onerror="this.style.display='none'">
+            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo">
             <div class="textblock">
               <p class="title">B.Sc. in Computer Engineering</p>
               <p class="meta">University of Jordan — Amman, Jordan</p>
@@ -983,7 +1050,9 @@
 
         <div class="item">
           <div class="left">
-            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo" onerror="this.style.display='none'">
+            <!-- ✅ if your logo file is different, rename it OR edit this src -->
+            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo"
+                 onerror="this.onerror=null; this.src='assets/al-jazeera.png';">
             <div class="textblock">
               <p class="title">High School Diploma (Tawjihi)</p>
               <p class="meta">Al-Jazeera School — Amman, Jordan</p>
@@ -1006,12 +1075,10 @@
       <h2 class="section-title">Experience</h2>
 
       <div class="card reveal">
-        <!-- ✅ Add your EDCO logo here:
-             assets/edco.png
-        -->
         <div class="item" style="margin-top: 0;">
           <div class="left">
-            <img class="logo" src="assets/edco.png" alt="EDCO logo" onerror="this.style.display='none'">
+            <img class="logo" src="assets/edco.png" alt="EDCO logo"
+                 onerror="this.style.display='none'">
             <div class="textblock">
               <p class="title">Electricity Distribution Co. (EDCO) — Operating Systems Dept. (Internship)</p>
               <p class="meta">
@@ -1053,12 +1120,6 @@
     <section id="certificates" class="anchor reveal">
       <h2 class="section-title">Certificates</h2>
 
-      <!-- ✅ Add issuer logos into assets/:
-           assets/cisco.png
-           assets/aws.png
-           assets/sololearn.png
-           assets/coursera.png
-      -->
       <div class="card reveal">
         <div class="cert-grid">
           <div class="cert">
@@ -1148,7 +1209,6 @@
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
 
-        <!-- Icons instead of text buttons -->
         <div class="icon-row" aria-label="Contact links">
           <a class="icon-btn" href="mailto:mohammadsaleem2001@gmail.com" aria-label="Email">
             <i class="fa-solid fa-envelope"></i>
@@ -1182,7 +1242,6 @@
     </footer>
   </div>
 
-  <!-- ✅ Blue Back-to-top only -->
   <button class="to-top" id="toTop" aria-label="Back to top">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
@@ -1284,4 +1343,3 @@
   </script>
 </body>
 </html>
-
