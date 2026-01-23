@@ -1101,6 +1101,42 @@ body.light .verify-card{
       justify-content:center;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
+
+  /* =========================
+   SOCIAL ICON COLORS (like photo #1)
+   Add AFTER your .icon-btn styles
+   ========================= */
+.icon-btn.brand{
+  border: 0;
+  background: var(--brand, rgba(255,255,255,0.10));
+  box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+}
+.icon-btn.brand i{ color: #fff !important; }
+
+.icon-btn.brand:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.32);
+}
+
+/* Brand colors */
+.icon-btn.github   { --brand:#181717; } /* GitHub */
+.icon-btn.linkedin { --brand:#0A66C2; } /* LinkedIn */
+.icon-btn.email    { --brand:#6c7bff; } /* Nice email color (matches your theme) */
+.icon-btn.x        { --brand:#000000; } /* X */
+.icon-btn.facebook { --brand:#1877F2; } /* Facebook */
+
+/* Instagram gradient */
+.icon-btn.instagram{
+  background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
+}
+
+/* Light mode: keep them colorful (don’t turn gray) */
+body.light .icon-btn.brand{
+  box-shadow: 0 12px 28px rgba(12,14,20,0.12);
+}
+
+    
     .icon-btn i{ font-size: 18px; color: rgba(255,255,255,0.90); }
     .icon-btn:hover{
       transform: translateY(-1px);
@@ -1419,15 +1455,18 @@ html{ scrollbar-gutter: stable; }
       <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
 
-        <div class="icon-row" aria-label="Quick links icons">
-          <a class="icon-btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
-            <i class="fa-brands fa-github"></i>
-          </a>
-          <a class="icon-btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <i class="fa-brands fa-linkedin-in"></i>
-          </a>
-          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
-        </div>
+      <div class="icon-row" aria-label="Quick links icons">
+        <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      
+        <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+      
+        <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+      </div>
+
 
         <div class="pill-row" style="margin-top: 14px;">
           <span class="pill">Amman, Jordan</span>
@@ -1759,26 +1798,32 @@ html{ scrollbar-gutter: stable; }
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
 
-        <div class="icon-row" aria-label="Contact links">
-          <a class="icon-btn" href="mailto:mohammadsaleem2001@gmail.com" aria-label="Email">
-            <i class="fa-solid fa-envelope"></i>
-          </a>
-          <a class="icon-btn" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub">
-            <i class="fa-brands fa-github"></i>
-          </a>
-          <a class="icon-btn" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <i class="fa-brands fa-linkedin-in"></i>
-          </a>
-          <a class="icon-btn" href="https://x.com/MoTech00" target="_blank" rel="noopener" aria-label="X (Twitter)">
-            <i class="fa-brands fa-x-twitter"></i>
-          </a>
-          <a class="icon-btn" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener" aria-label="Facebook">
-            <i class="fa-brands fa-facebook-f"></i>
-          </a>
-          <a class="icon-btn" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener" aria-label="Instagram">
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-        </div>
+      <div class="icon-row" aria-label="Contact links">
+        <a class="icon-btn brand email" href="mailto:mohammadsaleem2001@gmail.com" aria-label="Email">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
+      
+        <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      
+        <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+      
+        <a class="icon-btn brand x" href="https://x.com/MoTech00" target="_blank" rel="noopener" aria-label="X (Twitter)">
+          <i class="fa-brands fa-x-twitter"></i>
+        </a>
+      
+        <a class="icon-btn brand facebook" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+      
+        <a class="icon-btn brand instagram" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+      </div>
+
 
         <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top: 14px;">
           <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
