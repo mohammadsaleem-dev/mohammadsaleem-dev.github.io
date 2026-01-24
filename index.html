@@ -202,19 +202,26 @@
       #introOverlay *{ transition: none !important; }
     }
 
-    @media (max-width: 520px){
+@media (max-width: 520px){
 
-  /* Space under the name */
-  .hero-title h1{
-    margin-bottom: 10px;   /* ✅ creates breathing room */
+  /* Make hero title breathe */
+  .hero-title{
+    align-items: flex-start; /* prevents vertical compression */
   }
 
-  /* Space above the subtitle line */
+  /* Add space under the NAME */
+  .hero-title h1{
+    margin-bottom: 14px !important; /* ✅ hard separation */
+  }
+
+  /* Force subtitle onto its own visual block */
   .subtitle-row{
-    margin-top: 6px;       /* ✅ pushes subtitle down slightly */
+    display: flex !important;
+    margin-top: 6px !important;
   }
 
 }
+
 
 
     /* LIGHT MODE */
