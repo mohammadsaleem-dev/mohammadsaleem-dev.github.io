@@ -551,11 +551,15 @@
       border-color: rgba(150,175,255,0.22);
     }
 
-    /* Offscreen perf */
-    section, footer{
+    section{
       content-visibility: auto;
       contain-intrinsic-size: 800px;
     }
+    footer{
+      content-visibility: auto;
+      contain-intrinsic-size: 200px;
+    }
+
 
     .hero-title{
       display: flex;
@@ -578,6 +582,11 @@
           align-items: center;
           gap: 12px;
         }
+
+        @media (max-width: 520px){
+  .nav{ backdrop-filter: blur(10px); }
+  .time-card{ backdrop-filter: blur(10px); }
+}
       
         .hero-title h1{
           flex: 1;               /* ✅ take remaining space */
@@ -1369,8 +1378,7 @@ body.light .icon-btn.brand{
   box-shadow: 0 12px 28px rgba(12,14,20,0.12);
 }
 
-    
-    .icon-btn i{ font-size: 18px; color: rgba(255,255,255,0.90); }
+
 
     body.light .icon-btn{
       background: rgba(255,255,255,0.94);
@@ -1638,7 +1646,6 @@ body.light{
   --hover-bg: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
 }
 
-/* Apply the hover to ALL key boxes */
 .item,
 .timeline-item,
 .verify-card,
@@ -1652,11 +1659,13 @@ body.light{
 .tag,
 .btn,
 .icon-btn{
+  transition:
     transform 520ms var(--ease),
     box-shadow 520ms var(--ease),
     filter 520ms var(--ease),
     background 520ms var(--ease);
 }
+
     /* ✅ Override fast transitions (make it slower + smoother) */
 .item,
 .timeline-item,
