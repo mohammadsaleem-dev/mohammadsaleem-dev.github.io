@@ -80,40 +80,45 @@
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* Subtitle row with colorful PC icon */
-.subtitle-row{
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  flex-wrap: nowrap;
-}
-
-  /* Small colorful PC icon */
-  .mini-pc{
-    width: 28px;
-    height: 28px;
-    border-radius: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(110,220,255,0.35), rgba(120,140,255,0.30));
-    border: 1px solid rgba(150,175,255,0.35);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.25);
-    flex-shrink: 0;
-  }
-  
-  .mini-pc i{
-    font-size: 14px;
-    background: linear-gradient(135deg,
-      #ff7ad9,
-      #7aa2ff,
-      #64e1ff
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
+    
+    /* ===== FIX: subtitle + location alignment ===== */
+    .subtitle-row{
+      display: inline-flex;          /* keep it tight like the location row */
+      align-items: center;           /* perfect vertical alignment */
+      gap: 12px;
+      flex-wrap: nowrap;
+      line-height: 1;                /* prevents baseline weirdness */
+      margin-bottom: 10px;
+    }
+    
+    .subtitle-row span:last-child{
+      line-height: 1.2;              /* text readability */
+    }
+    
+    /* Small colorful PC icon */
+    .mini-pc{
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 28px;                /* fixed size (no shrink) */
+      line-height: 1;
+      transform: translateY(1px);    /* micro nudge to match location icon */
+      background: linear-gradient(135deg, rgba(110,220,255,0.35), rgba(120,140,255,0.30));
+      border: 1px solid rgba(150,175,255,0.35);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+    }
+    
+    .mini-pc i{
+      font-size: 14px;
+      line-height: 1;
+      background: linear-gradient(135deg, #ff7ad9, #7aa2ff, #64e1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+      
   /* Light mode tuning */
   body.light .mini-pc{
     box-shadow: 0 8px 18px rgba(12,14,20,0.12);
@@ -568,23 +573,22 @@
       margin-bottom: 10px;
     }
 
+/* Location row stays aligned with same rules */
     .locline{
-      display:flex;
-      align-items:center;
-      gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;                     /* match subtitle gap */
+      line-height: 1;
+      margin: 0 0 14px;
       color: var(--muted);
       font-weight: 800;
-      margin: 0 0 14px;
     }
-    .locline i{ color: rgba(140,170,255,0.95); }
-
-    .lead{
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.75;
-      margin: 0 0 18px;
-      max-width: 70ch;
-      font-weight: 500;
+    
+    .locline i{
+      font-size: 18px;
+      line-height: 1;
+      transform: translateY(1px);    /* same baseline as mini-pc */
+      color: rgba(140,170,255,0.95);
     }
 
     .objective{
@@ -630,56 +634,81 @@
     }
     body.light .pill{ color: rgba(12,14,20,0.92); }
 
-/* =========================
-   Colorful skill logos
-   ========================= */
+/* ===== STEP 2: SKILLS alignment + consistent icon boxes ===== */
+.skill-icons{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  align-content: flex-start;
+  margin: 14px 0 2px;
+}
+
 .icon-chip{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--panel);
+  font-weight: 800;
+  color: rgba(255,255,255,0.90);
+  line-height: 1;
+  min-height: 44px;              /* same height for all chips */
+  white-space: nowrap;           /* prevents weird breaks inside chip */
 }
 
+/* the colorful icon box (your <span class="sicon ..."> ) */
 .sicon{
-  width:28px;
-  height:28px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 10px 22px rgba(0,0,0,.18);
-  border:1px solid rgba(255,255,255,.14);
-  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.18);
+  line-height: 1;
+  border: 1px solid rgba(255,255,255,0.14);
 }
 
-.sicon i{ color:#fff; font-size:15px; }
-
-/* Color backgrounds per skill */
-.sicon.java   { background:linear-gradient(135deg,#ff6a6a,#ffb36b); }
-.sicon.python { background:linear-gradient(135deg,#3776AB,#FFD43B); }
-.sicon.js     { background:linear-gradient(135deg,#F7DF1E,#ffb300); }
-.sicon.eth    { background:linear-gradient(135deg,#627EEA,#9aaeff); }
-.sicon.chain  { background:linear-gradient(135deg,#6ee7ff,#7c8cff); }
-
-.sicon.cpp{
-  background:linear-gradient(135deg,#7c8cff,#6ee7ff);
+.sicon i{
+  font-size: 15px;
+  line-height: 1;
+  color: #fff;
 }
 
-/* Make your existing C++ badge work inside the new icon */
-.sicon.cpp .cpp-badge{
-  width:18px;
-  height:18px;
-  border-radius:6px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  font-weight:900;
-  background:rgba(255,255,255,.25);
-  border:1px solid rgba(255,255,255,.3);
-  color:#fff;
+/* C++ badge centered inside the same icon box */
+.sicon .cpp-badge{
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 950;
+  color: #fff;
+  border: 0;
+  background: transparent;
 }
 
-    body.light .cpp-badge{ color: rgba(12,14,20,0.95); }
+/* --- individual skill colors --- */
+.sicon.java  { background: linear-gradient(135deg, #ff7a59, #ff3d77); }
+.sicon.cpp   { background: linear-gradient(135deg, #5aa7ff, #7c4dff); }
+.sicon.python{ background: linear-gradient(135deg, #2dd4bf, #fbbf24); }
+.sicon.js    { background: linear-gradient(135deg, #facc15, #f59e0b); }
+.sicon.eth   { background: linear-gradient(135deg, #7aa2ff, #6ee7ff); }
+.sicon.chain { background: linear-gradient(135deg, #60a5fa, #38bdf8); }
+
+/* Light mode */
+body.light .icon-chip{
+  color: rgba(12,14,20,0.92);
+}
+body.light .sicon{
+  box-shadow: 0 12px 22px rgba(12,14,20,0.10);
+}
+
 
     .stats{
       display: grid;
