@@ -218,6 +218,22 @@
       white-space: nowrap;
       min-width: 0;
     }
+    
+    /* Small circular profile photo next to your name */
+    .profile-avatar{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      object-fit: cover;
+      flex: 0 0 auto;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+      transform: translateZ(0);
+    }
+    body.light .profile-avatar{
+      box-shadow: 0 12px 24px rgba(12,14,20,0.10);
+    }
+
+    
     .brand-initials{
       font-weight: 900;
       font-size: 15px;
@@ -1740,11 +1756,13 @@ body.theme-transition::before{
     <div id="home" class="grid anchor">
       <div class="card reveal">
         <div class="hero-title">
+          <img class="profile-avatar" src="assets/profile.png" alt="Mohammad Saleem profile photo">
           <h1>Mohammad Saleem</h1>
           <span class="pc-logo" title="Computer Engineering">
             <i class="fa-solid fa-computer" aria-hidden="true"></i>
           </span>
         </div>
+
 
         <div class="subtitle">Computer Engineering Graduate | Blockchain | AI | Cybersecurity</div>
 
