@@ -576,33 +576,31 @@
       white-space: nowrap; 
     }
 
-      @media (max-width: 520px){
-        .hero-title{
-          flex-wrap: nowrap;     /* ✅ keep photo + name on the same row */
-          align-items: center;
-          gap: 12px;
-        }
+@media (max-width: 520px){
+  .hero-title{
+    flex-wrap: nowrap;     /* keep photo + name on same row */
+    align-items: center;
+    gap: 12px;
+  }
 
-        @media (max-width: 520px){
+  .hero-title h1{
+    flex: 1;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: normal;
+    line-height: 1.05;
+    font-size: clamp(28px, 7vw, 40px);
+    margin: 0;
+  }
+
+  .profile-avatar{
+    width: 44px;
+    height: 44px;
+  }
+
   .nav{ backdrop-filter: blur(10px); }
   .time-card{ backdrop-filter: blur(10px); }
 }
-      
-        .hero-title h1{
-          flex: 1;               /* ✅ take remaining space */
-          min-width: 0;          /* ✅ allow wrapping INSIDE without dropping under photo */
-          white-space: normal;   /* ✅ text can wrap to 2 lines but stays beside photo */
-          overflow-wrap: normal; /* (or keep anywhere if you want aggressive wrap) */
-          line-height: 1.05;
-          font-size: clamp(28px, 7vw, 40px); /* ✅ smaller on mobile so it fits */
-          margin: 0;
-        }
-      
-        .profile-avatar{
-          width: 44px;           /* optional: slightly smaller on mobile */
-          height: 44px;
-        }
-      }
 
 
 
@@ -1273,11 +1271,7 @@ body.light .verify{
   min-height: 92px;
   transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
-.verify-card:hover{
-  transform: translateY(-8px);
-  box-shadow: var(--glow);
-  border-color: rgba(150,175,255,0.22);
-}
+
 
 .verify-num{
   font-size: 34px;
@@ -1740,7 +1734,6 @@ html{ scrollbar-gutter: stable; }
   --theme-ease: cubic-bezier(.2,.8,.2,1);
 }
 
-/* Smoothly animate common visual properties */
 body,
 .nav-inner,
 .card,
@@ -1761,7 +1754,7 @@ body,
     color var(--theme-dur) var(--theme-ease),
     border-color var(--theme-dur) var(--theme-ease),
     box-shadow var(--theme-dur) var(--theme-ease),
-    filter var(--theme-dur) var(--theme-ease);
+    filter var(--theme-dur) var(--theme-ease),
     transform 240ms var(--ease);
 }
 
@@ -1953,40 +1946,6 @@ body.theme-transition::before{
             Research assistantships or software roles where I can build reliable systems in blockchain security, networking/cloud security, and applied AI for cybersecurity.
           </p>
         </div>
-
-      <div class="skill-icons" aria-label="Key technologies">
-      
-        <span class="icon-chip">
-          <span class="sicon java"><i class="fa-brands fa-java"></i></span>
-          Java
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
-          C++
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon python"><i class="fa-brands fa-python"></i></span>
-          Python
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon js"><i class="fa-brands fa-js"></i></span>
-          JavaScript
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
-          Ethereum
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
-          Blockchain
-        </span>
-      
-      </div>
 
 
         <div class="pill-row">
