@@ -81,6 +81,46 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Subtitle row with colorful PC icon */
+.subtitle-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+  /* Small colorful PC icon */
+  .mini-pc{
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(110,220,255,0.35), rgba(120,140,255,0.30));
+    border: 1px solid rgba(150,175,255,0.35);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+    flex-shrink: 0;
+  }
+  
+  .mini-pc i{
+    font-size: 14px;
+    background: linear-gradient(135deg,
+      #ff7ad9,
+      #7aa2ff,
+      #64e1ff
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Light mode tuning */
+  body.light .mini-pc{
+    box-shadow: 0 8px 18px rgba(12,14,20,0.12);
+    background: linear-gradient(135deg, rgba(110,220,255,0.22), rgba(120,140,255,0.18));
+  }
+
+
     /* Noise overlay (premium) */
     body::after{
       content:"";
@@ -1768,8 +1808,13 @@ body.theme-transition::before{
         </div>
 
 
-
-        <div class="subtitle">Computer Engineering Graduate | Blockchain | AI | Cybersecurity</div>
+        
+                <div class="subtitle subtitle-row">
+          <span class="mini-pc">
+            <i class="fa-solid fa-computer"></i>
+          </span>
+          <span>Computer Engineering Graduate | Blockchain | AI | Cybersecurity</span>
+        </div>
 
         <div class="locline">
           <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
