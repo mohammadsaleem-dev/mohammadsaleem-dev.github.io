@@ -543,6 +543,23 @@
       white-space: nowrap; 
     }
 
+        /* ===== Mobile: allow full name to wrap (fix cut off) ===== */
+    @media (max-width: 520px){
+      .hero-title{
+        flex-wrap: wrap;          /* allow next line */
+        align-items: center;
+        gap: 12px;
+      }
+    
+      .hero-title h1{
+        white-space: normal;      /* allow wrapping */
+        overflow-wrap: anywhere;  /* prevent cutting on small widths */
+        line-height: 1.08;
+        margin-bottom: 0;         /* keep spacing clean */
+      }
+    }
+
+
     .pc-logo{
       width: 42px;
       height: 42px;
