@@ -2448,7 +2448,6 @@ body.theme-switching .objective:hover{
 .thumb-badge,
 .thumb-icon,
 .btn,
-.icon-btn,
 .menu-btn,
 .logo,
 .issuer-logo,
@@ -2495,28 +2494,6 @@ body{
     box-shadow       var(--theme-dur) var(--theme-ease) !important,
     filter           var(--theme-dur) var(--theme-ease) !important,
     transform        260ms var(--ease) !important;
-}
-
-/* =========================
-   FIX: Keep ICON COLORS in DARK MODE
-   (icons only — no background changes)
-   ========================= */
-
-/* Allow Font Awesome icons to use their own color */
-.icon-btn i{
-  color: inherit !important;
-}
-
-/* Brand buttons must define their own icon color */
-.icon-btn.brand.github i   { color: #ffffff !important; }
-.icon-btn.brand.linkedin i { color: #ffffff !important; }
-.icon-btn.brand.email i    { color: #ffffff !important; }
-.icon-btn.brand.x i        { color: #ffffff !important; }
-.icon-btn.brand.facebook i { color: #ffffff !important; }
-
-/* Instagram stays gradient (Font Awesome icon is white on gradient bg) */
-.icon-btn.brand.instagram i{
-  color: #ffffff !important;
 }
 
     
