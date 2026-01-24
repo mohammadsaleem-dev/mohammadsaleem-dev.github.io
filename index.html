@@ -3070,127 +3070,122 @@ toggle.addEventListener("click", () => {
         setInterval(tick, 1000);
       }, delay);
     })();
+<script>
+/* =========================
+   INTRO typing screen + replay on MS click (FIXED)
+   ========================= */
+(function () {
+  const overlay = document.getElementById("introOverlay");
+  const introTextEl = document.getElementById("introText");
+  const skipBtn = document.getElementById("skipIntroBtn");
+  const brand = document.getElementById("brandHome");
 
-    // =========================
-    // INTRO typing screen + replay on MS click
-    // =========================
-    (function(){
-      const overlay = document.getElementById("introOverlay");
-      const introTextEl = document.getElementById("introText");
-      const skipBtn = document.getElementById("skipIntroBtn");
-      const brand = document.getElementById("brandHome");
+  if (!overlay || !introTextEl || !skipBtn) return;
 
-      const FULL_TEXT = "Eng Mohammad Saleem";
-      let typingTimer = null;
-      let stageTimer = null;
-      let isRunning = false;
+  const FULL_TEXT = "Eng Mohammad Saleem";
 
-      const clearTimers = () => {
-        if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
-        if (stageTimer) { clearTimeout(stageTimer); stageTimer = null; }
-      };
+  let typingTimer = null;
+  let stageTimer = null;
+  let isRunning = false;
+  let restoreScrollY = 0;
 
-      const showOverlay = () => {
-        overlay.style.display = "flex";
-        // force reflow so transition plays every time
-        void overlay.offsetHeight;
-        overlay.classList.remove("intro-hide");
-        overlay.setAttribute("aria-hidden", "false");
-      };
+  const clearTimers = () => {
+    if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
+    if (stageTimer) { clearTimeout(stageTimer); stageTimer = null; }
+  };
 
+  const showOverlay = () => {
+    overlay.style.display = "flex";
+    void overlay.offsetHeight; // force reflow so animation works every time
+    overlay.classList.remove("intro-hide");
+    overlay.setAttribute("aria-hidden", "false");
+  };
 
-      const hideOverlay = () => {
-        overlay.classList.add("intro-hide");
-        overlay.setAttribute("aria-hidden", "true");
-      
-        // remove after animation ends
-        stageTimer = setTimeout(() => {
-          overlay.style.display = "none";
-        }, 560);
-      };
+  const hideOverlay = (keepScroll) => {
+    overlay.classList.add("intro-hide");
+    overlay.setAttribute("aria-hidden", "true");
 
-
-let restoreScrollY = 0;
-
-const runIntro = (opts = { keepScroll: false }) => {
-  clearTimers();
-  isRunning = true;
-
-  // Save scroll position only if we want to keep it
-  if (opts.keepScroll) restoreScrollY = window.scrollY || 0;
-
-  showOverlay();
-  introTextEl.textContent = "";
-
-  // Only scroll to top on FIRST load (keepScroll=false)
-  if (!opts.keepScroll) {
-    try { window.scrollTo({ top: 0, behavior: "auto" }); } catch { window.scrollTo(0, 0); }
-  }
-
-  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion) {
-    introTextEl.textContent = FULL_TEXT;
     stageTimer = setTimeout(() => {
-      hideOverlay(opts.keepScroll);
-      isRunning = false;
-    }, 650);
-    return;
-  }
+      overlay.style.display = "none";
 
-  let i = 0;
-  typingTimer = setInterval(() => {
-    introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
-    i++;
+      if (keepScroll) {
+        try { window.scrollTo({ top: restoreScrollY, behavior: "auto" }); }
+        catch { window.scrollTo(0, restoreScrollY); }
+      }
+    }, 560);
+  };
 
-    if (i >= FULL_TEXT.length) {
-      clearInterval(typingTimer);
-      typingTimer = null;
+  const runIntro = (opts = { keepScroll: false }) => {
+    clearTimers();
+    isRunning = true;
 
+    if (opts.keepScroll) restoreScrollY = window.scrollY || 0;
+
+    showOverlay();
+    introTextEl.textContent = "";
+
+    if (!opts.keepScroll) {
+      try { window.scrollTo({ top: 0, behavior: "auto" }); }
+      catch { window.scrollTo(0, 0); }
+    }
+
+    const reduceMotion =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) {
+      introTextEl.textContent = FULL_TEXT;
       stageTimer = setTimeout(() => {
         hideOverlay(opts.keepScroll);
         isRunning = false;
-      }, 700);
+      }, 650);
+      return;
     }
-  }, 55);
-};
 
-const hideOverlay = (keepScroll) => {
-  overlay.classList.add("intro-hide");
-  overlay.setAttribute("aria-hidden", "true");
+    let i = 0;
+    typingTimer = setInterval(() => {
+      introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
+      i++;
 
-  stageTimer = setTimeout(() => {
-    overlay.style.display = "none";
+      if (i >= FULL_TEXT.length) {
+        clearInterval(typingTimer);
+        typingTimer = null;
 
-    // Restore the exact scroll position after replay
-    if (keepScroll) {
-      try { window.scrollTo({ top: restoreScrollY, behavior: "auto" }); }
-      catch { window.scrollTo(0, restoreScrollY); }
-    }
-  }, 560);
-};
-
-// Replay intro when clicking MS (brand) - KEEP SCROLL
-brand.addEventListener("click", () => {
-  if (isRunning) return;
-  runIntro({ keepScroll: true });
-});
-
-// Run on first load (go top normally)
-window.addEventListener("load", () => runIntro({ keepScroll: false }), { once: true });
-
-
-      // Run on first load
-      window.addEventListener("load", () => runIntro(), { once: true });
-
-      // Also allow ESC to skip
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && overlay.style.display !== "none") {
-          clearTimers();
-          hideOverlay();
+        stageTimer = setTimeout(() => {
+          hideOverlay(opts.keepScroll);
           isRunning = false;
-        }
-      });
-    })();
+        }, 700);
+      }
+    }, 55);
+  };
+
+  // Skip button
+  skipBtn.addEventListener("click", () => {
+    clearTimers();
+    hideOverlay(true);   // keep scroll position if they clicked skip mid-page
+    isRunning = false;
+  });
+
+  // Replay intro when clicking MS (KEEP SCROLL)
+  if (brand) {
+    brand.addEventListener("click", () => {
+      if (isRunning) return;
+      runIntro({ keepScroll: true });
+    });
+  }
+
+  // ESC to skip
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay.style.display !== "none") {
+      clearTimers();
+      hideOverlay(true);
+      isRunning = false;
+    }
+  });
+
+  // Run on first load (only once)
+  window.addEventListener("load", () => runIntro({ keepScroll: false }), { once: true });
+})();
 
 
 
