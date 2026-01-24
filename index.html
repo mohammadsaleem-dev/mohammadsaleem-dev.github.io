@@ -2419,6 +2419,84 @@ body.theme-switching .objective:hover{
   transform: none !important;
 }
 
+    /* =========================================
+   FINAL FIX: Inner boxes switching too fast
+   Reason: they use `background:` (shorthand) which snaps.
+   Force them to use `background-color` so it animates.
+   Paste at VERY END of <style>
+   ========================================= */
+
+:root{
+  --theme-dur: 420ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* 1) Normalize surfaces to *background-color* (not background shorthand) */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.tag,
+.pill,
+.icon-chip,
+.thumb-badge,
+.thumb-icon,
+.btn,
+.icon-btn,
+.menu-btn,
+.logo,
+.issuer-logo,
+.intro-box,
+.intro-type{
+  background-image: none !important;           /* prevent snap from gradients */
+  background: none !important;                 /* kill shorthand overrides */
+  background-color: var(--panel) !important;   /* smooth animatable color */
+}
+
+/* Keep BODY using the canvas bg var */
+body{
+  background: var(--bg) !important;
+}
+
+/* 2) One consistent transition set for theme switching */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo,
+.intro-box,
+.intro-type{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important,
+    transform        260ms var(--ease) !important;
+}
+
 
     
   </style>
