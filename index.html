@@ -1544,8 +1544,85 @@ body.light .icon-btn.brand{
       transition: opacity 260ms ease, transform 260ms ease;
     }
 
+/* =========================
+   PERFORMANCE MODE (Zoom/Scroll)
+   ========================= */
+body.perf-mode *{
+  /* Reduce expensive animations during zoom/scroll */
+  transition-duration: 0ms !important;
+}
 
+body.perf-mode .bg-orb{
+  animation: none !important;
+  filter: none !important;
+  opacity: 0.35 !important;
+}
 
+body.perf-mode::after{
+  /* turn off noise overlay while zooming */
+  opacity: 0 !important;
+}
+
+/* Turn off backdrop blur during zoom/scroll (very expensive) */
+body.perf-mode .nav,
+body.perf-mode .nav-links,
+body.perf-mode .time-card,
+body.perf-mode .intro-box,
+body.perf-mode .thumb-badge{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Reduce heavy shadows during zoom/scroll */
+body.perf-mode .card,
+body.perf-mode .project-card,
+body.perf-mode .btn,
+body.perf-mode .icon-btn,
+body.perf-mode .to-top{
+  box-shadow: none !important;
+}
+  
+/* ===========================================
+   BORDERLESS STYLE (but KEEP premium hover)
+   Fix: missing hover + timeline borders + dark/light consistency
+   =========================================== */
+
+/* Remove borders everywhere you want it borderless */
+.card,
+.item,
+.project-card,
+.project-thumb,
+.tag,
+.cert,
+.stat,
+.icon-chip,
+.logo,
+.issuer-logo,
+.verify,
+.verify-card,
+.time-card,
+.objective,
+.nav-inner,
+.intro-box,
+.intro-type,
+.thumb-badge,
+.thumb-icon,
+.btn,
+.menu-btn,
+.icon-btn,
+.timeline-item {
+  border: 0 !important;
+}
+
+/* Remove timeline dot ring (keep dot) */
+.timeline-item::before{
+  border: 0 !important;
+}
+
+/* Remove the divider line in Verification (you requested no borders) */
+.verify{
+  border-top: 0 !important;
+}
   
       /* ✅ Smooth hover: force GPU */
   .item,
@@ -1562,6 +1639,308 @@ body.light .icon-btn.brand{
     transform: translateZ(0);
     backface-visibility: hidden;
   }
+
+
+/* -------------------------------------------
+   NEW: Premium hover “surface lift”
+   (bigger, more noticeable, works in dark & light)
+   ------------------------------------------- */
+:root{
+  --hover-lift: translateY(-8px);
+  --hover-shadow: 0 18px 55px rgba(0,0,0,0.35);
+  --hover-stroke: inset 0 0 0 1px rgba(150,175,255,0.20);
+  --hover-bg: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+}
+
+body.light{
+  --hover-shadow: 0 18px 55px rgba(12,14,20,0.12);
+  --hover-stroke: inset 0 0 0 1px rgba(70,110,255,0.16);
+  --hover-bg: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+}
+
+.item,
+.timeline-item,
+.verify-card,
+.cert,
+.project-card,
+.stat,
+.time-card,
+.objective,
+.icon-chip,
+.pill,
+.tag,
+.btn,
+.icon-btn{
+  transition:
+    transform 520ms var(--ease),
+    box-shadow 520ms var(--ease),
+    filter 520ms var(--ease),
+    background 520ms var(--ease);
+}
+
+    /* ✅ FIX: keep transform slow BUT keep theme transitions too */
+.item,
+.timeline-item,
+.verify-card,
+.cert,
+.project-card,
+.stat,
+.time-card,
+.objective,
+.btn,
+.icon-btn{
+  transition:
+    transform 650ms cubic-bezier(.22,.61,.36,1),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease) !important;
+}
+
+
+
+/* BIGGER hover (your main issue) */
+.item:hover,
+.timeline-item:hover,
+.verify-card:hover,
+.cert:hover,
+.project-card:hover,
+.stat:hover,
+.time-card:hover,
+.objective:hover{
+  transform: var(--hover-lift);
+  box-shadow: var(--hover-shadow), var(--hover-stroke);
+}
+
+/* Chips / pills hover (make it feel larger & clickable) */
+.pill,
+.icon-chip,
+.tag{
+  cursor: default;
+}
+
+.pill:hover,
+.icon-chip:hover,
+.tag:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.22), var(--hover-stroke);
+  filter: brightness(1.03);
+}
+
+/* Buttons + icon buttons hover (keep brand colors) */
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.28), var(--hover-stroke);
+}
+
+/* IMPORTANT: brand icon hover should stay colorful */
+.icon-btn.brand:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.30);
+  filter: brightness(1.06);
+}
+
+/* Ensure Experience/Awards “inner card” matches dark/light properly */
+#experience .card,
+#awards .card{
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+}
+
+/* Keep layout stable */
+html{ scrollbar-gutter: stable; }
+
+
+    /* =========================
+   Smooth theme transitions
+   ========================= */
+:root{
+  --theme-dur: 320ms;
+  --theme-ease: cubic-bezier(.2,.8,.2,1);
+}
+
+body,
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease),
+    transform 240ms var(--ease);
+}
+
+/* Also animate your big page background */
+body{
+  transition:
+    background var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
+}
+
+/* Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce){
+  :root{ --theme-dur: 0ms; }
+}
+
+/* =========================
+   Theme icon animation
+   ========================= */
+#themeToggle{
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a little animated “pulse” ring */
+#themeToggle::after{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:999px;
+  background: radial-gradient(circle, rgba(140,170,255,0.35), transparent 60%);
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events:none;
+}
+
+/* When toggling, we add .icon-swap briefly */
+#themeToggle.icon-swap{
+  animation: iconSpin 380ms cubic-bezier(.2,.9,.2,1);
+}
+#themeToggle.icon-swap::after{
+  animation: iconPulse 380ms cubic-bezier(.2,.9,.2,1);
+}
+
+@keyframes iconSpin{
+  0%   { transform: translateY(0) rotate(0deg) scale(1); }
+  45%  { transform: translateY(-1px) rotate(120deg) scale(1.12); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
+}
+@keyframes iconPulse{
+  0%   { opacity: 0; transform: scale(0.7); }
+  45%  { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+
+    /* =========================
+   Smooth Theme Crossfade
+   ========================= */
+
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: inherit;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  z-index: 9998;
+}
+
+/* When switching theme */
+body.theme-transition::before{
+  opacity: 1;
+}
+
+    /* =========================
+   Theme switch overlay (no white flash)
+   ========================= */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9997; /* below intro overlay (9999), above everything else */
+  transition: opacity 320ms ease;
+  will-change: opacity;
+}
+
+    /* ===========================================
+   FIX: Make navbar NOT transparent + blue buttons back
+   Paste near END of <style>
+   =========================================== */
+
+/* 1) Make page background solid (so no glass look) */
+body{
+  background: var(--page-bg) !important; /* keep your gradient */
+}
+
+/* 2) NAVBAR: make it solid (not transparent) */
+.nav{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.nav-inner{
+  background: rgba(10,16,32,0.96) !important;   /* solid dark */
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.35) !important;
+}
+
+/* Light mode navbar solid */
+body.light .nav-inner{
+  background: rgba(255,255,255,0.96) !important;
+  border-color: rgba(12,14,20,0.14) !important;
+  box-shadow: 0 14px 30px rgba(12,14,20,0.10) !important;
+}
+
+/* 3) INTRO BOX (Skip area): remove glass + keep solid */
+.intro-box{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(10,16,32,0.92) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* Light intro box */
+body.light .intro-box{
+  background: rgba(255,255,255,0.96) !important;
+  border-color: rgba(12,14,20,0.14) !important;
+}
+
+/* 4) Bring BACK borders for buttons/nav if "borderless" removed them */
+.btn,
+.menu-btn{
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+body.light .btn,
+body.light .menu-btn{
+  border-color: rgba(12,14,20,0.18) !important;
+}
+
+/* 5) Force PRIMARY buttons to be BLUE (View Projects / Skip) */
+.btn-primary{
+  background: linear-gradient(135deg, #2f81f7, #58a6ff) !important;
+  border-color: rgba(120,170,255,0.35) !important;
+  color: #081026 !important;
+}
+
+.btn-primary:hover{
+  filter: brightness(1.05) !important;
+}
+
+
+/* Smooth icon animation */
+#themeToggle{
+  transition: transform 260ms ease, filter 260ms ease;
+}
+#themeToggle.icon-swap{
+  transform: rotate(180deg) scale(1.08);
+  filter: brightness(1.05);
+}
 
 /* =========================
    GITHUB-STYLE STATIC THEME (NO GLASS / NO BLUR)
@@ -1786,7 +2165,118 @@ body.light .objective{
   filter: brightness(1.06) !important;
 }
 
-  
+    /* =========================
+   INTRO OVERLAY — match main theme (dark + light)
+   Paste at VERY END of <style>
+   ========================= */
+
+/* Overlay background uses your theme --bg */
+#introOverlay{
+  background: var(--bg) !important;
+}
+
+/* Add subtle GitHub-like accents only in DARK mode */
+body:not(.light) #introOverlay{
+  background:
+    radial-gradient(900px 520px at 15% 10%, rgba(88,166,255,0.10), transparent 60%),
+    radial-gradient(700px 420px at 85% 0%, rgba(47,129,247,0.10), transparent 60%),
+    var(--bg) !important;
+}
+
+/* Intro card uses your theme surface */
+.intro-box{
+  background: var(--panel) !important;
+  color: var(--text) !important;
+  border: 0 !important;                 /* you removed borders globally */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.35) !important;
+}
+
+/* Light mode shadow */
+body.light .intro-box{
+  box-shadow: 0 14px 34px rgba(27,31,36,0.12) !important;
+}
+
+/* Typing pill matches theme */
+.intro-type{
+  background: rgba(255,255,255,0.04) !important; /* dark subtle */
+  color: var(--text) !important;
+  border: 0 !important;
+}
+
+body.light .intro-type{
+  background: rgba(27,31,36,0.04) !important;    /* light subtle */
+}
+
+/* Cursor follows theme */
+.cursor{
+  background: var(--text) !important;
+  opacity: 0.7;
+}
+
+/* Subtitle follows theme muted */
+.intro-sub{
+  color: var(--muted) !important;
+}
+
+/* Ensure intro text doesn’t look dim */
+.intro-title{
+  color: var(--text) !important;
+}
+
+/* =========================
+   UNIFY THEME SWITCH SPEED
+   Paste at VERY END of <style>
+   ========================= */
+
+/* One source of truth */
+:root{
+  --theme-dur: 320ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Apply consistent theme transitions */
+body,
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important;
+}
+
+/* If you animate transforms on hover, keep them separate and consistent */
+.btn, .icon-btn, .item, .timeline-item, .project-card, .cert, .verify-card, .stat, .time-card, .objective{
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
 
 /* =========================
    THEME SWITCH ANIMATION
@@ -1834,37 +2324,259 @@ body.light .objective{
   filter: blur(3px);
 }
 
+
+    /* =========================
+   FIX: Theme toggle icon (no weird moon/sun jump)
+   Paste at VERY END of <style>
+   ========================= */
+
+#themeToggle{
+  position: relative;
+  width: 46px;
+  height: 46px;
+  padding: 0 !important;
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Two icons stacked, we crossfade + rotate */
+#themeToggle .ticon{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 220ms var(--theme-ease),
+    transform 320ms var(--theme-ease);
+  will-change: opacity, transform;
+}
+
+/* Default (dark mode): show moon */
+#themeToggle .moon{ opacity: 1; transform: rotate(0) scale(1); }
+#themeToggle .sun { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+
+/* Light mode: show sun */
+#themeToggle.is-light .moon{ opacity: 0; transform: rotate(90deg) scale(0.6); }
+#themeToggle.is-light .sun { opacity: 1; transform: rotate(0) scale(1); }
+
+/* Kill the old conflicting icon-swap rules (you had multiple) */
+#themeToggle.icon-swap{
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Optional: tiny click “tap” feedback */
+#themeToggle:active{
+  transform: scale(0.97);
+}
+
+/* =========================
+   FIX: All cards switch at SAME speed (no fast ones)
+   Paste at VERY END of <style>
+   ========================= */
+
+:root{
+  --theme-dur: 420ms; /* a bit slower = smoother */
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Force consistent theme transitions everywhere important */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important,
+    transform        260ms var(--ease) !important;
+}
+
+/* During theme switching, disable hover-lift so nothing "pops" mid-toggle */
+body.theme-switching .item:hover,
+body.theme-switching .timeline-item:hover,
+body.theme-switching .verify-card:hover,
+body.theme-switching .cert:hover,
+body.theme-switching .project-card:hover,
+body.theme-switching .stat:hover,
+body.theme-switching .time-card:hover,
+body.theme-switching .objective:hover{
+  transform: none !important;
+}
+
+    /* =========================================
+   FINAL FIX: Inner boxes switching too fast
+   Reason: they use `background:` (shorthand) which snaps.
+   Force them to use `background-color` so it animates.
+   Paste at VERY END of <style>
+   ========================================= */
+
+:root{
+  --theme-dur: 420ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* 1) Normalize surfaces to *background-color* (not background shorthand) */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.tag,
+.pill,
+.icon-chip,
+.thumb-badge,
+.thumb-icon,
+.btn,
+.menu-btn,
+.logo,
+.issuer-logo,
+.intro-box,
+.intro-type{
+  background-image: none !important;           /* prevent snap from gradients */
+  background: none !important;                 /* kill shorthand overrides */
+  background-color: var(--panel) !important;   /* smooth animatable color */
+}
+
+/* Keep BODY using the canvas bg var */
+body{
+  background: var(--bg) !important;
+}
+
+/* 2) One consistent transition set for theme switching */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo,
+.intro-box,
+.intro-type{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important,
+    transform        260ms var(--ease) !important;
+}
 /* ✅ Make sure intro overlay never blocks clicks when hidden */
 #introOverlay.intro-hide{
   pointer-events: none !important;
 }
 
-  /* ===== FINAL: GitHub Theme Override (keep only this) ===== */
+    /* =========================
+   FIX: Logos & profile photo switch smoothly
+   Paste at VERY END of <style>
+   ========================= */
+
 :root{
-  --bg:#0d1117; --panel:#161b22; --panel2:#161b22; --border:#30363d;
-  --text:#c9d1d9; --muted:#8b949e; --muted2:#6e7681;
-  --accent:#58a6ff; --accent2:#2f81f7;
+  --theme-dur: 420ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
 }
-body.light{
-  --bg:#ffffff; --panel:#f6f8fa; --panel2:#f6f8fa; --border:#d0d7de;
-  --text:#24292f; --muted:#57606a; --muted2:#6e7781;
-  --accent:#0969da; --accent2:#1f6feb;
+
+/* Make ALL logo/profile images animate with the same timing */
+.profile-avatar,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    border-color     var(--theme-dur) var(--theme-ease),
+    box-shadow       var(--theme-dur) var(--theme-ease),
+    filter           var(--theme-dur) var(--theme-ease) !important;
 }
-body{ background:var(--bg) !important; }
-body::after, .bg-orb{ display:none !important; }
-.nav, .nav-links, .time-card, .intro-box, .thumb-badge{
-  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+
+/* Optional: tiny crossfade feel (looks premium) */
+body.theme-switching .profile-avatar,
+body.theme-switching .logo,
+body.theme-switching .issuer-logo{
+  filter: brightness(0.98) contrast(1.02);
 }
-.nav-inner,.card,.item,.timeline-item,.project-card,.cert,.stat,.verify-card,.time-card,.objective,
-.tag,.pill,.icon-chip,.thumb-badge,.thumb-icon,.logo,.issuer-logo{
-  background:var(--panel) !important;
-  border:1px solid var(--border) !important;
-  color:var(--text) !important;
+
+/* =========================================
+   REAL FIX: Project header area snapping
+   Target: .project-thumb + badge
+   Paste at VERY END of <style>
+   ========================================= */
+
+.project-thumb{
+  /* remove gradients that snap */
+  background-image: none !important;
+  background: none !important;
+
+  /* use animatable color */
+  background-color: var(--panel) !important;
+
+  /* smooth transition */
+  transition: background-color var(--theme-dur) var(--theme-ease) !important;
+
+  /* remove the line under header if any */
+  border-bottom: 0 !important;
 }
-.card::before{ display:none !important; }
-.subtitle,.section-sub,.item .meta,.t-meta,.cert-by,footer,.stat span{ color:var(--muted) !important; }
-.btn{ background:var(--panel) !important; border:1px solid var(--border) !important; box-shadow:none !important; }
-.btn.btn-primary{ background:var(--accent2) !important; color:#fff !important; border:0 !important; }
+
+/* badge: remove blur + make it follow theme smoothly */
+.thumb-badge{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  background-image: none !important;
+  background: none !important;
+  background-color: var(--panel2) !important;
+
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color var(--theme-dur) var(--theme-ease) !important;
+}
+
+/* icon box inside the badge */
+.thumb-icon{
+  background-image: none !important;
+  background: none !important;
+  background-color: var(--panel) !important;
+
+  transition: background-color var(--theme-dur) var(--theme-ease) !important;
+}
 
 
   </style>
