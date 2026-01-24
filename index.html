@@ -291,6 +291,16 @@
       white-space: nowrap;
       min-width: 0;
     }
+
+        button.brand{
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+    
     
     .profile-avatar{
       width: 60px;
@@ -2333,9 +2343,9 @@ body,
     <div class="container" style="padding-bottom: 0;">
       <div class="nav-inner">
         <!-- MS click will replay intro -->
-        <a class="brand" href="#top" aria-label="Home" id="brandHome">
-          <span class="brand-initials">MS</span>
-        </a>
+            <button class="brand" type="button" aria-label="Home" id="brandHome">
+      <span class="brand-initials">MS</span>
+    </button>
 
         <div class="nav-links" id="navLinks">
           <a href="#top">Home</a>
@@ -3100,57 +3110,74 @@ toggle.addEventListener("click", () => {
       };
 
 
-      const runIntro = () => {
-        clearTimers();
-        isRunning = true;
-        showOverlay();
-        introTextEl.textContent = "";
+let restoreScrollY = 0;
 
-        // Always go to top for the intro effect
-        try { window.scrollTo({ top: 0, behavior: "auto" }); } catch { window.scrollTo(0,0); }
+const runIntro = (opts = { keepScroll: false }) => {
+  clearTimers();
+  isRunning = true;
 
-        // Reduced motion: show instantly
-        const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reduceMotion) {
-          introTextEl.textContent = FULL_TEXT;
-          stageTimer = setTimeout(() => { hideOverlay(); isRunning = false; }, 650);
-          return;
-        }
+  // Save scroll position only if we want to keep it
+  if (opts.keepScroll) restoreScrollY = window.scrollY || 0;
 
-      let i = 0;
-      
-      typingTimer = setInterval(() => {
-        introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
-        i++;
-      
-        if (i >= FULL_TEXT.length) {
-          clearInterval(typingTimer);
-          typingTimer = null;
-      
-          stageTimer = setTimeout(() => {
-            hideOverlay();
-            isRunning = false;
-          }, 700);
-        }
-      }, 55);
-      
+  showOverlay();
+  introTextEl.textContent = "";
 
-      };
+  // Only scroll to top on FIRST load (keepScroll=false)
+  if (!opts.keepScroll) {
+    try { window.scrollTo({ top: 0, behavior: "auto" }); } catch { window.scrollTo(0, 0); }
+  }
 
-      // Skip intro
-      skipBtn.addEventListener("click", () => {
-        clearTimers();
-        introTextEl.textContent = FULL_TEXT;
-        hideOverlay();
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    introTextEl.textContent = FULL_TEXT;
+    stageTimer = setTimeout(() => {
+      hideOverlay(opts.keepScroll);
+      isRunning = false;
+    }, 650);
+    return;
+  }
+
+  let i = 0;
+  typingTimer = setInterval(() => {
+    introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
+    i++;
+
+    if (i >= FULL_TEXT.length) {
+      clearInterval(typingTimer);
+      typingTimer = null;
+
+      stageTimer = setTimeout(() => {
+        hideOverlay(opts.keepScroll);
         isRunning = false;
-      });
+      }, 700);
+    }
+  }, 55);
+};
 
-      // Replay intro when clicking MS (brand)
-      brand.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (isRunning) return;
-        runIntro();
-      });
+const hideOverlay = (keepScroll) => {
+  overlay.classList.add("intro-hide");
+  overlay.setAttribute("aria-hidden", "true");
+
+  stageTimer = setTimeout(() => {
+    overlay.style.display = "none";
+
+    // Restore the exact scroll position after replay
+    if (keepScroll) {
+      try { window.scrollTo({ top: restoreScrollY, behavior: "auto" }); }
+      catch { window.scrollTo(0, restoreScrollY); }
+    }
+  }, 560);
+};
+
+// Replay intro when clicking MS (brand) - KEEP SCROLL
+brand.addEventListener("click", () => {
+  if (isRunning) return;
+  runIntro({ keepScroll: true });
+});
+
+// Run on first load (go top normally)
+window.addEventListener("load", () => runIntro({ keepScroll: false }), { once: true });
+
 
       // Run on first load
       window.addEventListener("load", () => runIntro(), { once: true });
