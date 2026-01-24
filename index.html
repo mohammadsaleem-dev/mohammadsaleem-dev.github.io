@@ -1678,7 +1678,7 @@ body.light{
     background 520ms var(--ease);
 }
 
-    /* ✅ Override fast transitions (make it slower + smoother) */
+    /* ✅ FIX: keep transform slow BUT keep theme transitions too */
 .item,
 .timeline-item,
 .verify-card,
@@ -1689,8 +1689,15 @@ body.light{
 .objective,
 .btn,
 .icon-btn{
-  transition: transform 650ms cubic-bezier(.22,.61,.36,1) !important;
+  transition:
+    transform 650ms cubic-bezier(.22,.61,.36,1),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease) !important;
 }
+
 
 
 /* BIGGER hover (your main issue) */
@@ -2499,92 +2506,6 @@ body{
   pointer-events: none !important;
 }
 
-    /* =========================================================
-   ✅ FINAL 100% FIX: Animate theme variables (same speed)
-   Put this at the VERY END of <style>
-   ========================================================= */
-
-/* Tell the browser these CSS vars are COLORS so they can interpolate */
-@property --bg     { syntax: "<color>"; inherits: true; initial-value: #0d1117; }
-@property --panel  { syntax: "<color>"; inherits: true; initial-value: #161b22; }
-@property --panel2 { syntax: "<color>"; inherits: true; initial-value: #161b22; }
-@property --text   { syntax: "<color>"; inherits: true; initial-value: #c9d1d9; }
-@property --muted  { syntax: "<color>"; inherits: true; initial-value: #8b949e; }
-@property --muted2 { syntax: "<color>"; inherits: true; initial-value: #6e7681; }
-@property --border { syntax: "<color>"; inherits: true; initial-value: #30363d; }
-
-/* Animate the variables ONCE here (this forces identical timing everywhere) */
-:root{
-  --theme-dur: 420ms;
-  --theme-ease: cubic-bezier(.22,.61,.36,1);
-
-  transition:
-    --bg     var(--theme-dur) var(--theme-ease),
-    --panel  var(--theme-dur) var(--theme-ease),
-    --panel2 var(--theme-dur) var(--theme-ease),
-    --text   var(--theme-dur) var(--theme-ease),
-    --muted  var(--theme-dur) var(--theme-ease),
-    --muted2 var(--theme-dur) var(--theme-ease),
-    --border var(--theme-dur) var(--theme-ease);
-}
-
-/* Make text inherit from body (so everything follows the same animated vars) */
-body{
-  background-color: var(--bg) !important;
-  color: var(--text) !important;
-}
-
-/* Muted text uses the animated vars */
-.subtitle, .section-sub, .item .meta, .t-meta, .cert-by, footer, .stat span, .verify p, .verify-card small{
-  color: var(--muted) !important;
-}
-
-/* Surfaces use animated vars (no background shorthand snap) */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.thumb-badge,
-.thumb-icon,
-.btn,
-.menu-btn,
-.logo,
-.issuer-logo,
-.intro-box,
-.intro-type{
-  background-color: var(--panel) !important;
-  background-image: none !important;
-}
-
-/* Keep borders consistent if you use them */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.logo,
-.issuer-logo{
-  border-color: var(--border) !important;
-}
-
-    
   </style>
 </head>
 
