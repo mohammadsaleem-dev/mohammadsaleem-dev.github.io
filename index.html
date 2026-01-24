@@ -677,6 +677,11 @@
     }
     body.light .pill{ color: rgba(12,14,20,0.92); }
 
+    /* DARK MODE: hide the white outline borders on pills */
+body:not(.light) .pill{
+  border: none !important;
+}
+
 /* ===== STEP 2: SKILLS alignment + consistent icon boxes ===== */
 .skill-icons{
   display: flex;
