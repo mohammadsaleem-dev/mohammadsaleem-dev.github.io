@@ -2534,47 +2534,48 @@ body.theme-switching .issuer-logo{
   filter: brightness(0.98) contrast(1.02);
 }
 
-    /* =========================================
-   FIX: Project pills (Featured/ROS2/SCADA/Hardware) switching too fast
-   Reason: .project-thumb uses gradient background (background shorthand)
+/* =========================================
+   REAL FIX: Project header area snapping
+   Target: .project-thumb + badge
+   Paste at VERY END of <style>
    ========================================= */
 
-:root{
-  --theme-dur: 420ms;
-  --theme-ease: cubic-bezier(.22,.61,.36,1);
-}
-
-/* 1) Kill the gradient on the project thumbnail area and use animatable background-color */
 .project-thumb{
+  /* remove gradients that snap */
   background-image: none !important;
   background: none !important;
+
+  /* use animatable color */
   background-color: var(--panel) !important;
+
+  /* smooth transition */
   transition: background-color var(--theme-dur) var(--theme-ease) !important;
+
+  /* remove the line under header if any */
+  border-bottom: 0 !important;
 }
 
-/* 2) Make the pill itself animate via background-color (not rgba glass) */
+/* badge: remove blur + make it follow theme smoothly */
 .thumb-badge{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
   background-image: none !important;
   background: none !important;
   background-color: var(--panel2) !important;
-  color: var(--text) !important;
+
   transition:
     background-color var(--theme-dur) var(--theme-ease) !important,
     color var(--theme-dur) var(--theme-ease) !important;
 }
 
-/* 3) Same for the small icon box inside the pill */
+/* icon box inside the badge */
 .thumb-icon{
   background-image: none !important;
   background: none !important;
   background-color: var(--panel) !important;
-  transition: background-color var(--theme-dur) var(--theme-ease) !important;
-}
 
-/* Optional: keep borders removed if you want your borderless style */
-.thumb-badge,
-.thumb-icon{
-  border: 0 !important;
+  transition: background-color var(--theme-dur) var(--theme-ease) !important;
 }
 
 
