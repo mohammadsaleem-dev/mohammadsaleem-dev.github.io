@@ -2497,6 +2497,22 @@ body{
     transform        260ms var(--ease) !important;
 }
 
+    /* =========================
+   FIX ICONS IN DARK MODE ONLY
+   (icons were inheriting muted colors from later overrides)
+   Paste at VERY END of <style>
+   ========================= */
+body:not(.light) .icon-btn i{
+  color: #ffffff !important;     /* ✅ make the icon itself visible */
+  opacity: 1 !important;
+  line-height: 1 !important;
+}
+
+/* Ensure brand icons stay white too (email/github/linkedin/x/facebook/instagram) */
+body:not(.light) .icon-btn.brand i{
+  color: #ffffff !important;
+}
+
 
     
   </style>
