@@ -723,10 +723,6 @@
     }
     body.light .pill{ color: rgba(12,14,20,0.92); }
 
-    /* DARK MODE: hide the white outline borders on pills */
-body:not(.light) .pill{
-  border: none !important;
-}
 
 /* ===== STEP 2: SKILLS alignment + consistent icon boxes ===== */
 .skill-icons{
@@ -1842,11 +1838,6 @@ body.theme-switching .objective:hover{
   background-color: var(--panel) !important;   /* smooth animatable color */
 }
 
-/* Keep BODY using the canvas bg var */
-body{
-  background: var(--bg) !important;
-}
-
 /* 2) One consistent transition set for theme switching */
 .nav-inner,
 .card,
@@ -2016,6 +2007,79 @@ body.theme-switching .objective:hover{
 /* Light mode: keep brand icons colorful too */
 body.light .icon-btn.brand{
   box-shadow: 0 12px 28px rgba(12,14,20,0.12);
+}
+
+
+    /* =========================
+   FIXES:
+   1) Light mode background became black
+   2) Remove blur/glass everywhere
+   3) Remove white outline borders in dark mode
+   Paste at VERY END of <style>
+   ========================= */
+
+/* 1) Force correct page background in both themes */
+body{
+  background: var(--page-bg) !important;
+}
+
+/* 2) Remove blur/glass effect everywhere */
+.nav,
+.nav-links,
+.time-card,
+.thumb-badge,
+.intro-box,
+#introOverlay,
+#themeFade{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Mobile menu panel had blur too */
+@media (max-width: 1024px){
+  .nav-links{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Optional: remove the big blurred orb glow too (if you meant ALL blur) */
+.bg-orb{
+  filter: none !important;
+}
+
+/* 3) Remove “white outline” borders in DARK mode */
+body:not(.light) .nav-inner,
+body:not(.light) .card,
+body:not(.light) .item,
+body:not(.light) .timeline-item,
+body:not(.light) .project-card,
+body:not(.light) .cert,
+body:not(.light) .stat,
+body:not(.light) .verify-card,
+body:not(.light) .time-card,
+body:not(.light) .objective,
+body:not(.light) .pill,
+body:not(.light) .icon-chip,
+body:not(.light) .tag,
+body:not(.light) .btn,
+body:not(.light) .menu-btn,
+body:not(.light) .logo,
+body:not(.light) .issuer-logo{
+  border-color: transparent !important;
+}
+
+/* Keep a clean separation without borders (subtle shadow) */
+body:not(.light) .card,
+body:not(.light) .item,
+body:not(.light) .timeline-item,
+body:not(.light) .project-card,
+body:not(.light) .cert,
+body:not(.light) .stat,
+body:not(.light) .verify-card,
+body:not(.light) .time-card,
+body:not(.light) .objective{
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55) !important;
 }
 
     
