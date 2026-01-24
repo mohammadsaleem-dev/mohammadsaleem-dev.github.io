@@ -1545,101 +1545,7 @@ body.light .icon-btn.brand{
       transition: opacity 260ms ease, transform 260ms ease;
     }
 
-/* =========================
-   PERFORMANCE MODE (Zoom/Scroll)
-   ========================= */
-body.perf-mode *{
-  /* Reduce expensive animations during zoom/scroll */
-  transition-duration: 0ms !important;
-}
 
-body.perf-mode .bg-orb{
-  animation: none !important;
-  filter: none !important;
-  opacity: 0.35 !important;
-}
-
-body.perf-mode::after{
-  /* turn off noise overlay while zooming */
-  opacity: 0 !important;
-}
-
-/* Turn off backdrop blur during zoom/scroll (very expensive) */
-body.perf-mode .nav,
-body.perf-mode .nav-links,
-body.perf-mode .time-card,
-body.perf-mode .intro-box,
-body.perf-mode .thumb-badge{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/* Reduce heavy shadows during zoom/scroll */
-body.perf-mode .card,
-body.perf-mode .project-card,
-body.perf-mode .btn,
-body.perf-mode .icon-btn,
-body.perf-mode .to-top{
-  box-shadow: none !important;
-}
-  
-/* ===========================================
-   BORDERLESS STYLE (but KEEP premium hover)
-   Fix: missing hover + timeline borders + dark/light consistency
-   =========================================== */
-
-/* Remove borders everywhere you want it borderless */
-.card,
-.item,
-.project-card,
-.project-thumb,
-.tag,
-.cert,
-.stat,
-.icon-chip,
-.logo,
-.issuer-logo,
-.verify,
-.verify-card,
-.time-card,
-.objective,
-.nav-inner,
-.intro-box,
-.intro-type,
-.thumb-badge,
-.thumb-icon,
-.btn,
-.menu-btn,
-.icon-btn:not(.brand),
-.timeline-item {
-  border: 0 !important;
-}
-
-/* Remove timeline dot ring (keep dot) */
-.timeline-item::before{
-  border: 0 !important;
-}
-
-/* Remove the divider line in Verification (you requested no borders) */
-.verify{
-  border-top: 0 !important;
-}
-  
-      /* ✅ Smooth hover: force GPU */
-  .item,
-  .timeline-item,
-  .verify-card,
-  .cert,
-  .project-card,
-  .stat,
-  .time-card,
-  .objective,
-  .btn,
-  .icon-btn{
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-  }
 
 
 /* -------------------------------------------
@@ -1730,26 +1636,6 @@ body.light{
 html{ scrollbar-gutter: stable; }
 
     /* =========================
-   Smooth Theme Crossfade
-   ========================= */
-
-body::before{
-  content:"";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: inherit;
-  opacity: 0;
-  transition: opacity 280ms ease;
-  z-index: 9998;
-}
-
-/* When switching theme */
-body.theme-transition::before{
-  opacity: 1;
-}
-
-    /* =========================
    Theme switch overlay (no white flash)
    ========================= */
 #themeFade{
@@ -1761,208 +1647,6 @@ body.theme-transition::before{
   transition: opacity 320ms ease;
   will-change: opacity;
 }
-
-    /* ===========================================
-   FIX: Make navbar NOT transparent + blue buttons back
-   Paste near END of <style>
-   =========================================== */
-
-/* 1) Make page background solid (so no glass look) */
-body{
-  background: var(--page-bg) !important; /* keep your gradient */
-}
-
-/* 2) NAVBAR: make it solid (not transparent) */
-.nav{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-.nav-inner{
-  background: rgba(10,16,32,0.96) !important;   /* solid dark */
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.35) !important;
-}
-
-/* Light mode navbar solid */
-body.light .nav-inner{
-  background: rgba(255,255,255,0.96) !important;
-  border-color: rgba(12,14,20,0.14) !important;
-  box-shadow: 0 14px 30px rgba(12,14,20,0.10) !important;
-}
-
-/* 3) INTRO BOX (Skip area): remove glass + keep solid */
-.intro-box{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: rgba(10,16,32,0.92) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
-}
-
-/* Light intro box */
-body.light .intro-box{
-  background: rgba(255,255,255,0.96) !important;
-  border-color: rgba(12,14,20,0.14) !important;
-}
-
-/* 4) Bring BACK borders for buttons/nav if "borderless" removed them */
-.btn,
-.menu-btn{
-  border: 1px solid rgba(255,255,255,0.14) !important;
-}
-
-body.light .btn,
-body.light .menu-btn{
-  border-color: rgba(12,14,20,0.18) !important;
-}
-
-/* 5) Force PRIMARY buttons to be BLUE (View Projects / Skip) */
-.btn-primary{
-  background: linear-gradient(135deg, #2f81f7, #58a6ff) !important;
-  border-color: rgba(120,170,255,0.35) !important;
-  color: #081026 !important;
-}
-
-.btn-primary:hover{
-  filter: brightness(1.05) !important;
-}
-
-
-/* Smooth icon animation */
-#themeToggle{
-  transition: transform 260ms ease, filter 260ms ease;
-}
-#themeToggle.icon-swap{
-  transform: rotate(180deg) scale(1.08);
-  filter: brightness(1.05);
-}
-
-/* =========================
-   GITHUB-STYLE STATIC THEME (NO GLASS / NO BLUR)
-   Paste at END of your <style>
-   ========================= */
-
-/* GitHub-like palette (based on Primer “theme reference” fallbacks) */
-:root{
-  --bg: #0d1117;          /* canvas default */
-  --panel: #161b22;       /* canvas overlay / subtle */
-  --panel2: #161b22;
-  --border: #30363d;      /* border default */
-  --text: #c9d1d9;        /* fg default */
-  --muted: #8b949e;       /* fg muted */
-  --muted2: #6e7681;      /* fg subtle */
-  --accent: #58a6ff;      /* accent fg */
-  --accent2: #2f81f7;
-
-  /* Make shadows simpler (less expensive during zoom) */
-  --shadow: 0 10px 26px rgba(0,0,0,0.35);
-  --glow: 0 12px 30px rgba(0,0,0,0.40);
-}
-
-/* Light mode like GitHub */
-body.light{
-  --bg: #ffffff;          /* canvas default */
-  --panel: #f6f8fa;       /* canvas inset/subtle */
-  --panel2: #f6f8fa;
-  --border: #d0d7de;      /* border default */
-  --text: #24292f;        /* fg default */
-  --muted: #57606a;       /* fg muted */
-  --muted2: #6e7781;      /* close to subtle */
-  --accent: #0969da;
-  --accent2: #1f6feb;
-
-  --shadow: 0 10px 22px rgba(27,31,36,0.10);
-  --glow: 0 12px 26px rgba(27,31,36,0.12);
-}
-
-/* Hard remove the gradient page background */
-body{
-  background: var(--bg) !important;
-}
-
-/* Remove noise overlay (expensive + bad with zoom) */
-body::after{ display:none !important; }
-
-/* Remove animated/blur orb completely */
-.bg-orb{ display:none !important; }
-
-/* Kill ALL backdrop blur/glass */
-.nav,
-.nav-links,
-.time-card,
-.intro-box,
-.thumb-badge{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/* Make surfaces solid (no glass gradients) */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip{
-  background: var(--panel) !important;
-  color: var(--text) !important;
-}
-
-/* Stop fancy “glow” overlays */
-.card::before{ display:none !important; }
-
-/* Bring borders back in a clean GitHub way */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.logo,
-.issuer-logo{
-  border: 1px solid var(--border) !important;
-}
-
-/* Text tuning */
-.subtitle, .section-sub, .item .meta, .t-meta, .cert-by, footer, .stat span{
-  color: var(--muted) !important;
-}
-
-/* Accent colors */
-.locline i{ color: var(--accent) !important; }
-.brand-initials{
-  background: none !important;
-  -webkit-text-fill-color: unset !important;
-  color: var(--accent) !important;
-}
-
-/* Buttons: solid, fast */
-.btn{
-  background: var(--panel) !important;
-  border: 1px solid var(--border) !important;
-  box-shadow: none !important;
-}
-.btn:hover{
-  box-shadow: var(--glow) !important;
-}
-
-/* Keep your colorful social buttons as-is, but ensure borders don’t fight */
-.icon-btn{ border: 1px solid var(--border) !important; }
-.icon-btn.brand{ border: 0 !important; }
-
 
  /* =========================
    HERO ACTION BUTTONS (4 buttons row)
@@ -1989,156 +1673,6 @@ body::after{ display:none !important; }
     justify-content: center;
   }
 }
-   
-/* =========================
-   REMOVE INNER BOX OUTLINES (dark + light)
-   Put this AFTER your GitHub-style block
-   ========================= */
-
-/* Keep main cards as you like; remove borders from inner boxes */
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.verify-card,
-.stat,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.logo,
-.issuer-logo,
-.thumb-badge,
-.thumb-icon,
-.icon-btn:not(.brand),,
-.btn,
-.menu-btn{
-  border: 0 !important;
-}
-
-/* If you still see a “line”, it might be a border-bottom */
-.project-thumb{
-  border-bottom: 0 !important;
-}
-
-/* Optional: add soft separation WITHOUT borders (still clean) */
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.verify-card,
-.stat,
-.time-card,
-.objective{
-  box-shadow: 0 10px 24px rgba(0,0,0,0.18) !important;
-}
-
-body.light .item,
-body.light .timeline-item,
-body.light .project-card,
-body.light .cert,
-body.light .verify-card,
-body.light .stat,
-body.light .time-card,
-body.light .objective{
-  box-shadow: 0 10px 24px rgba(27,31,36,0.10) !important;
-}
-
-    /* =========================
-   FORCE PRIMARY BUTTONS BLUE
-   (Fix: GitHub-style .btn background overrides btn-primary)
-   Paste at VERY END of <style>
-   ========================= */
-.btn.btn-primary{
-  background: linear-gradient(135deg, #2f81f7, #58a6ff) !important;
-  color: #ffffff !important;
-  border: 0 !important;
-}
-
-.btn.btn-primary:hover{
-  filter: brightness(1.06) !important;
-}
-
-    /* =========================
-   INTRO OVERLAY — match main theme (dark + light)
-   Paste at VERY END of <style>
-   ========================= */
-
-/* Overlay background uses your theme --bg */
-#introOverlay{
-  background: var(--bg) !important;
-}
-
-/* Add subtle GitHub-like accents only in DARK mode */
-body:not(.light) #introOverlay{
-  background:
-    radial-gradient(900px 520px at 15% 10%, rgba(88,166,255,0.10), transparent 60%),
-    radial-gradient(700px 420px at 85% 0%, rgba(47,129,247,0.10), transparent 60%),
-    var(--bg) !important;
-}
-
-/* Intro card uses your theme surface */
-.intro-box{
-  background: var(--panel) !important;
-  color: var(--text) !important;
-  border: 0 !important;                 /* you removed borders globally */
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: 0 18px 45px rgba(0,0,0,0.35) !important;
-}
-
-/* Light mode shadow */
-body.light .intro-box{
-  box-shadow: 0 14px 34px rgba(27,31,36,0.12) !important;
-}
-
-/* Typing pill matches theme */
-.intro-type{
-  background: rgba(255,255,255,0.04) !important; /* dark subtle */
-  color: var(--text) !important;
-  border: 0 !important;
-}
-
-body.light .intro-type{
-  background: rgba(27,31,36,0.04) !important;    /* light subtle */
-}
-
-/* Cursor follows theme */
-.cursor{
-  background: var(--text) !important;
-  opacity: 0.7;
-}
-
-/* Subtitle follows theme muted */
-.intro-sub{
-  color: var(--muted) !important;
-}
-
-/* Ensure intro text doesn’t look dim */
-.intro-title{
-  color: var(--text) !important;
-}
-
-
-/* =========================
-   THEME SWITCH ANIMATION
-   ========================= */
-#themeFade{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 9997;
-  transition: opacity 420ms cubic-bezier(.22,.61,.36,1);
-  will-change: opacity;
-}
-
-/* when active */
-#themeFade.show{
-  opacity: 1;
-}
-
     /* =========================
    INTRO → MAIN ANIMATION
    ========================= */
@@ -2345,12 +1879,120 @@ body{
     filter           var(--theme-dur) var(--theme-ease) !important,
     transform        260ms var(--ease) !important;
 }
+/* =========================================================
+   FINAL (single source of truth)
+   - Smooth, consistent theme switching (no fast boxes)
+   - No duplicate overrides
+   - Brand icons always stay colorful
+   ========================================================= */
 
-/* =========================
-   FINAL: Keep social icons colorful in DARK + LIGHT
-   (paste at VERY END of <style>)
-   ========================= */
+:root{
+  --theme-dur: 420ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
 
+/* Make BODY actually use your gradient vars (your code had no background set earlier) */
+body{
+  background: var(--page-bg);
+}
+
+/* Theme fade overlay (single definition) */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9997;
+  transition: opacity var(--theme-dur) var(--theme-ease);
+  will-change: opacity;
+}
+#themeFade.show{ opacity: 1; }
+
+/* ✅ IMPORTANT:
+   Some of your elements use `background:` shorthand / gradients.
+   Those can “snap” during theme switch.
+   We normalize key surfaces to use background-color only. */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.tag,
+.pill,
+.icon-chip,
+.thumb-badge,
+.thumb-icon,
+.btn,
+.icon-btn:not(.brand),
+.menu-btn,
+.logo,
+.issuer-logo,
+.intro-box,
+.intro-type{
+  background-image: none !important;         /* prevents gradient snapping */
+  background: none !important;               /* kill shorthand overrides */
+  background-color: var(--panel) !important; /* smooth animatable color */
+}
+
+/* Make sure nav links hover doesn't snap weirdly */
+.nav-links a{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    transform 200ms var(--ease);
+}
+
+/* Consistent theme transitions for key UI pieces */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn:not(.brand),
+.menu-btn,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo,
+.intro-box,
+.intro-type{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important,
+    transform        260ms var(--ease) !important;
+}
+
+/* While switching theme: disable hover-lift so nothing “pops” mid-toggle */
+body.theme-switching .card:hover,
+body.theme-switching .item:hover,
+body.theme-switching .timeline-item:hover,
+body.theme-switching .project-card:hover,
+body.theme-switching .cert:hover,
+body.theme-switching .verify-card:hover,
+body.theme-switching .stat:hover,
+body.theme-switching .time-card:hover,
+body.theme-switching .objective:hover{
+  transform: none !important;
+}
+
+/* ===== Brand icon buttons (single, clean) ===== */
 .icon-btn.brand{
   background: var(--brand) !important;
   border: 0 !important;
@@ -2365,10 +2007,15 @@ body{
 .icon-btn.x        { --brand:#000000; }
 .icon-btn.facebook { --brand:#1877F2; }
 
-/* Instagram gradient (always) */
+/* Instagram gradient always */
 .icon-btn.instagram{
   background: radial-gradient(circle at 30% 30%,
     #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
+}
+
+/* Light mode: keep brand icons colorful too */
+body.light .icon-btn.brand{
+  box-shadow: 0 12px 28px rgba(12,14,20,0.12);
 }
 
     
@@ -2982,11 +2629,9 @@ const syncToggleIcon = () => {
 
     // snapshot current background into overlay
     const cs = getComputedStyle(document.body);
-    fade.style.backgroundColor = cs.backgroundColor;
+    fade.style.background = cs.background;
     fade.style.backgroundImage = cs.backgroundImage;
-    fade.style.backgroundSize = cs.backgroundSize;
-    fade.style.backgroundPosition = cs.backgroundPosition;
-    fade.style.backgroundRepeat = cs.backgroundRepeat;
+
 
     // show overlay
     fade.classList.add("show");
