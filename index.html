@@ -82,6 +82,7 @@
       font-size: var(--body);
       line-height: var(--leading);
       color: var(--text);
+      background: var(--page-bg);
       min-height: 100vh;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
@@ -1841,72 +1842,6 @@ body.theme-transition::before{
   will-change: opacity;
 }
 
-    /* ===========================================
-   FIX: Make navbar NOT transparent + blue buttons back
-   Paste near END of <style>
-   =========================================== */
-
-/* 1) Make page background solid (so no glass look) */
-body{
-  background: var(--page-bg) !important; /* keep your gradient */
-}
-
-/* 2) NAVBAR: make it solid (not transparent) */
-.nav{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-.nav-inner{
-  background: rgba(10,16,32,0.96) !important;   /* solid dark */
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.35) !important;
-}
-
-/* Light mode navbar solid */
-body.light .nav-inner{
-  background: rgba(255,255,255,0.96) !important;
-  border-color: rgba(12,14,20,0.14) !important;
-  box-shadow: 0 14px 30px rgba(12,14,20,0.10) !important;
-}
-
-/* 3) INTRO BOX (Skip area): remove glass + keep solid */
-.intro-box{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: rgba(10,16,32,0.92) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
-}
-
-/* Light intro box */
-body.light .intro-box{
-  background: rgba(255,255,255,0.96) !important;
-  border-color: rgba(12,14,20,0.14) !important;
-}
-
-/* 4) Bring BACK borders for buttons/nav if "borderless" removed them */
-.btn,
-.menu-btn{
-  border: 1px solid rgba(255,255,255,0.14) !important;
-}
-
-body.light .btn,
-body.light .menu-btn{
-  border-color: rgba(12,14,20,0.18) !important;
-}
-
-/* 5) Force PRIMARY buttons to be BLUE (View Projects / Skip) */
-.btn-primary{
-  background: linear-gradient(135deg, #2f81f7, #58a6ff) !important;
-  border-color: rgba(120,170,255,0.35) !important;
-  color: #081026 !important;
-}
-
-.btn-primary:hover{
-  filter: brightness(1.05) !important;
-}
-
-
 /* Smooth icon animation */
 #themeToggle{
   transition: transform 260ms ease, filter 260ms ease;
@@ -1916,138 +1851,6 @@ body.light .menu-btn{
   filter: brightness(1.05);
 }
 
-/* =========================
-   GITHUB-STYLE STATIC THEME (NO GLASS / NO BLUR)
-   Paste at END of your <style>
-   ========================= */
-
-/* GitHub-like palette (based on Primer “theme reference” fallbacks) */
-:root{
-  --bg: #0d1117;          /* canvas default */
-  --panel: #161b22;       /* canvas overlay / subtle */
-  --panel2: #161b22;
-  --border: #30363d;      /* border default */
-  --text: #c9d1d9;        /* fg default */
-  --muted: #8b949e;       /* fg muted */
-  --muted2: #6e7681;      /* fg subtle */
-  --accent: #58a6ff;      /* accent fg */
-  --accent2: #2f81f7;
-
-  /* Make shadows simpler (less expensive during zoom) */
-  --shadow: 0 10px 26px rgba(0,0,0,0.35);
-  --glow: 0 12px 30px rgba(0,0,0,0.40);
-}
-
-/* Light mode like GitHub */
-body.light{
-  --bg: #ffffff;          /* canvas default */
-  --panel: #f6f8fa;       /* canvas inset/subtle */
-  --panel2: #f6f8fa;
-  --border: #d0d7de;      /* border default */
-  --text: #24292f;        /* fg default */
-  --muted: #57606a;       /* fg muted */
-  --muted2: #6e7781;      /* close to subtle */
-  --accent: #0969da;
-  --accent2: #1f6feb;
-
-  --shadow: 0 10px 22px rgba(27,31,36,0.10);
-  --glow: 0 12px 26px rgba(27,31,36,0.12);
-}
-
-/* Hard remove the gradient page background */
-body{
-  background: var(--bg) !important;
-}
-
-/* Remove noise overlay (expensive + bad with zoom) */
-body::after{ display:none !important; }
-
-/* Remove animated/blur orb completely */
-.bg-orb{ display:none !important; }
-
-/* Kill ALL backdrop blur/glass */
-.nav,
-.nav-links,
-.time-card,
-.intro-box,
-.thumb-badge{
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/* Make surfaces solid (no glass gradients) */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip{
-  background: var(--panel) !important;
-  color: var(--text) !important;
-}
-
-/* Stop fancy “glow” overlays */
-.card::before{ display:none !important; }
-
-/* Bring borders back in a clean GitHub way */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.logo,
-.issuer-logo{
-  border: 1px solid var(--border) !important;
-}
-
-/* Text tuning */
-.subtitle, .section-sub, .item .meta, .t-meta, .cert-by, footer, .stat span{
-  color: var(--muted) !important;
-}
-
-/* Accent colors */
-.locline i{ color: var(--accent) !important; }
-.brand-initials{
-  background: none !important;
-  -webkit-text-fill-color: unset !important;
-  color: var(--accent) !important;
-}
-
-/* Buttons: solid, fast */
-.btn{
-  background: var(--panel) !important;
-  border: 1px solid var(--border) !important;
-  box-shadow: none !important;
-}
-.btn:hover{
-  box-shadow: var(--glow) !important;
-}
-
-/* Keep your colorful social buttons as-is, but ensure borders don’t fight */
-.icon-btn{ border: 1px solid var(--border) !important; }
-.icon-btn.brand{ border: 0 !important; }
-
-/* Reduce long transition chains (better zoom/scroll performance) */
-*{
-  transition-property: transform, opacity, color, background-color, border-color, box-shadow !important;
-  transition-duration: 180ms !important;
-}
-</style>
 
     
   </style>
@@ -2068,6 +1871,8 @@ body::after{ display:none !important; }
       </div>
     </div>
   </div>
+
+  <div class="bg-orb" id="bgOrb"></div>
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
@@ -2143,38 +1948,24 @@ body::after{ display:none !important; }
         </div>
 
 
-<div class="skill-icons" aria-label="Key technologies">
-  <span class="icon-chip">
-    <span class="sicon java"><i class="fa-brands fa-java"></i></span>
-    Java
-  </span>
+        <div class="pill-row">
+          <span class="pill">Open To Research Assistantships</span>
+          <span class="pill">Blockchain Security Focus</span>
+          <span class="pill">Networking & Security</span>
+          <span class="pill">Web (HTML/CSS)</span>
+        </div>
 
-  <span class="icon-chip">
-    <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
-    C++
-  </span>
-
-  <span class="icon-chip">
-    <span class="sicon python"><i class="fa-brands fa-python"></i></span>
-    Python
-  </span>
-
-  <span class="icon-chip">
-    <span class="sicon js"><i class="fa-brands fa-js"></i></span>
-    JavaScript
-  </span>
-
-  <span class="icon-chip">
-    <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
-    Ethereum
-  </span>
-
-  <span class="icon-chip">
-    <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
-    Blockchain
-  </span>
-</div>
-
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top: 18px;">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
+        
+          <!-- NEW: Download Resume button -->
+          <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
+            Download Resume
+          </a>
+        
+          <a class="btn btn-ghost" href="#contact">Contact</a>
+        </div>
         
 
         <div class="stats">
@@ -2649,14 +2440,6 @@ const setIcon = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
     setIcon();
-
-    const themeMeta = document.querySelector('meta[name="theme-color"]');
-const setThemeColor = () => {
-  const isLight = document.body.classList.contains("light");
-  themeMeta && themeMeta.setAttribute("content", isLight ? "#ffffff" : "#0d1117");
-};
-setThemeColor();
-
 
     // 4) Fade overlay OUT (reveals new theme smoothly)
     requestAnimationFrame(() => {
