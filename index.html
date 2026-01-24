@@ -1841,6 +1841,72 @@ body.theme-transition::before{
   will-change: opacity;
 }
 
+    /* ===========================================
+   FIX: Make navbar NOT transparent + blue buttons back
+   Paste near END of <style>
+   =========================================== */
+
+/* 1) Make page background solid (so no glass look) */
+body{
+  background: var(--page-bg) !important; /* keep your gradient */
+}
+
+/* 2) NAVBAR: make it solid (not transparent) */
+.nav{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.nav-inner{
+  background: rgba(10,16,32,0.96) !important;   /* solid dark */
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.35) !important;
+}
+
+/* Light mode navbar solid */
+body.light .nav-inner{
+  background: rgba(255,255,255,0.96) !important;
+  border-color: rgba(12,14,20,0.14) !important;
+  box-shadow: 0 14px 30px rgba(12,14,20,0.10) !important;
+}
+
+/* 3) INTRO BOX (Skip area): remove glass + keep solid */
+.intro-box{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(10,16,32,0.92) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* Light intro box */
+body.light .intro-box{
+  background: rgba(255,255,255,0.96) !important;
+  border-color: rgba(12,14,20,0.14) !important;
+}
+
+/* 4) Bring BACK borders for buttons/nav if "borderless" removed them */
+.btn,
+.menu-btn{
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+body.light .btn,
+body.light .menu-btn{
+  border-color: rgba(12,14,20,0.18) !important;
+}
+
+/* 5) Force PRIMARY buttons to be BLUE (View Projects / Skip) */
+.btn-primary{
+  background: linear-gradient(135deg, #2f81f7, #58a6ff) !important;
+  border-color: rgba(120,170,255,0.35) !important;
+  color: #081026 !important;
+}
+
+.btn-primary:hover{
+  filter: brightness(1.05) !important;
+}
+
+
 /* Smooth icon animation */
 #themeToggle{
   transition: transform 260ms ease, filter 260ms ease;
@@ -1850,7 +1916,6 @@ body.theme-transition::before{
   filter: brightness(1.05);
 }
 
-<style>
 /* =========================
    GITHUB-STYLE STATIC THEME (NO GLASS / NO BLUR)
    Paste at END of your <style>
@@ -2078,24 +2143,38 @@ body::after{ display:none !important; }
         </div>
 
 
-        <div class="pill-row">
-          <span class="pill">Open To Research Assistantships</span>
-          <span class="pill">Blockchain Security Focus</span>
-          <span class="pill">Networking & Security</span>
-          <span class="pill">Web (HTML/CSS)</span>
-        </div>
+<div class="skill-icons" aria-label="Key technologies">
+  <span class="icon-chip">
+    <span class="sicon java"><i class="fa-brands fa-java"></i></span>
+    Java
+  </span>
 
-        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top: 18px;">
-          <a class="btn btn-primary" href="#projects">View Projects</a>
-          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">View Resume (PDF)</a>
-        
-          <!-- NEW: Download Resume button -->
-          <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
-            Download Resume
-          </a>
-        
-          <a class="btn btn-ghost" href="#contact">Contact</a>
-        </div>
+  <span class="icon-chip">
+    <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
+    C++
+  </span>
+
+  <span class="icon-chip">
+    <span class="sicon python"><i class="fa-brands fa-python"></i></span>
+    Python
+  </span>
+
+  <span class="icon-chip">
+    <span class="sicon js"><i class="fa-brands fa-js"></i></span>
+    JavaScript
+  </span>
+
+  <span class="icon-chip">
+    <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
+    Ethereum
+  </span>
+
+  <span class="icon-chip">
+    <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
+    Blockchain
+  </span>
+</div>
+
         
 
         <div class="stats">
