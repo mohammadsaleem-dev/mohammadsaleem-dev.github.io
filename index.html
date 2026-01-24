@@ -2267,6 +2267,52 @@ body,
     filter var(--theme-dur) var(--theme-ease);
 }
 
+/* =========================
+   THEME SWITCH ANIMATION
+   ========================= */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9997;
+  transition: opacity 420ms cubic-bezier(.22,.61,.36,1);
+  will-change: opacity;
+}
+
+/* when active */
+#themeFade.show{
+  opacity: 1;
+}
+
+    /* =========================
+   INTRO → MAIN ANIMATION
+   ========================= */
+#introOverlay{
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 520ms cubic-bezier(.22,.61,.36,1), visibility 0ms linear 520ms;
+}
+
+#introOverlay .intro-box{
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+  opacity: 1;
+  transition: transform 520ms cubic-bezier(.22,.61,.36,1), opacity 520ms cubic-bezier(.22,.61,.36,1), filter 520ms cubic-bezier(.22,.61,.36,1);
+}
+
+/* when hiding */
+#introOverlay.intro-hide{
+  opacity: 0;
+  visibility: hidden;
+}
+
+#introOverlay.intro-hide .intro-box{
+  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  filter: blur(3px);
+}
+
 
     
   </style>
@@ -2869,47 +2915,41 @@ const setIcon = () => {
   if (saved === "light") document.body.classList.add("light");
   setIcon();
 
-  toggle.addEventListener("click", () => {
-    // 1) Freeze CURRENT background into overlay (pre-toggle)
-    const cs = getComputedStyle(document.body);
-    fade.style.backgroundColor = cs.backgroundColor;
-    fade.style.backgroundImage = cs.backgroundImage;
-    fade.style.backgroundSize = cs.backgroundSize;
-    fade.style.backgroundPosition = cs.backgroundPosition;
-    fade.style.backgroundRepeat = cs.backgroundRepeat;
+toggle.addEventListener("click", () => {
+  // snapshot current background into overlay
+  const cs = getComputedStyle(document.body);
+  fade.style.backgroundColor = cs.backgroundColor;
+  fade.style.backgroundImage = cs.backgroundImage;
+  fade.style.backgroundSize = cs.backgroundSize;
+  fade.style.backgroundPosition = cs.backgroundPosition;
+  fade.style.backgroundRepeat = cs.backgroundRepeat;
 
-    // show overlay instantly (covers while switching)
-    fade.style.transition = "none";
-    fade.style.opacity = "1";
-    void fade.offsetHeight; // force reflow
-    fade.style.transition = "opacity 320ms ease";
+  // show overlay (covers while switching)
+  fade.classList.add("show");
 
-    // 2) Animate icon
-    toggle.classList.remove("icon-swap");
-    void toggle.offsetWidth;
-    toggle.classList.add("icon-swap");
+  // icon animation
+  toggle.classList.remove("icon-swap");
+  void toggle.offsetWidth;
+  toggle.classList.add("icon-swap");
 
-    // 3) Toggle theme
+  // switch theme on next frame (so overlay is visible first)
+  requestAnimationFrame(() => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
     setIcon();
 
     const themeMeta = document.querySelector('meta[name="theme-color"]');
-const setThemeColor = () => {
-  const isLight = document.body.classList.contains("light");
-  themeMeta && themeMeta.setAttribute("content", isLight ? "#ffffff" : "#0d1117");
-};
-setThemeColor();
+    if (themeMeta) {
+      themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
+    }
 
+    // fade overlay out after theme applied
+    requestAnimationFrame(() => fade.classList.remove("show"));
 
-    // 4) Fade overlay OUT (reveals new theme smoothly)
-    requestAnimationFrame(() => {
-      fade.style.opacity = "0";
-    });
+    setTimeout(() => toggle.classList.remove("icon-swap"), 420);
+  });
+}, { passive: true });
 
-    // cleanup icon class
-    setTimeout(() => toggle.classList.remove("icon-swap"), 320);
-  }, { passive: true });
 })();
 
 
@@ -3046,19 +3086,24 @@ setThemeColor();
       };
 
       const showOverlay = () => {
-        overlay.classList.remove("intro-hide");
         overlay.style.display = "flex";
+        // force reflow so transition plays every time
+        void overlay.offsetHeight;
+        overlay.classList.remove("intro-hide");
         overlay.setAttribute("aria-hidden", "false");
       };
+
 
       const hideOverlay = () => {
         overlay.classList.add("intro-hide");
         overlay.setAttribute("aria-hidden", "true");
-        // remove after transition
+      
+        // remove after animation ends
         stageTimer = setTimeout(() => {
           overlay.style.display = "none";
-        }, 280);
+        }, 560);
       };
+
 
       const runIntro = () => {
         clearTimers();
