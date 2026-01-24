@@ -202,6 +202,21 @@
       #introOverlay *{ transition: none !important; }
     }
 
+    @media (max-width: 520px){
+
+  /* Space under the name */
+  .hero-title h1{
+    margin-bottom: 10px;   /* ✅ creates breathing room */
+  }
+
+  /* Space above the subtitle line */
+  .subtitle-row{
+    margin-top: 6px;       /* ✅ pushes subtitle down slightly */
+  }
+
+}
+
+
     /* LIGHT MODE */
     body.light{
       --text: rgba(12, 14, 20, 0.95);
