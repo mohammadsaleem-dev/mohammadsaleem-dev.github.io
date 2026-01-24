@@ -550,21 +550,29 @@
       white-space: nowrap; 
     }
 
-        /* ===== Mobile: allow full name to wrap (fix cut off) ===== */
-    @media (max-width: 520px){
-      .hero-title{
-        flex-wrap: wrap;          /* allow next line */
-        align-items: center;
-        gap: 12px;
+      @media (max-width: 520px){
+        .hero-title{
+          flex-wrap: nowrap;     /* ✅ keep photo + name on the same row */
+          align-items: center;
+          gap: 12px;
+        }
+      
+        .hero-title h1{
+          flex: 1;               /* ✅ take remaining space */
+          min-width: 0;          /* ✅ allow wrapping INSIDE without dropping under photo */
+          white-space: normal;   /* ✅ text can wrap to 2 lines but stays beside photo */
+          overflow-wrap: normal; /* (or keep anywhere if you want aggressive wrap) */
+          line-height: 1.05;
+          font-size: clamp(28px, 7vw, 40px); /* ✅ smaller on mobile so it fits */
+          margin: 0;
+        }
+      
+        .profile-avatar{
+          width: 44px;           /* optional: slightly smaller on mobile */
+          height: 44px;
+        }
       }
-    
-      .hero-title h1{
-        white-space: normal;      /* allow wrapping */
-        overflow-wrap: anywhere;  /* prevent cutting on small widths */
-        line-height: 1.08;
-        margin-bottom: 0;         /* keep spacing clean */
-      }
-    }
+
 
 
     .pc-logo{
