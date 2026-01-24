@@ -2052,11 +2052,6 @@ body::after{ display:none !important; }
 .icon-btn{ border: 1px solid var(--border) !important; }
 .icon-btn.brand{ border: 0 !important; }
 
-/* Reduce long transition chains (better zoom/scroll performance) */
-*{
-  transition-property: transform, opacity, color, background-color, border-color, box-shadow !important;
-  transition-duration: 180ms !important;
-}
 
  /* =========================
    HERO ACTION BUTTONS (4 buttons row)
@@ -2214,6 +2209,63 @@ body.light .intro-type{
   color: var(--text) !important;
 }
 
+/* =========================
+   UNIFY THEME SWITCH SPEED
+   Paste at VERY END of <style>
+   ========================= */
+
+/* One source of truth */
+:root{
+  --theme-dur: 320ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Stop any old forced transition-duration overrides */
+*{
+  transition-duration: initial !important;
+}
+
+/* Apply consistent theme transitions */
+body,
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important;
+}
+
+/* If you animate transforms on hover, keep them separate and consistent */
+.btn, .icon-btn, .item, .timeline-item, .project-card, .cert, .verify-card, .stat, .time-card, .objective{
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
 
 
     
