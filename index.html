@@ -1610,7 +1610,7 @@ body.perf-mode .to-top{
 .thumb-icon,
 .btn,
 .menu-btn,
-.icon-btn:not(.brand),
+.icon-btn,
 .timeline-item {
   border: 0 !important;
 }
@@ -1679,6 +1679,21 @@ body.light{
     background 520ms var(--ease);
 }
 
+    /* ✅ Override fast transitions (make it slower + smoother) */
+.item,
+.timeline-item,
+.verify-card,
+.cert,
+.project-card,
+.stat,
+.time-card,
+.objective,
+.btn,
+.icon-btn{
+  transition: transform 650ms cubic-bezier(.22,.61,.36,1) !important;
+}
+
+
 /* BIGGER hover (your main issue) */
 .item:hover,
 .timeline-item:hover,
@@ -1728,6 +1743,90 @@ body.light{
 
 /* Keep layout stable */
 html{ scrollbar-gutter: stable; }
+
+
+    /* =========================
+   Smooth theme transitions
+   ========================= */
+:root{
+  --theme-dur: 320ms;
+  --theme-ease: cubic-bezier(.2,.8,.2,1);
+}
+
+body,
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease),
+    transform 240ms var(--ease);
+}
+
+/* Also animate your big page background */
+body{
+  transition:
+    background var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
+}
+
+/* Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce){
+  :root{ --theme-dur: 0ms; }
+}
+
+/* =========================
+   Theme icon animation
+   ========================= */
+#themeToggle{
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a little animated “pulse” ring */
+#themeToggle::after{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:999px;
+  background: radial-gradient(circle, rgba(140,170,255,0.35), transparent 60%);
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events:none;
+}
+
+/* When toggling, we add .icon-swap briefly */
+#themeToggle.icon-swap{
+  animation: iconSpin 380ms cubic-bezier(.2,.9,.2,1);
+}
+#themeToggle.icon-swap::after{
+  animation: iconPulse 380ms cubic-bezier(.2,.9,.2,1);
+}
+
+@keyframes iconSpin{
+  0%   { transform: translateY(0) rotate(0deg) scale(1); }
+  45%  { transform: translateY(-1px) rotate(120deg) scale(1.12); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
+}
+@keyframes iconPulse{
+  0%   { opacity: 0; transform: scale(0.7); }
+  45%  { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
 
     /* =========================
    Smooth Theme Crossfade
@@ -2011,7 +2110,7 @@ body::after{ display:none !important; }
 .issuer-logo,
 .thumb-badge,
 .thumb-icon,
-.icon-btn:not(.brand),,
+.icon-btn,
 .btn,
 .menu-btn{
   border: 0 !important;
@@ -2120,6 +2219,58 @@ body.light .intro-type{
   color: var(--text) !important;
 }
 
+/* =========================
+   UNIFY THEME SWITCH SPEED
+   Paste at VERY END of <style>
+   ========================= */
+
+/* One source of truth */
+:root{
+  --theme-dur: 320ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Apply consistent theme transitions */
+body,
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important;
+}
+
+/* If you animate transforms on hover, keep them separate and consistent */
+.btn, .icon-btn, .item, .timeline-item, .project-card, .cert, .verify-card, .stat, .time-card, .objective{
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
 
 /* =========================
    THEME SWITCH ANIMATION
@@ -2240,7 +2391,7 @@ body.light .intro-type{
 .icon-chip,
 .tag,
 .btn,
-.icon-btn:not(.brand),
+.icon-btn,
 .menu-btn,
 .nav-links a,
 .thumb-badge,
@@ -2297,7 +2448,7 @@ body.theme-switching .objective:hover{
 .thumb-badge,
 .thumb-icon,
 .btn,
-.icon-btn:not(.brand),
+.icon-btn,
 .menu-btn,
 .logo,
 .issuer-logo,
@@ -2328,7 +2479,7 @@ body{
 .icon-chip,
 .tag,
 .btn,
-.icon-btn:not(.brand),
+.icon-btn,
 .menu-btn,
 .nav-links a,
 .thumb-badge,
@@ -2346,30 +2497,6 @@ body{
     transform        260ms var(--ease) !important;
 }
 
-/* =========================
-   FINAL: Keep social icons colorful in DARK + LIGHT
-   (paste at VERY END of <style>)
-   ========================= */
-
-.icon-btn.brand{
-  background: var(--brand) !important;
-  border: 0 !important;
-  box-shadow: 0 14px 32px rgba(0,0,0,0.28);
-}
-.icon-btn.brand i{ color:#fff !important; }
-
-/* Brand colors */
-.icon-btn.github   { --brand:#181717; }
-.icon-btn.linkedin { --brand:#0A66C2; }
-.icon-btn.email    { --brand:#6c7bff; }
-.icon-btn.x        { --brand:#000000; }
-.icon-btn.facebook { --brand:#1877F2; }
-
-/* Instagram gradient (always) */
-.icon-btn.instagram{
-  background: radial-gradient(circle at 30% 30%,
-    #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
-}
 
     
   </style>
