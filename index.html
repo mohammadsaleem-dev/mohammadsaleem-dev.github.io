@@ -883,6 +883,16 @@ body.light .sicon{
       padding: 8px;
       flex: 0 0 auto;
     }
+
+    /* Make small logos stay sharper when zooming */
+.logo,
+.issuer-logo{
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  transform: translateZ(0);        /* reduce resample jitter */
+  backface-visibility: hidden;
+}
+
     body.light .logo{
       background: rgba(12,14,20,0.04);
       border-color: rgba(12,14,20,0.14);
