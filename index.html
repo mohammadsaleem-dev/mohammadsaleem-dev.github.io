@@ -2497,22 +2497,27 @@ body{
     transform        260ms var(--ease) !important;
 }
 
-    /* =========================
-   FIX ICONS IN DARK MODE ONLY
-   (icons were inheriting muted colors from later overrides)
-   Paste at VERY END of <style>
+/* =========================
+   FIX: Keep ICON COLORS in DARK MODE
+   (icons only — no background changes)
    ========================= */
-body:not(.light) .icon-btn i{
-  color: #ffffff !important;     /* ✅ make the icon itself visible */
-  opacity: 1 !important;
-  line-height: 1 !important;
+
+/* Allow Font Awesome icons to use their own color */
+.icon-btn i{
+  color: inherit !important;
 }
 
-/* Ensure brand icons stay white too (email/github/linkedin/x/facebook/instagram) */
-body:not(.light) .icon-btn.brand i{
+/* Brand buttons must define their own icon color */
+.icon-btn.brand.github i   { color: #ffffff !important; }
+.icon-btn.brand.linkedin i { color: #ffffff !important; }
+.icon-btn.brand.email i    { color: #ffffff !important; }
+.icon-btn.brand.x i        { color: #ffffff !important; }
+.icon-btn.brand.facebook i { color: #ffffff !important; }
+
+/* Instagram stays gradient (Font Awesome icon is white on gradient bg) */
+.icon-btn.brand.instagram i{
   color: #ffffff !important;
 }
-
 
     
   </style>
