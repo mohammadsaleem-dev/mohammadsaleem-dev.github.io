@@ -85,7 +85,7 @@
 .subtitle-row{
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: nowrap;
 }
 
@@ -630,43 +630,55 @@
     }
     body.light .pill{ color: rgba(12,14,20,0.92); }
 
-    .skill-icons{
-      display:flex;
-      flex-wrap:wrap;
-      gap: 10px;
-      margin: 14px 0 2px;
-    }
-    .icon-chip{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: var(--panel);
-      font-weight: 800;
-      color: rgba(255,255,255,0.86);
-    }
-    .icon-chip i{
-      font-size: 16px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-    }
-    body.light .icon-chip{ color: rgba(12,14,20,0.92); }
-    body.light .icon-chip i{ color: rgba(70,110,255,0.95); }
+/* =========================
+   Colorful skill logos
+   ========================= */
+.icon-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
 
-    .cpp-badge{
-      width: 18px; height: 18px;
-      border-radius: 6px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size: 11px;
-      font-weight: 900;
-      background: rgba(140,170,255,0.22);
-      border: 1px solid rgba(140,170,255,0.28);
-      color: rgba(255,255,255,0.92);
-    }
+.sicon{
+  width:28px;
+  height:28px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 22px rgba(0,0,0,.18);
+  border:1px solid rgba(255,255,255,.14);
+  flex-shrink: 0;
+}
+
+.sicon i{ color:#fff; font-size:15px; }
+
+/* Color backgrounds per skill */
+.sicon.java   { background:linear-gradient(135deg,#ff6a6a,#ffb36b); }
+.sicon.python { background:linear-gradient(135deg,#3776AB,#FFD43B); }
+.sicon.js     { background:linear-gradient(135deg,#F7DF1E,#ffb300); }
+.sicon.eth    { background:linear-gradient(135deg,#627EEA,#9aaeff); }
+.sicon.chain  { background:linear-gradient(135deg,#6ee7ff,#7c8cff); }
+
+.sicon.cpp{
+  background:linear-gradient(135deg,#7c8cff,#6ee7ff);
+}
+
+/* Make your existing C++ badge work inside the new icon */
+.sicon.cpp .cpp-badge{
+  width:18px;
+  height:18px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:900;
+  background:rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.3);
+  color:#fff;
+}
+
     body.light .cpp-badge{ color: rgba(12,14,20,0.95); }
 
     .stats{
