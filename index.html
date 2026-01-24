@@ -2319,6 +2319,107 @@ body,
 }
 
 
+    /* =========================
+   FIX: Theme toggle icon (no weird moon/sun jump)
+   Paste at VERY END of <style>
+   ========================= */
+
+#themeToggle{
+  position: relative;
+  width: 46px;
+  height: 46px;
+  padding: 0 !important;
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Two icons stacked, we crossfade + rotate */
+#themeToggle .ticon{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 220ms var(--theme-ease),
+    transform 320ms var(--theme-ease);
+  will-change: opacity, transform;
+}
+
+/* Default (dark mode): show moon */
+#themeToggle .moon{ opacity: 1; transform: rotate(0) scale(1); }
+#themeToggle .sun { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+
+/* Light mode: show sun */
+#themeToggle.is-light .moon{ opacity: 0; transform: rotate(90deg) scale(0.6); }
+#themeToggle.is-light .sun { opacity: 1; transform: rotate(0) scale(1); }
+
+/* Kill the old conflicting icon-swap rules (you had multiple) */
+#themeToggle.icon-swap{
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Optional: tiny click “tap” feedback */
+#themeToggle:active{
+  transform: scale(0.97);
+}
+
+/* =========================
+   FIX: All cards switch at SAME speed (no fast ones)
+   Paste at VERY END of <style>
+   ========================= */
+
+:root{
+  --theme-dur: 420ms; /* a bit slower = smoother */
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Force consistent theme transitions everywhere important */
+.nav-inner,
+.card,
+.item,
+.timeline-item,
+.project-card,
+.cert,
+.stat,
+.verify-card,
+.time-card,
+.objective,
+.pill,
+.icon-chip,
+.tag,
+.btn,
+.icon-btn,
+.menu-btn,
+.nav-links a,
+.thumb-badge,
+.thumb-icon,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease) !important,
+    color            var(--theme-dur) var(--theme-ease) !important,
+    border-color     var(--theme-dur) var(--theme-ease) !important,
+    box-shadow       var(--theme-dur) var(--theme-ease) !important,
+    filter           var(--theme-dur) var(--theme-ease) !important,
+    transform        260ms var(--ease) !important;
+}
+
+/* During theme switching, disable hover-lift so nothing "pops" mid-toggle */
+body.theme-switching .item:hover,
+body.theme-switching .timeline-item:hover,
+body.theme-switching .verify-card:hover,
+body.theme-switching .cert:hover,
+body.theme-switching .project-card:hover,
+body.theme-switching .stat:hover,
+body.theme-switching .time-card:hover,
+body.theme-switching .objective:hover{
+  transform: none !important;
+}
+
+
     
   </style>
 </head>
@@ -2365,7 +2466,11 @@ body,
             <span class="dot3"></span>
           </button>
 
-          <button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">🌙</button>
+<button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">
+  <span class="ticon moon" aria-hidden="true">🌙</span>
+  <span class="ticon sun" aria-hidden="true">☀️</span>
+</button>
+
           <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
         </div>
       </div>
@@ -2907,58 +3012,58 @@ body,
   </button>
 
   <script>
-// Theme toggle (no white flash) + smooth icon
+// Theme toggle (no white flash) + stable icon crossfade
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
-const setIcon = () => {
-  toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+const syncToggleIcon = () => {
+  toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
 (function initTheme(){
   const saved = localStorage.getItem("theme");
   if (saved === "light") document.body.classList.add("light");
-  setIcon();
+  syncToggleIcon();
 
-toggle.addEventListener("click", () => {
-  // snapshot current background into overlay
-  const cs = getComputedStyle(document.body);
-  fade.style.backgroundColor = cs.backgroundColor;
-  fade.style.backgroundImage = cs.backgroundImage;
-  fade.style.backgroundSize = cs.backgroundSize;
-  fade.style.backgroundPosition = cs.backgroundPosition;
-  fade.style.backgroundRepeat = cs.backgroundRepeat;
+  toggle.addEventListener("click", () => {
+    // Prevent hover transforms / weird mid-toggle pops
+    document.body.classList.add("theme-switching");
 
-  // show overlay (covers while switching)
-  fade.classList.add("show");
+    // snapshot current background into overlay
+    const cs = getComputedStyle(document.body);
+    fade.style.backgroundColor = cs.backgroundColor;
+    fade.style.backgroundImage = cs.backgroundImage;
+    fade.style.backgroundSize = cs.backgroundSize;
+    fade.style.backgroundPosition = cs.backgroundPosition;
+    fade.style.backgroundRepeat = cs.backgroundRepeat;
 
-  // icon animation
-  toggle.classList.remove("icon-swap");
-  void toggle.offsetWidth;
-  toggle.classList.add("icon-swap");
+    // show overlay
+    fade.classList.add("show");
 
-  // switch theme on next frame (so overlay is visible first)
-  requestAnimationFrame(() => {
-    document.body.classList.toggle("light");
-    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
-    setIcon();
+    // switch theme next frame
+    requestAnimationFrame(() => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-    const themeMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeMeta) {
-      themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
-    }
+      // update meta theme-color
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
+      }
 
-    // fade overlay out after theme applied
-    requestAnimationFrame(() => fade.classList.remove("show"));
+      // icon crossfade (no emoji swapping)
+      syncToggleIcon();
 
-    setTimeout(() => toggle.classList.remove("icon-swap"), 420);
+      // fade overlay out
+      requestAnimationFrame(() => fade.classList.remove("show"));
+
+      // release "theme-switching" after transition finishes
+      window.setTimeout(() => {
+        document.body.classList.remove("theme-switching");
+      }, 460);
+    });
   });
-}, { passive: true });
-
 })();
-
-
-
 
     // Optimize background orb on slow devices
     (function optimizeBackground(){
