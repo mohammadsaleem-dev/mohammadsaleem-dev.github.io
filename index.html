@@ -2506,6 +2506,35 @@ body{
   pointer-events: none !important;
 }
 
+    /* =========================
+   FIX: Logos & profile photo switch smoothly
+   Paste at VERY END of <style>
+   ========================= */
+
+:root{
+  --theme-dur: 420ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Make ALL logo/profile images animate with the same timing */
+.profile-avatar,
+.logo,
+.issuer-logo{
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    border-color     var(--theme-dur) var(--theme-ease),
+    box-shadow       var(--theme-dur) var(--theme-ease),
+    filter           var(--theme-dur) var(--theme-ease) !important;
+}
+
+/* Optional: tiny crossfade feel (looks premium) */
+body.theme-switching .profile-avatar,
+body.theme-switching .logo,
+body.theme-switching .issuer-logo{
+  filter: brightness(0.98) contrast(1.02);
+}
+
+
   </style>
 </head>
 
