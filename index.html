@@ -125,12 +125,14 @@ body{
     color var(--theme-dur) var(--theme-ease);
 }
 
-  /* ✅ Force same theme transition on all themed surfaces + text */
-body, body *{
+/* ✅ Only animate theme changes while toggling (does NOT kill hover animations) */
+body.theme-switching,
+body.theme-switching *{
   transition-property: background-color, color, border-color, box-shadow, filter, opacity;
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
+
 
 
 a{ color: inherit; text-decoration: none; }
@@ -475,8 +477,18 @@ button.brand{
   contain: content;
 }
 
-/* Hover lift */
-.card:hover,
+/* ✅ Cards: no translateY (prevents hover loop glitch at the bottom edge) */
+.card:hover{
+  border-color: var(--border);
+  box-shadow: var(--hover-shadow), var(--hover-ring);
+}
+
+    /* smoother GPU hover */
+:where(.btn,.icon-btn,.pill,.tag,.icon-chip,.item,.timeline-item,.project-card,.cert,.verify-card,.stat,.time-card,.objective){
+  will-change: transform;
+}
+
+/* ✅ Other components can still lift smoothly */
 .item:hover,
 .timeline-item:hover,
 .project-card:hover,
@@ -489,6 +501,7 @@ button.brand{
   border-color: var(--border);
   box-shadow: var(--hover-shadow), var(--hover-ring);
 }
+
 
 /* -------------------------
    HERO (NAME + SUBTITLE + LOCATION)
