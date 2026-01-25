@@ -79,6 +79,10 @@
   --hover-dur: 260ms;
   --hover-ease: cubic-bezier(.22,.61,.36,1);
 }
+    /* Prevent visible "top then jump" on refresh */
+html.preload body{ visibility: hidden; }
+html.preload #introOverlay{ visibility: visible; } /* keep welcome overlay visible */
+
 
 /* Light theme */
 body.light{
@@ -1813,11 +1817,13 @@ body:not(.light) #introOverlay{
 
   <script>
 
-/* =========================
-   KEEP SCROLL POSITION ON REFRESH
+    /* =========================
+   NO TOP-FLASH SCROLL RESTORE (EARLY)
    ========================= */
 (function () {
-  // Turn off browser auto restoration (we restore manually)
+  // Hide body until we restore scroll (prevents top->jump flash)
+  document.documentElement.classList.add("preload");
+
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
   const KEY = "scrollY";
@@ -1826,24 +1832,26 @@ body:not(.light) #introOverlay{
     try { sessionStorage.setItem(KEY, String(window.scrollY || 0)); } catch {}
   };
 
-  // Save continuously (lightweight) + before unload
+  // Save on scroll + unload (works even if scripts later fail)
   window.addEventListener("scroll", save, { passive: true });
   window.addEventListener("beforeunload", save);
 
-  // Restore on load/pageshow (handles BFCache too)
-  const restore = () => {
+  // Restore ASAP, then show body
+  const restoreNow = () => {
     let y = 0;
     try { y = parseInt(sessionStorage.getItem(KEY) || "0", 10) || 0; } catch {}
 
-    // restore after layout settles
+    // Do it immediately (no smooth)
+    try { window.scrollTo(0, y); } catch {}
+
+    // Reveal body next frame (so layout is ready)
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        window.scrollTo(0, y);
-      });
+      document.documentElement.classList.remove("preload");
     });
   };
 
-  window.addEventListener("pageshow", restore);
+  // pageshow handles normal load + BFCache
+  window.addEventListener("pageshow", restoreNow, { once: true });
 })();
 
 // Theme toggle (no white flash) + stable icon crossfade
