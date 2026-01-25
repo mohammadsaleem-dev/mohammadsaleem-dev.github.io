@@ -125,6 +125,14 @@ body{
     color var(--theme-dur) var(--theme-ease);
 }
 
+  /* ✅ Force same theme transition on all themed surfaces + text */
+body, body *{
+  transition-property: background-color, color, border-color, box-shadow, filter, opacity;
+  transition-duration: var(--theme-dur);
+  transition-timing-function: var(--theme-ease);
+}
+
+
 a{ color: inherit; text-decoration: none; }
 footer p{ margin: 6px 0; }
 
@@ -1046,6 +1054,24 @@ button.brand{
   margin: 48px 0;
 }
 
+  /* -------------------------
+   THEME FADE OVERLAY (prevents white flash + sync feel)
+------------------------- */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  z-index: 9998;            /* below introOverlay (9999), above page */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--theme-dur) var(--theme-ease);
+  will-change: opacity;
+}
+
+#themeFade.show{
+  opacity: 1;
+}
+
+
 /* -------------------------
    INTRO OVERLAY
 ------------------------- */
@@ -1123,17 +1149,6 @@ body:not(.light) #introOverlay{
   flex: 0 0 auto;
 }
 
-.cursor{
-  display:inline-block;
-  width: 10px;
-  height: 1.1em;
-  transform: translateY(3px);
-  margin-left: 6px;
-  border-radius: 2px;
-  background: var(--text);
-  opacity: 0.7;
-  animation: blink 1s steps(1) infinite;
-}
 @keyframes blink{ 50%{ opacity: 0; } }
 
 .intro-sub{ margin: 12px 0 0; color: var(--muted); font-weight: 700; }
@@ -1576,7 +1591,7 @@ body:not(.light) #introOverlay{
             </div>
             <div class="t-date">2019 – 2020</div>
           </div>
-
+        </div> <!-- end .timeline -->
         <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
         <p class="lead" style="margin: 0;">
           My research interests focus on <b>secure and trustworthy systems</b>, especially
@@ -1838,7 +1853,7 @@ const syncToggleIcon = () => {
       // release "theme-switching" after transition finishes
       window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, 460);
+      }, 540);
     });
   });
 })();
