@@ -79,10 +79,6 @@
   --hover-dur: 260ms;
   --hover-ease: cubic-bezier(.22,.61,.36,1);
 }
-    /* Prevent visible "top then jump" on refresh */
-html.preload body{ visibility: hidden; }
-html.preload #introOverlay{ visibility: visible; } /* keep welcome overlay visible */
-
 
 /* Light theme */
 body.light{
@@ -1213,10 +1209,12 @@ body:not(.light) #introOverlay{
   .hero-actions{ flex-direction: column; align-items: stretch; }
   .hero-actions .btn{ width: 100%; }
 }
-  html{ scroll-behavior: smooth; }
-    
 </style>
+
+
+
 </head>
+
 <body>
   <!-- Intro typing overlay -->
   <div id="themeFade" aria-hidden="true"></div>
@@ -1816,44 +1814,6 @@ body:not(.light) #introOverlay{
   </button>
 
   <script>
-
-    /* =========================
-   NO TOP-FLASH SCROLL RESTORE (EARLY)
-   ========================= */
-(function () {
-  // Hide body until we restore scroll (prevents top->jump flash)
-  document.documentElement.classList.add("preload");
-
-  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-
-  const KEY = "scrollY";
-
-  const save = () => {
-    try { sessionStorage.setItem(KEY, String(window.scrollY || 0)); } catch {}
-  };
-
-  // Save on scroll + unload (works even if scripts later fail)
-  window.addEventListener("scroll", save, { passive: true });
-  window.addEventListener("beforeunload", save);
-
-  // Restore ASAP, then show body
-  const restoreNow = () => {
-    let y = 0;
-    try { y = parseInt(sessionStorage.getItem(KEY) || "0", 10) || 0; } catch {}
-
-    // Do it immediately (no smooth)
-    try { window.scrollTo(0, y); } catch {}
-
-    // Reveal body next frame (so layout is ready)
-    requestAnimationFrame(() => {
-      document.documentElement.classList.remove("preload");
-    });
-  };
-
-  // pageshow handles normal load + BFCache
-  window.addEventListener("pageshow", restoreNow, { once: true });
-})();
-
 // Theme toggle (no white flash) + stable icon crossfade
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
@@ -2126,7 +2086,7 @@ const syncToggleIcon = () => {
 const startOnce = () => {
   if (overlay.dataset.ran === "1") return;   // hard guard
   overlay.dataset.ran = "1";
-  runIntro({ goTop: false });
+  runIntro({ goTop: true });
 };
 
 // pageshow fires on normal load + BFCache restore
