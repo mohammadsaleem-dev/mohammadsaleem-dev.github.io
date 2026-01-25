@@ -76,6 +76,8 @@
 
   /* hover border ring */
   --hover-ring: 0 0 0 1px rgba(88,166,255,0.22) inset;
+  --hover-dur: 260ms;
+  --hover-ease: cubic-bezier(.22,.61,.36,1);
 }
 
 /* Light theme */
@@ -156,8 +158,23 @@ a:focus-visible, button:focus-visible{
     border-color var(--theme-dur) var(--theme-ease),
     box-shadow var(--theme-dur) var(--theme-ease),
     filter var(--theme-dur) var(--theme-ease),
-    opacity var(--theme-dur) var(--theme-ease);
+    opacity var(--theme-dur) var(--theme-ease),
+    transform var(--hover-dur) var(--hover-ease); /* ✅ THIS fixes instant hover */
 }
+    /* icons/chips visual smoothness */
+.icon-chip .sicon,
+.thumb-icon,
+.icon-btn i{
+  transition: transform var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease);
+}
+
+.icon-chip:hover .sicon,
+.icon-btn:hover i,
+.thumb-badge:hover .thumb-icon{
+  transform: scale(1.06);
+}
+
 
 /* During toggle: disable hover “jump” while colors change */
 body.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, .verify-card, .stat, .time-card, .objective, .icon-chip, .pill, .tag, .icon-btn):hover{
@@ -211,8 +228,16 @@ footer{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
-  align-items: start;
+
+  align-items: stretch;     /* ✅ both columns stretch same height */
 }
+
+.two-col > .card{
+  height: 100%;             /* ✅ force equal height */
+  display: flex;
+  flex-direction: column;
+}
+
 @media (max-width: 960px){
   .two-col{ grid-template-columns: 1fr; }
 }
@@ -705,39 +730,6 @@ button.brand{
   box-shadow: var(--shadow);
 }
 
-/* ✅ Education: add blue line + dots like timeline */
-#education{ position: relative; }
-#education::before{
-  content:"";
-  position:absolute;
-  left: 18px;
-  top: 74px;          /* starts under title */
-  bottom: 26px;
-  width: 2px;
-  background: linear-gradient(to bottom, rgba(88,166,255,0.55), rgba(88,166,255,0.10));
-  border-radius: 999px;
-  opacity: 0.95;
-  pointer-events:none;
-}
-#education .item{
-  padding-left: 22px; /* room for dot */
-}
-#education .item::before{
-  content:"";
-  position:absolute;
-  left: 12px;
-  top: 20px;
-  width: 14px;
-  height: 14px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  box-shadow: var(--shadow);
-}
-#education .item:hover{
-  border-color: var(--border);
-  box-shadow: var(--hover-shadow), var(--hover-ring);
-}
-
 /* -------------------------
    PROJECTS
 ------------------------- */
@@ -858,6 +850,27 @@ button.brand{
 .t-title{ margin: 0 0 6px; font-weight: 900; }
 .t-meta{ margin: 0; color: var(--muted); font-weight: 650; line-height: 1.65; }
 .t-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; padding-left: 12px; }
+
+    /* =========================
+   EDUCATION = SAME TIMELINE STYLE
+   (uses .timeline + .timeline-item)
+   ========================= */
+#education .timeline{
+  margin-top: 14px;      /* space under Education title */
+  padding-left: 18px;    /* same as awards */
+}
+
+#education .timeline::before{
+  top: 10px;             /* start line a bit lower (fix "broken" look) */
+  bottom: 10px;
+}
+
+#education .timeline-item::before{
+  top: 20px;             /* dot aligned nicely with logo/text */
+}
+
+
+    
 
 /* -------------------------
    CERTIFICATES
@@ -1498,28 +1511,31 @@ body:not(.light) #introOverlay{
       <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
-        <div class="item">
-          <div class="left">
-            <img class="logo" src="assets/uoj.png" alt="University of Jordan logo">
-            <div class="textblock">
-              <p class="title">B.Sc. in Computer Engineering</p>
-              <p class="meta">University of Jordan — Amman, Jordan</p>
+        <div class="timeline">
+          <!-- Education 1 -->
+          <div class="timeline-item">
+            <div style="display:flex; gap:12px; align-items:flex-start; min-width:0;">
+              <img class="logo" src="assets/uoj.png" alt="University of Jordan logo">
+              <div style="min-width:0;">
+                <p class="t-title">B.Sc. in Computer Engineering</p>
+                <p class="t-meta">University of Jordan — Amman, Jordan</p>
+              </div>
             </div>
+            <div class="t-date">2020 – 2025</div>
           </div>
-          <div class="date">2020 – 2025</div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo"
-                 onerror="this.onerror=null; this.src='assets/al-jazeera.png';">
-            <div class="textblock">
-              <p class="title">High School Diploma (Tawjihi)</p>
-              <p class="meta">Al-Jazeera School — Amman, Jordan</p>
+  
+          <!-- Education 2 -->
+          <div class="timeline-item">
+            <div style="display:flex; gap:12px; align-items:flex-start; min-width:0;">
+              <img class="logo" src="assets/aljazeera.png" alt="Al-Jazeera School logo"
+                   onerror="this.onerror=null; this.src='assets/al-jazeera.png';">
+              <div style="min-width:0;">
+                <p class="t-title">High School Diploma (Tawjihi)</p>
+                <p class="t-meta">Al-Jazeera School — Amman, Jordan</p>
+              </div>
             </div>
+            <div class="t-date">2019 – 2020</div>
           </div>
-          <div class="date">2019 – 2020</div>
-        </div>
 
         <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
         <p class="lead" style="margin: 0;">
