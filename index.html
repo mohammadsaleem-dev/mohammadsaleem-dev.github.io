@@ -122,13 +122,12 @@ body{
 
   transition:
     background-color var(--theme-dur) var(--theme-ease),
-    color var(--theme-dur) var(--theme-ease);
 }
 
 /* ✅ Only animate theme changes while toggling (does NOT kill hover animations) */
 body.theme-switching,
 body.theme-switching *{
-  transition-property: background-color, color, border-color, box-shadow, filter, opacity;
+  transition-property: background-color, border-color, box-shadow, filter, opacity;
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
@@ -521,6 +520,20 @@ button.brand{
   letter-spacing: -0.7px;
   white-space: nowrap;
 }
+
+  /* ✅ Stop the NAME from fading through gray on theme toggle */
+.hero-title h1{
+  transition: none !important;     /* no color interpolation */
+  color: var(--text) !important;   /* always snap to the current theme text */
+}
+
+/* Optional: if you also want the subtitle/location to snap instantly */
+.subtitle,
+.locline,
+.lead{
+  transition: none !important;
+}
+
 
 /* Mobile: add space AFTER NAME */
 @media (max-width: 520px){
