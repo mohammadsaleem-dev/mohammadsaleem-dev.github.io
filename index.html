@@ -1209,12 +1209,10 @@ body:not(.light) #introOverlay{
   .hero-actions{ flex-direction: column; align-items: stretch; }
   .hero-actions .btn{ width: 100%; }
 }
+  html{ scroll-behavior: smooth; }
+    
 </style>
-
-
-
 </head>
-
 <body>
   <!-- Intro typing overlay -->
   <div id="themeFade" aria-hidden="true"></div>
@@ -1814,6 +1812,40 @@ body:not(.light) #introOverlay{
   </button>
 
   <script>
+
+/* =========================
+   KEEP SCROLL POSITION ON REFRESH
+   ========================= */
+(function () {
+  // Turn off browser auto restoration (we restore manually)
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  const KEY = "scrollY";
+
+  const save = () => {
+    try { sessionStorage.setItem(KEY, String(window.scrollY || 0)); } catch {}
+  };
+
+  // Save continuously (lightweight) + before unload
+  window.addEventListener("scroll", save, { passive: true });
+  window.addEventListener("beforeunload", save);
+
+  // Restore on load/pageshow (handles BFCache too)
+  const restore = () => {
+    let y = 0;
+    try { y = parseInt(sessionStorage.getItem(KEY) || "0", 10) || 0; } catch {}
+
+    // restore after layout settles
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, y);
+      });
+    });
+  };
+
+  window.addEventListener("pageshow", restore);
+})();
+
 // Theme toggle (no white flash) + stable icon crossfade
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
@@ -2086,7 +2118,7 @@ const syncToggleIcon = () => {
 const startOnce = () => {
   if (overlay.dataset.ran === "1") return;   // hard guard
   overlay.dataset.ran = "1";
-  runIntro({ goTop: true });
+  runIntro({ goTop: false });
 };
 
 // pageshow fires on normal load + BFCache restore
