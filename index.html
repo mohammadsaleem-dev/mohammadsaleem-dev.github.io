@@ -25,86 +25,94 @@
 
   <!-- Icons (Font Awesome) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
 /* =========================================================
-   FINAL <style> — fixes ALL your points (no missing parts)
-   1) Skills + Education side-by-side (desktop), stacked (mobile)
-   2) EDCO experience text replaced (CSS supports bullet list nicely)
-   3) Education gets SAME blue timeline line style
-   4) NO outer border lines unless hover
-   5) Theme switch: ALL cards change at SAME speed (no snapping)
+   ONE CLEAN STYLE (ALL FEATURES IN ONE PLACE)
+   - GitHub-like theme (no glass / no blur / no noise / no orb)
+   - Smooth theme switching (same speed everywhere)
+   - Premium hover lift
+   - Subtitle + location alignment fixes
+   - Skills icon chips
+   - Social brand colored icons
+   - Intro overlay (matches theme)
+   - Mobile hero spacing (space after name)
    ========================================================= */
 
 /* -------------------------
-   THEME TOKENS (ONE truth)
--------------------------- */
+   THEME TOKENS (DEFAULT: DARK)
+   ------------------------- */
 :root{
-  --font: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  /* Sizes */
+  --radius: 24px;
+  --radius2: 18px;
+  --max: 1240px;
+  --navh: 74px;
 
+  /* Motion */
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --theme-dur: 420ms;
+  --theme-ease: cubic-bezier(.22,.61,.36,1);
+
+  /* Typography */
+  --font: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   --h1: clamp(40px, 5vw, 60px);
   --h2: clamp(26px, 2.6vw, 34px);
   --h3: 18px;
   --body: 16px;
   --leading: 1.75;
 
-  --radius: 24px;
-  --radius2: 18px;
-  --max: 1240px;
-  --navh: 74px;
-
-  --ease: cubic-bezier(.22,.61,.36,1);
-
-  /* ✅ ONE source of truth for theme switching speed */
-  --theme-dur: 420ms;
-  --theme-ease: cubic-bezier(.22,.61,.36,1);
-
-  /* GitHub-ish dark */
+  /* GitHub-like (dark) */
   --bg: #0d1117;
   --panel: #161b22;
   --panel2: #161b22;
+  --border: #30363d;
   --text: #c9d1d9;
   --muted: #8b949e;
   --muted2: #6e7681;
-
   --accent: #58a6ff;
   --accent2: #2f81f7;
 
+  /* Shadows / hover */
   --shadow: 0 10px 26px rgba(0,0,0,0.35);
-  --glow: 0 12px 30px rgba(0,0,0,0.40);
-
-  /* ✅ borders: hidden by default, appear ONLY on hover */
-  --border: rgba(48,54,61,1);
-  --border-idle: rgba(0,0,0,0);              /* invisible */
-  --border-hover: rgba(88,166,255,0.38);     /* blue on hover */
+  --glow: 0 12px 26px rgba(0,0,0,0.40);
+  --hover-lift: translateY(-8px);
+  --hover-shadow: 0 18px 55px rgba(0,0,0,0.35);
+  --hover-stroke: inset 0 0 0 1px rgba(88,166,255,0.20);
 }
 
-/* Light mode */
+@media (min-width: 1400px){
+  :root{ --max: 1280px; }
+}
+
+/* Light theme */
 body.light{
   --bg: #ffffff;
   --panel: #f6f8fa;
   --panel2: #f6f8fa;
+  --border: #d0d7de;
   --text: #24292f;
   --muted: #57606a;
   --muted2: #6e7781;
-
   --accent: #0969da;
   --accent2: #1f6feb;
 
   --shadow: 0 10px 22px rgba(27,31,36,0.10);
   --glow: 0 12px 26px rgba(27,31,36,0.12);
 
-  --border-hover: rgba(9,105,218,0.25);
+  --hover-shadow: 0 18px 55px rgba(12,14,20,0.12);
+  --hover-stroke: inset 0 0 0 1px rgba(31,111,235,0.16);
 }
 
 /* -------------------------
-   BASE
--------------------------- */
-*{ box-sizing: border-box; }
+   GLOBAL
+   ------------------------- */
+*{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
 html{
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--navh) + 18px);
 }
+
 body{
   margin: 0;
   font-family: var(--font);
@@ -115,23 +123,37 @@ body{
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 
-  /* ✅ no gradient/glass — solid GitHub canvas */
+  /* IMPORTANT: GitHub-like solid canvas */
   background: var(--bg) !important;
+
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
 }
 
-/* ✅ remove expensive noise/orb if you still had them */
+/* Remove noise / orb from older versions if they exist in HTML */
 body::after{ display: none !important; }
-.bg-orb{ display: none !important; }
+.bg-orb{ display:none !important; }
 
 a{ color: inherit; text-decoration: none; }
 footer p{ margin: 6px 0; }
 
 a:focus-visible, button:focus-visible{
-  outline: 2px solid rgba(88,166,255,0.65);
+  outline: 2px solid rgba(88,166,255,0.55);
   outline-offset: 3px;
   border-radius: 12px;
 }
 
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .reveal{ transition: none !important; transform: none !important; opacity: 1 !important; }
+  #introOverlay *{ transition: none !important; }
+}
+
+/* -------------------------
+   CONTAINER / LAYOUT
+   ------------------------- */
 .container{
   max-width: var(--max);
   margin: 0 auto;
@@ -143,147 +165,47 @@ a:focus-visible, button:focus-visible{
   .container{ padding-left: 28px; padding-right: 28px; }
 }
 
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce){
-  html{ scroll-behavior: auto; }
-  .reveal{ transition: none !important; transform: none !important; opacity: 1 !important; }
-  #introOverlay *{ transition: none !important; }
+.grid{
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 18px;
+  margin-top: 18px;
 }
+@media (max-width: 960px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+/* Content visibility (perf) */
+section{
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+  margin-top: 28px;
+}
+footer{
+  content-visibility: auto;
+  contain-intrinsic-size: 200px;
+  text-align: center;
+  color: var(--muted2);
+  padding: 26px 0 10px;
+  margin-top: 26px;
+}
+
+.anchor{ scroll-margin-top: calc(var(--navh) + 18px); }
 
 /* -------------------------
-   ✅ THEME SWITCH CONSISTENCY (NO fast cards)
-   Fix: some elements used `background:` gradients -> SNAP
-   We force ALL surfaces to use background-color only.
--------------------------- */
-
-/* ✅ Normalize these to animatable background-color */
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.project-thumb,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.thumb-badge,
-.thumb-icon,
-.btn,
-.menu-btn,
-.logo,
-.issuer-logo,
-.intro-box,
-.intro-type{
-  background-image: none !important;     /* prevent gradient snapping */
-  background: none !important;           /* kill shorthand overrides */
-  background-color: var(--panel) !important;
-}
-
-/* Some sections need a slightly different surface */
-.card{ background-color: var(--panel2) !important; }
-
-/* ✅ One consistent transition set */
-body,
-.nav-inner,
-.card,
-.item,
-.timeline-item,
-.project-card,
-.project-thumb,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.btn,
-.icon-btn,
-.menu-btn,
-.nav-links a,
-.thumb-badge,
-.thumb-icon,
-.logo,
-.issuer-logo,
-.intro-box,
-.intro-type{
-  transition:
-    background-color var(--theme-dur) var(--theme-ease) !important,
-    color            var(--theme-dur) var(--theme-ease) !important,
-    border-color     var(--theme-dur) var(--theme-ease) !important,
-    box-shadow       var(--theme-dur) var(--theme-ease) !important,
-    filter           var(--theme-dur) var(--theme-ease) !important;
-}
-
-/* Keep hover transform separate */
-.btn, .icon-btn, .item, .timeline-item, .project-card, .cert, .verify-card, .stat, .time-card, .objective{
-  transition:
-    transform 260ms var(--ease),
-    background-color var(--theme-dur) var(--theme-ease),
-    color var(--theme-dur) var(--theme-ease),
-    box-shadow var(--theme-dur) var(--theme-ease),
-    filter var(--theme-dur) var(--theme-ease),
-    border-color var(--theme-dur) var(--theme-ease);
-}
-
-/* -------------------------
-   ✅ NO borders unless hover
--------------------------- */
-.card,
-.item,
-.timeline-item,
-.project-card,
-.cert,
-.stat,
-.verify-card,
-.time-card,
-.objective,
-.tag,
-.pill,
-.icon-chip,
-.logo,
-.issuer-logo,
-.nav-inner,
-.btn,
-.menu-btn{
-  border: 1px solid var(--border-idle) !important; /* invisible */
-}
-
-/* Show border only on hover (premium) */
-.card:hover,
-.item:hover,
-.timeline-item:hover,
-.project-card:hover,
-.cert:hover,
-.stat:hover,
-.verify-card:hover,
-.time-card:hover,
-.objective:hover,
-.tag:hover,
-.pill:hover,
-.icon-chip:hover,
-.nav-inner:hover{
-  border-color: var(--border-hover) !important;
-  box-shadow: var(--glow) !important;
-}
-
-/* -------------------------
-   NAV (solid)
--------------------------- */
+   NAV
+   ------------------------- */
 .nav{
   position: sticky;
   top: 0;
   z-index: 50;
   padding-top: 14px;
+
+  /* no blur/glass */
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
 .nav-inner{
   height: var(--navh);
   display: grid;
@@ -292,10 +214,17 @@ body,
   gap: 14px;
   padding: 0 18px;
   border-radius: 999px;
+
+  background-color: var(--panel);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow);
+
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
 }
 
-/* Links */
 .brand{ justify-self: start; }
 .nav-links{ justify-self: center; }
 .nav-actions{ justify-self: end; }
@@ -317,11 +246,24 @@ button.brand{
   font: inherit;
   color: inherit;
 }
+
+.profile-avatar{
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+  transition:
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
+
 .brand-initials{
   font-weight: 900;
   font-size: 15px;
   letter-spacing: 1px;
-  color: var(--accent) !important;
+  color: var(--accent);
 }
 
 .nav-links{
@@ -338,35 +280,14 @@ button.brand{
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
-  transition: 180ms ease;
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
   flex: 0 0 auto;
 }
 .nav-links a:hover{
   color: var(--text);
-  background-color: rgba(127,127,127,0.10);
-}
-
-/* Hamburger (3 dots) */
-.menu-btn{
-  display: none;
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
-  background-color: var(--panel) !important;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 5px;
-  flex-shrink: 0;
-}
-.menu-btn .dot3{
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--text);
-  opacity: 0.85;
-  display: inline-block;
+  background: rgba(127,127,127,0.10);
 }
 
 .nav-actions{
@@ -374,6 +295,37 @@ button.brand{
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+}
+
+/* Hamburger */
+.menu-btn{
+  display: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease);
+}
+.menu-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--glow);
+}
+.menu-btn .dot3{
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--text);
+  opacity: .85;
 }
 
 /* Mobile dropdown */
@@ -388,7 +340,8 @@ button.brand{
     top: calc(100% + 10px);
     padding: 12px;
     border-radius: 18px;
-    background-color: var(--panel) !important;
+    border: 1px solid var(--border);
+    background: var(--panel);
     box-shadow: var(--shadow);
     flex-direction: column;
     gap: 8px;
@@ -425,13 +378,17 @@ button.brand{
   .nav-links a{
     padding: 12px 12px;
     border-radius: 14px;
-    background-color: rgba(127,127,127,0.08);
+    background: rgba(127,127,127,0.08);
+    color: var(--text);
+  }
+  .nav-links a:hover{
+    background: rgba(127,127,127,0.14);
   }
 }
 
 /* -------------------------
    BUTTONS
--------------------------- */
+   ------------------------- */
 .btn{
   display: inline-flex;
   align-items: center;
@@ -439,70 +396,110 @@ button.brand{
   gap: 10px;
   padding: 12px 16px;
   border-radius: 999px;
-  background-color: var(--panel) !important;
+  border: 1px solid var(--border);
+  background: var(--panel);
   color: var(--text);
   font-weight: 800;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  box-shadow: none !important;
+
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
 }
 .btn:hover{
   transform: translateY(-1px);
-  box-shadow: var(--glow) !important;
+  box-shadow: var(--glow), var(--hover-stroke);
 }
-.btn-ghost{ opacity: 0.95; }
 
-/* ✅ Primary stays BLUE always */
+/* Primary stays BLUE */
 .btn.btn-primary{
   background: linear-gradient(135deg, var(--accent2), var(--accent)) !important;
-  color: #fff !important;
-  border: 1px solid rgba(0,0,0,0) !important;
+  border: 0 !important;
+  color: #ffffff !important;
 }
-.btn.btn-primary:hover{ filter: brightness(1.06) !important; }
+.btn.btn-primary:hover{
+  filter: brightness(1.06);
+}
 
 /* -------------------------
-   HERO (name + subtitle)
--------------------------- */
+   CARDS / COMMON SURFACES
+   ------------------------- */
+.card{
+  border: 1px solid var(--border);
+  background-color: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 26px;
+  position: relative;
+  overflow: hidden;
+  contain: content;
+
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
+
+/* Hover lift (premium) */
+.card:hover,
+.item:hover,
+.timeline-item:hover,
+.project-card:hover,
+.cert:hover,
+.verify-card:hover,
+.stat:hover,
+.time-card:hover,
+.objective:hover{
+  transform: var(--hover-lift);
+  box-shadow: var(--hover-shadow), var(--hover-stroke);
+}
+
+/* -------------------------
+   HERO (NAME + SUBTITLE + LOCATION)
+   ------------------------- */
 .hero-title{
   display: flex;
   align-items: center;
   gap: 14px;
   flex-wrap: nowrap;
 }
+
 .hero-title h1{
   margin: 0 0 8px;
   font-size: var(--h1);
   letter-spacing: -0.7px;
   white-space: nowrap;
 }
-.profile-avatar{
-  width: 60px;
-  height: 60px;
-  border-radius: 999px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
 
-/* Mobile hero tweaks */
+/* Mobile: add space AFTER NAME (your request) */
 @media (max-width: 520px){
   .hero-title{
-    flex-wrap: nowrap;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
   }
   .hero-title h1{
-    flex: 1;
-    min-width: 0;
     white-space: normal;
+    overflow-wrap: normal;
     line-height: 1.05;
     font-size: clamp(28px, 7vw, 40px);
-    margin: 0 0 14px !important;
+    margin: 0 0 14px !important; /* ✅ space under name */
   }
-  .profile-avatar{ width: 44px; height: 44px; }
+  .profile-avatar{
+    width: 46px;
+    height: 46px;
+  }
 }
 
-/* Subtitle row with icon */
+/* Subtitle alignment (PC icon + text) */
 .subtitle-row{
   display: inline-flex;
   align-items: center;
@@ -511,9 +508,11 @@ button.brand{
   line-height: 1;
   margin-bottom: 10px;
 }
-.subtitle-row span:last-child{ line-height: 1.2; }
+.subtitle-row span:last-child{
+  line-height: 1.2;
+}
 
-/* Mini PC icon */
+/* Small colorful PC icon */
 .mini-pc{
   width: 28px;
   height: 28px;
@@ -524,7 +523,9 @@ button.brand{
   flex: 0 0 28px;
   line-height: 1;
   transform: translateY(1px);
-  background: rgba(127,127,127,0.12);
+  background: rgba(127,127,127,0.10);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 .mini-pc i{
   font-size: 14px;
@@ -532,6 +533,7 @@ button.brand{
   color: var(--accent);
 }
 
+/* Subtitle text */
 .subtitle{
   color: var(--muted);
   font-size: 16px;
@@ -539,7 +541,7 @@ button.brand{
   margin-bottom: 10px;
 }
 
-/* Location line */
+/* Location row */
 .locline{
   display: flex;
   align-items: center;
@@ -550,77 +552,93 @@ button.brand{
   font-weight: 800;
   margin-left: 8px;
 }
-.locline span{ padding-left: 6px; }
 .locline i{
   font-size: 18px;
   line-height: 1;
   transform: translateY(1px);
-  color: var(--accent) !important;
+  color: var(--accent);
+}
+.locline span{
+  padding-left: 6px; /* moves ONLY text, not the icon */
+}
+
+/* Make long text readable */
+.lead,
+.project-desc,
+.t-meta,
+.item .meta,
+.section-sub,
+.objective p{
+  max-width: 70ch;
 }
 
 /* -------------------------
-   LAYOUT GRID
--------------------------- */
-.grid{
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 18px;
-  margin-top: 18px;
+   OBJECTIVE BOX
+   ------------------------- */
+.objective{
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background-color: var(--panel);
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    border-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
 }
-@media (max-width: 960px){
-  .grid{ grid-template-columns: 1fr; }
+.objective h3{
+  margin: 0 0 8px;
+  font-size: 16px;
+  letter-spacing: -0.1px;
 }
-
-/* Base card */
-.card{
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 26px;
-  position: relative;
-  overflow: hidden;
-  contain: content;
-}
-
-/* Sections */
-section{ margin-top: 28px; }
-.section-title{
-  font-size: var(--h2);
-  margin: 0 0 12px;
-  letter-spacing: -0.2px;
-}
-.section-sub{
-  margin: -4px 0 14px;
-  color: var(--muted2);
-  line-height: 1.6;
+.objective p{
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 600;
 }
 
 /* -------------------------
-   ✅ 1) SKILLS + EDUCATION side-by-side
-   Add wrapper around them in HTML:
-   <div class="two-up">
-     <section id="skills">...</section>
-     <section id="education">...</section>
-   </div>
--------------------------- */
-.two-up{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  align-items: start;
+   PILLS
+   ------------------------- */
+.pill-row{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
 }
-@media (max-width: 960px){
-  .two-up{ grid-template-columns: 1fr; }
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 0;                 /* ✅ no outline in dark */
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 13px;
+  gap: 8px;
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
+}
+.pill:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--glow), var(--hover-stroke);
 }
 
 /* -------------------------
-   SKILLS chips
--------------------------- */
+   SKILLS (ICON CHIPS)
+   ------------------------- */
 .skill-icons{
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
-  margin: 14px 0 8px;
+  align-content: flex-start;
+  margin: 14px 0 2px;
 }
 .icon-chip{
   display: inline-flex;
@@ -628,13 +646,24 @@ section{ margin-top: 28px; }
   gap: 10px;
   padding: 10px 14px;
   border-radius: 999px;
-  background-color: rgba(127,127,127,0.08) !important;
+  background: var(--panel);
   font-weight: 800;
   color: var(--text);
   line-height: 1;
   min-height: 44px;
   white-space: nowrap;
+  border: 0; /* ✅ no outline */
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
 }
+.icon-chip:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--glow), var(--hover-stroke);
+}
+
+/* Icon square inside chip */
 .sicon{
   width: 30px;
   height: 30px;
@@ -644,9 +673,14 @@ section{ margin-top: 28px; }
   justify-content: center;
   flex: 0 0 30px;
   line-height: 1;
-  background: rgba(127,127,127,0.12);
+  border: 0;
+  box-shadow: var(--shadow);
 }
-.sicon i{ font-size: 15px; color: #fff; }
+.sicon i{
+  font-size: 15px;
+  line-height: 1;
+  color: #fff;
+}
 .sicon .cpp-badge{
   width: 100%;
   height: 100%;
@@ -660,7 +694,7 @@ section{ margin-top: 28px; }
   background: transparent;
 }
 
-/* skill colors */
+/* Skill colors */
 .sicon.java  { background: linear-gradient(135deg, #ff7a59, #ff3d77); }
 .sicon.cpp   { background: linear-gradient(135deg, #5aa7ff, #7c4dff); }
 .sicon.python{ background: linear-gradient(135deg, #2dd4bf, #fbbf24); }
@@ -668,24 +702,71 @@ section{ margin-top: 28px; }
 .sicon.eth   { background: linear-gradient(135deg, #7aa2ff, #6ee7ff); }
 .sicon.chain { background: linear-gradient(135deg, #60a5fa, #38bdf8); }
 
-/* Skill list */
-.list{
-  margin: 0;
-  padding-left: 18px;
+/* -------------------------
+   STATS
+   ------------------------- */
+.stats{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.stat{
+  border-radius: 18px;
+  padding: 14px;
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
+}
+.stat b{
+  display:block;
+  font-size: 16px;
+  letter-spacing: -0.2px;
+  font-weight: 900;
+}
+.stat span{
+  display:block;
+  margin-top: 4px;
+  font-size: 13px;
   color: var(--muted);
-  line-height: 1.9;
+  font-weight: 800;
+}
+@media (max-width: 960px){
+  .stats{ grid-template-columns: 1fr; }
 }
 
 /* -------------------------
-   ITEMS (Education list cards)
--------------------------- */
+   SECTION TITLES
+   ------------------------- */
+.section-title{
+  font-size: var(--h2);
+  margin: 0 0 12px;
+  letter-spacing: -0.2px;
+}
+.section-sub{
+  margin: -4px 0 14px;
+  color: var(--muted2);
+  line-height: 1.6;
+}
+
+/* -------------------------
+   ITEMS (Education, etc.)
+   ------------------------- */
 .item{
   display:flex;
   justify-content: space-between;
   gap: 14px;
   padding: 14px 16px;
   border-radius: 16px;
-  background-color: rgba(127,127,127,0.06) !important;
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
 }
 .item + .item{ margin-top: 12px; }
 
@@ -705,21 +786,135 @@ section{ margin-top: 28px; }
   padding-left: 10px;
 }
 
-.logo{
+.logo,
+.issuer-logo{
   width: 46px;
   height: 46px;
   border-radius: 14px;
   object-fit: contain;
-  background-color: rgba(127,127,127,0.08) !important;
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
   padding: 8px;
   flex: 0 0 auto;
+  box-shadow: var(--shadow);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
+  transition:
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
 }
 
 /* -------------------------
-   ✅ 3) Education BLUE LINE like Experience/Awards
-   Use same timeline styles for education:
-   Wrap your education items in <div class="timeline edu-timeline"> ... </div>
--------------------------- */
+   PROJECTS
+   ------------------------- */
+.projects-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 900px){
+  .projects-grid{ grid-template-columns: 1fr; }
+}
+
+.project-card{
+  border-radius: var(--radius2);
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 150px auto;
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
+}
+
+.project-thumb{
+  position: relative;
+  overflow: hidden;
+  background-color: var(--panel);
+  border-bottom: 0 !important;
+  transition: background-color var(--theme-dur) var(--theme-ease);
+}
+
+.thumb-badge{
+  position:absolute;
+  left: 14px;
+  top: 14px;
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 0; /* ✅ no outline */
+  background-color: var(--panel2);
+  font-weight: 900;
+  color: var(--text);
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
+}
+
+.thumb-icon{
+  width: 34px; height: 34px;
+  border-radius: 12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background-color: var(--panel);
+  border: 0; /* ✅ no outline */
+  transition: background-color var(--theme-dur) var(--theme-ease);
+}
+
+.project-body{ padding: 16px 16px 18px; }
+.project-title{
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+.project-desc{
+  margin: 0 0 12px;
+  color: var(--muted);
+  line-height: 1.65;
+  font-weight: 600;
+}
+.tags{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+.tag{
+  font-size: 12px;
+  font-weight: 900;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 0; /* ✅ no outline */
+  background: rgba(127,127,127,0.10);
+  color: var(--text);
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
+}
+.tag:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--glow), var(--hover-stroke);
+}
+.project-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.btn-sm{ padding: 10px 12px; font-weight: 900; border-radius: 999px; }
+
+/* -------------------------
+   TIMELINE
+   ------------------------- */
 .timeline{
   position: relative;
   padding-left: 18px;
@@ -732,7 +927,7 @@ section{ margin-top: 28px; }
   top: 4px;
   bottom: 4px;
   width: 2px;
-  background: linear-gradient(to bottom, rgba(88,166,255,0.55), rgba(47,129,247,0.18));
+  background: linear-gradient(to bottom, rgba(88,166,255,0.55), rgba(88,166,255,0.10));
   border-radius: 999px;
   opacity: 0.9;
 }
@@ -742,11 +937,17 @@ section{ margin-top: 28px; }
   margin: 0 0 14px;
   padding: 14px 16px;
   border-radius: 16px;
-  background-color: rgba(127,127,127,0.06) !important;
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 12px;
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
 }
+
 .timeline-item::before{
   content:"";
   position:absolute;
@@ -756,55 +957,17 @@ section{ margin-top: 28px; }
   height: 14px;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent2), var(--accent));
-  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+  border: 0 !important; /* ✅ remove ring */
+  box-shadow: var(--shadow);
 }
 
-/* Education timeline variant (same visuals, just a name) */
-.edu-timeline{ margin-top: 12px; }
-
-/* Titles/meta */
-.t-title{
-  margin: 0 0 6px;
-  font-weight: 900;
-  letter-spacing: -0.2px;
-}
-.t-meta{
-  margin: 0;
-  color: var(--muted);
-  font-weight: 650;
-  line-height: 1.65;
-}
-.t-date{
-  color: var(--muted2);
-  font-weight: 900;
-  white-space: nowrap;
-  padding-left: 12px;
-}
+.t-title{ margin: 0 0 6px; font-weight: 900; letter-spacing: -0.2px; }
+.t-meta{ margin: 0; color: var(--muted); font-weight: 650; line-height: 1.65; }
+.t-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; padding-left: 12px; }
 
 /* -------------------------
-   ✅ 2) EDCO experience bullets formatting
-   Put your new EDCO text in HTML using:
-   <ul class="bullets"> ... </ul>
--------------------------- */
-.bullets{
-  margin: 8px 0 0;
-  padding-left: 18px;
-  color: var(--muted);
-  line-height: 1.8;
-}
-.bullets li{
-  margin: 6px 0;
-}
-
-/* -------------------------
-   ✅ Remove “Timeline view for quick scanning”
-   Just delete that text in HTML.
-   (No CSS needed.)
--------------------------- */
-
-/* -------------------------
-   Certificates grid (your screenshot)
--------------------------- */
+   CERTIFICATES
+   ------------------------- */
 .cert-grid{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -818,13 +981,18 @@ section{ margin-top: 28px; }
 }
 .cert{
   border-radius: 16px;
-  background-color: rgba(127,127,127,0.06) !important;
-  padding: 14px;
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
+  padding: 14px 14px;
   display:flex;
   flex-direction: column;
   gap: 10px;
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
 }
-.cert:hover{ transform: translateY(-2px); }
+.cert:hover{ transform: translateY(-6px); }
 
 .cert-top{
   display:flex;
@@ -842,32 +1010,169 @@ section{ margin-top: 28px; }
   gap: 10px;
   margin-top: 4px;
 }
-.issuer-logo{
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-  object-fit: contain;
-  background-color: rgba(127,127,127,0.08) !important;
-  padding: 8px;
-  flex: 0 0 auto;
+
+/* -------------------------
+   TIME WIDGET
+   ------------------------- */
+.meta-wrap{
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 6px;
+  width: 100%;
+}
+.time-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 6px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  border: 0; /* ✅ no outline */
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  min-width: 190px;
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
+}
+.time-label{
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  color: var(--muted2);
+}
+.time-value{
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  color: var(--text);
 }
 
 /* -------------------------
-   Reveal anim
--------------------------- */
-.reveal{
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 500ms ease, transform 500ms ease;
+   VERIFICATION
+   ------------------------- */
+.verify{
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 0 !important; /* ✅ no divider */
 }
-.reveal.show{
-  opacity: 1;
-  transform: translateY(0);
+.verify h3{
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: -0.2px;
+}
+.verify p{
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-weight: 650;
+}
+.verify-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 560px){
+  .verify-grid{ grid-template-columns: 1fr; }
+}
+.verify-card{
+  background: var(--panel);
+  border: 0; /* ✅ no outline */
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  gap: 6px;
+  min-height: 92px;
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease);
+}
+.verify-num{
+  font-size: 34px;
+  font-weight: 950;
+  letter-spacing: -0.6px;
+  line-height: 1;
+}
+.verify-label{
+  color: var(--muted);
+  font-weight: 900;
+  line-height: 1.2;
+}
+.verify-card small{
+  color: var(--muted2);
+  font-weight: 800;
 }
 
 /* -------------------------
-   Back-to-top
--------------------------- */
+   SOCIAL ICON BUTTONS (BRAND COLORS)
+   ------------------------- */
+.icon-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.icon-btn{
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 0; /* ✅ no outline */
+  background: var(--panel);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:
+    transform 260ms var(--ease),
+    background-color var(--theme-dur) var(--theme-ease),
+    box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease);
+}
+.icon-btn i{
+  font-size: 18px;
+  color: var(--text);
+  transition: transform 260ms var(--ease);
+}
+.icon-btn:hover{
+  transform: translateY(-6px);
+  box-shadow: var(--glow);
+}
+.icon-btn:hover i{ transform: scale(1.10); }
+
+/* Brand style */
+.icon-btn.brand{
+  background: var(--brand, rgba(127,127,127,0.10));
+  box-shadow: var(--shadow);
+}
+.icon-btn.brand i{ color: #fff !important; }
+.icon-btn.brand:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: var(--glow);
+}
+
+/* Brand colors */
+.icon-btn.github   { --brand:#181717; }
+.icon-btn.linkedin { --brand:#0A66C2; }
+.icon-btn.email    { --brand:#6c7bff; }
+.icon-btn.x        { --brand:#000000; }
+.icon-btn.facebook { --brand:#1877F2; }
+
+/* Instagram gradient */
+.icon-btn.instagram{
+  background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
+}
+
+/* -------------------------
+   BACK TO TOP
+   ------------------------- */
 .to-top{
   position: fixed;
   right: 18px;
@@ -875,7 +1180,8 @@ section{ margin-top: 28px; }
   width: 54px;
   height: 54px;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent2), var(--accent)) !important;
+  border: 0;
+  background: var(--accent2);
   color: white;
   font-weight: 900;
   cursor: pointer;
@@ -894,8 +1200,27 @@ section{ margin-top: 28px; }
 .to-top:hover{ filter: brightness(1.05); }
 
 /* -------------------------
-   Intro overlay (kept clean)
--------------------------- */
+   REVEAL
+   ------------------------- */
+.reveal{
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+.reveal.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-divider{
+  height:1px;
+  background: rgba(127,127,127,0.22);
+  margin: 48px 0;
+}
+
+/* -------------------------
+   INTRO OVERLAY (MATCH THEME)
+   ------------------------- */
 #introOverlay{
   position: fixed;
   inset: 0;
@@ -905,25 +1230,48 @@ section{ margin-top: 28px; }
   justify-content: center;
   background: var(--bg) !important;
   overflow: hidden;
-}
-#introOverlay.intro-hide{
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none !important;
+
+  opacity: 1;
+  visibility: visible;
   transition: opacity 520ms var(--theme-ease), visibility 0ms linear 520ms;
 }
+body:not(.light) #introOverlay{
+  background:
+    radial-gradient(900px 520px at 15% 10%, rgba(88,166,255,0.10), transparent 60%),
+    radial-gradient(700px 420px at 85% 0%, rgba(47,129,247,0.10), transparent 60%),
+    var(--bg) !important;
+}
+
+/* IMPORTANT: no noise layer */
+#introOverlay::after{ display:none !important; }
+
 .intro-box{
+  position: relative;
+  z-index: 2;
   width: min(720px, calc(100% - 36px));
   border-radius: 26px;
+  border: 0;
+  background: var(--panel);
+  box-shadow: var(--shadow);
   padding: 26px 22px;
   text-align: center;
-  box-shadow: var(--shadow);
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  transition:
+    transform 520ms var(--theme-ease),
+    opacity 520ms var(--theme-ease),
+    filter 520ms var(--theme-ease),
+    background-color var(--theme-dur) var(--theme-ease);
 }
+
 .intro-title{
   font-size: clamp(26px, 3.2vw, 36px);
   font-weight: 900;
   letter-spacing: -0.5px;
   margin: 0 0 10px;
+  color: var(--text);
 }
 .intro-type{
   font-size: clamp(20px, 3vw, 34px);
@@ -932,9 +1280,16 @@ section{ margin-top: 28px; }
   display: inline-block;
   padding: 10px 12px;
   border-radius: 18px;
+  background: rgba(127,127,127,0.10);
+  border: 0;
   min-height: 52px;
-  background-color: rgba(127,127,127,0.08) !important;
+  color: var(--text);
+
+  transition:
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
 }
+
 .cursor{
   display:inline-block;
   width: 10px;
@@ -942,7 +1297,7 @@ section{ margin-top: 28px; }
   transform: translateY(3px);
   margin-left: 6px;
   border-radius: 2px;
-  background: var(--text) !important;
+  background: var(--text);
   opacity: 0.7;
   animation: blink 1s steps(1) infinite;
 }
@@ -950,7 +1305,7 @@ section{ margin-top: 28px; }
 
 .intro-sub{
   margin: 12px 0 0;
-  color: var(--muted) !important;
+  color: var(--muted);
   font-weight: 700;
 }
 .intro-actions{
@@ -961,14 +1316,26 @@ section{ margin-top: 28px; }
   flex-wrap: wrap;
 }
 
+/* Hide overlay smoothly */
+#introOverlay.intro-hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none !important; /* ✅ never block clicks */
+}
+#introOverlay .intro-box{
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+  opacity: 1;
+}
+#introOverlay.intro-hide .intro-box{
+  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  filter: blur(3px);
+}
+
 /* -------------------------
-   ✅ Theme toggle icon (no jump)
-   HTML must have:
-   <button id="themeToggle" class="btn btn-ghost">
-     <span class="ticon moon"><i class="fa-solid fa-moon"></i></span>
-     <span class="ticon sun"><i class="fa-solid fa-sun"></i></span>
-   </button>
--------------------------- */
+   THEME TOGGLE ICON FIX (NO JUMP)
+   ------------------------- */
 #themeToggle{
   position: relative;
   width: 46px;
@@ -977,7 +1344,12 @@ section{ margin-top: 28px; }
   display: inline-grid;
   place-items: center;
   overflow: hidden;
+
+  transition: transform 260ms var(--ease);
 }
+#themeToggle:active{ transform: scale(0.97); }
+
+/* Two icons stacked */
 #themeToggle .ticon{
   position: absolute;
   inset: 0;
@@ -986,41 +1358,41 @@ section{ margin-top: 28px; }
   transition:
     opacity 220ms var(--theme-ease),
     transform 320ms var(--theme-ease);
+  will-change: opacity, transform;
 }
 #themeToggle .moon{ opacity: 1; transform: rotate(0) scale(1); }
 #themeToggle .sun { opacity: 0; transform: rotate(-90deg) scale(0.6); }
 #themeToggle.is-light .moon{ opacity: 0; transform: rotate(90deg) scale(0.6); }
 #themeToggle.is-light .sun { opacity: 1; transform: rotate(0) scale(1); }
-#themeToggle:active{ transform: scale(0.97); }
 
 /* -------------------------
-   Footer
--------------------------- */
-footer{
-  text-align: center;
-  color: var(--muted2);
-  padding: 26px 0 10px;
-  margin-top: 26px;
+   HERO ACTIONS (4 buttons row)
+   ------------------------- */
+.hero-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.hero-actions .btn{ padding: 12px 16px; }
+
+@media (max-width: 520px){
+  .hero-actions{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero-actions .btn{
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* -------------------------
-   Nice divider
--------------------------- */
-.section-divider{
-  height:1px;
-  background: linear-gradient(to right, transparent, rgba(127,127,127,.25), transparent);
-  margin: 48px 0;
-}
-
-/* Tap highlight */
-*{ -webkit-tap-highlight-color: transparent; }
-
-/* =========================
-   OPTIONAL: If you want Skills/Education title alignment nicer
-   ========================= */
-.card .section-title{ margin-top: 0; }
-
+   OPTIONAL: Perf mode (if you toggle it in JS)
+   ------------------------- */
+body.perf-mode *{ transition-duration: 0ms !important; }
 </style>
+
 
 </head>
 
