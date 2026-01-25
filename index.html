@@ -217,10 +217,9 @@ body.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, 
 }
 
 section{
-  content-visibility: auto;
-  contain-intrinsic-size: 800px;
   margin-top: 28px;
 }
+
 
 footer{
   content-visibility: auto;
@@ -474,7 +473,6 @@ button.brand{
   padding: 26px;
   position: relative;
   overflow: hidden;
-  contain: content;
 }
 
 /* ✅ Cards: no translateY (prevents hover loop glitch at the bottom edge) */
@@ -738,8 +736,7 @@ button.brand{
 .issuer-logo{
   width: 46px;
   height: 46px;
-  aspect-ratio: 1 / 1;
-  display: block;                 /* prevents inline-img baseline jitter */
+  display: block;
   flex: 0 0 46px;
 
   border-radius: 14px;
@@ -748,14 +745,16 @@ button.brand{
   background: var(--panel);
   border: 1px solid transparent;
   padding: 8px;
-
   box-shadow: var(--shadow);
 
-  /* anti-flicker / stable compositing */
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  /* IMPORTANT: remove GPU promotion (it can cause zoom artifacts) */
+  transform: none;
+  backface-visibility: visible;
 
-  /* IMPORTANT: don’t animate image rendering props */
+  /* better downscaling */
+  image-rendering: auto;
+  -ms-interpolation-mode: bicubic;
+
   transition: background-color var(--theme-dur) var(--theme-ease),
               border-color var(--theme-dur) var(--theme-ease),
               box-shadow var(--theme-dur) var(--theme-ease);
