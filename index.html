@@ -29,11 +29,9 @@
   <style>
 /* =========================================================
    CLEAN GITHUB THEME (FIX PACK)
-   1) Skills + Education side-by-side (two-col grid)
-   2) Remove "Timeline view for quick scanning." (Experience)
-   3) Education gets blue line + dots like Experience/Awards
-   4) No outer border unless hover
-   5) Uniform theme switching (no fast/slow cards)
+   ✅ Theme switch sync (all cards/icons same speed)
+   ✅ Intro typing: NO wrap (cursor never drops line)
+   ✅ Prevent hover jump during theme toggle
    ========================================================= */
 
 /* -------------------------
@@ -46,7 +44,7 @@
   --navh: 74px;
 
   --ease: cubic-bezier(.22,.61,.36,1);
-  --theme-dur: 520ms;                  /* ✅ unified duration */
+  --theme-dur: 520ms;
   --theme-ease: cubic-bezier(.22,.61,.36,1);
 
   --font: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
@@ -74,7 +72,6 @@
   --hover-lift: translateY(-8px);
   --hover-shadow: 0 18px 55px rgba(0,0,0,0.35);
 
-  /* hover border ring */
   --hover-ring: 0 0 0 1px rgba(88,166,255,0.22) inset;
   --hover-dur: 260ms;
   --hover-ease: cubic-bezier(.22,.61,.36,1);
@@ -143,14 +140,16 @@ a:focus-visible, button:focus-visible{
 
 /* -------------------------
    UNIFIED THEME SWITCHING
-   Fix: some cards switching faster
+   ✅ Fix: some cards switching faster
 ------------------------- */
 :where(
   .nav-inner, .card, .btn,
   .project-card, .timeline-item, .item,
   .cert, .verify-card, .stat, .time-card,
   .objective, .icon-chip, .pill, .tag, .icon-btn,
-  .thumb-badge, .thumb-icon, .logo, .issuer-logo
+  .thumb-badge, .thumb-icon, .logo, .issuer-logo,
+  /* ✅ also include intro elements */
+  #introOverlay, .intro-box, .intro-type
 ){
   transition:
     background-color var(--theme-dur) var(--theme-ease),
@@ -159,9 +158,10 @@ a:focus-visible, button:focus-visible{
     box-shadow var(--theme-dur) var(--theme-ease),
     filter var(--theme-dur) var(--theme-ease),
     opacity var(--theme-dur) var(--theme-ease),
-    transform var(--hover-dur) var(--hover-ease); /* ✅ THIS fixes instant hover */
+    transform var(--hover-dur) var(--hover-ease);
 }
-    /* icons/chips visual smoothness */
+
+/* icons/chips smoothness */
 .icon-chip .sicon,
 .thumb-icon,
 .icon-btn i{
@@ -175,9 +175,11 @@ a:focus-visible, button:focus-visible{
   transform: scale(1.06);
 }
 
-
 /* During toggle: disable hover “jump” while colors change */
-body.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, .verify-card, .stat, .time-card, .objective, .icon-chip, .pill, .tag, .icon-btn):hover{
+body.theme-switching :where(
+  .card, .project-card, .timeline-item, .item, .cert, .verify-card, .stat, .time-card,
+  .objective, .icon-chip, .pill, .tag, .icon-btn
+):hover{
   transform: none !important;
   box-shadow: var(--shadow) !important;
 }
@@ -228,16 +230,13 @@ footer{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
-
-  align-items: stretch;     /* ✅ both columns stretch same height */
+  align-items: stretch;
 }
-
 .two-col > .card{
-  height: 100%;             /* ✅ force equal height */
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
-
 @media (max-width: 960px){
   .two-col{ grid-template-columns: 1fr; }
 }
@@ -265,7 +264,7 @@ footer{
   border-radius: 999px;
 
   background-color: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   box-shadow: var(--shadow);
 }
 .nav-inner:hover{
@@ -316,9 +315,7 @@ button.brand{
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
-  transition:
-    background-color 240ms ease,
-    color 240ms ease;
+  transition: background-color 240ms ease, color 240ms ease;
   flex: 0 0 auto;
 }
 .nav-links a:hover{
@@ -339,7 +336,7 @@ button.brand{
   width: 46px;
   height: 46px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background: var(--panel);
   cursor: pointer;
   align-items: center;
@@ -372,7 +369,7 @@ button.brand{
     top: calc(100% + 10px);
     padding: 12px;
     border-radius: 18px;
-    border: 1px solid transparent; /* ✅ hidden */
+    border: 1px solid transparent;
     background: var(--panel);
     box-shadow: var(--shadow);
     flex-direction: column;
@@ -427,7 +424,7 @@ button.brand{
   gap: 10px;
   padding: 12px 16px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden unless hover */
+  border: 1px solid transparent;
   background: var(--panel);
   color: var(--text);
   font-weight: 800;
@@ -440,8 +437,6 @@ button.brand{
   box-shadow: var(--glow), var(--hover-ring);
   transform: translateY(-1px);
 }
-
-/* Primary stays BLUE */
 .btn.btn-primary{
   background: linear-gradient(135deg, var(--accent2), var(--accent)) !important;
   border: 1px solid transparent !important;
@@ -454,10 +449,9 @@ button.brand{
 
 /* -------------------------
    CARDS / SURFACES
-   ✅ No border unless hover
 ------------------------- */
 .card{
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background-color: var(--panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -466,8 +460,6 @@ button.brand{
   overflow: hidden;
   contain: content;
 }
-
-/* Hover lift */
 .card:hover,
 .item:hover,
 .timeline-item:hover,
@@ -491,7 +483,6 @@ button.brand{
   gap: 14px;
   flex-wrap: nowrap;
 }
-
 .profile-avatar{
   width: 60px;
   height: 60px;
@@ -500,15 +491,12 @@ button.brand{
   flex-shrink: 0;
   box-shadow: var(--shadow);
 }
-
 .hero-title h1{
   margin: 0 0 8px;
   font-size: var(--h1);
   letter-spacing: -0.7px;
   white-space: nowrap;
 }
-
-/* Mobile: add space AFTER NAME */
 @media (max-width: 520px){
   .hero-title{ align-items: flex-start; gap: 12px; }
   .hero-title h1{
@@ -549,7 +537,6 @@ button.brand{
   margin-bottom: 10px;
 }
 
-/* Location row */
 .locline{
   display: flex;
   align-items: center;
@@ -563,30 +550,26 @@ button.brand{
 .locline i{ font-size: 18px; transform: translateY(1px); color: var(--accent); }
 .locline span{ padding-left: 6px; }
 
-/* -------------------------
-   OBJECTIVE BOX (no border unless hover)
-------------------------- */
+/* Objective */
 .objective{
   margin-top: 12px;
   padding: 14px 16px;
   border-radius: 18px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background-color: var(--panel);
 }
 .objective:hover{ border-color: var(--border); }
 .objective h3{ margin: 0 0 8px; font-size: 16px; }
 .objective p{ margin: 0; color: var(--muted); line-height: 1.7; font-weight: 600; }
 
-/* -------------------------
-   PILLS (no border unless hover)
-------------------------- */
+/* Pills */
 .pill-row{ display:flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .pill{
   display:inline-flex;
   align-items:center;
   padding: 9px 12px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background: var(--panel);
   color: var(--text);
   font-weight: 800;
@@ -599,9 +582,7 @@ button.brand{
   transform: translateY(-1px);
 }
 
-/* -------------------------
-   SKILLS (ICON CHIPS)
-------------------------- */
+/* Skills chips */
 .skill-icons{
   display: flex;
   flex-wrap: wrap;
@@ -619,7 +600,7 @@ button.brand{
   font-weight: 800;
   color: var(--text);
   min-height: 44px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
 }
 .icon-chip:hover{
   border-color: var(--border);
@@ -652,9 +633,7 @@ button.brand{
 .sicon.eth   { background: linear-gradient(135deg, #7aa2ff, #6ee7ff); }
 .sicon.chain { background: linear-gradient(135deg, #60a5fa, #38bdf8); }
 
-/* -------------------------
-   STATS
-------------------------- */
+/* Stats */
 .stats{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -665,7 +644,7 @@ button.brand{
   border-radius: 18px;
   padding: 14px;
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
 }
 .stat:hover{ border-color: var(--border); }
 .stat b{ display:block; font-size: 16px; font-weight: 900; }
@@ -674,9 +653,7 @@ button.brand{
   .stats{ grid-template-columns: 1fr; }
 }
 
-/* -------------------------
-   SECTION TITLES
-------------------------- */
+/* Section titles */
 .section-title{
   font-size: var(--h2);
   margin: 0 0 12px;
@@ -687,13 +664,9 @@ button.brand{
   color: var(--muted2);
   line-height: 1.6;
 }
+#experience .section-sub{ display:none !important; } /* remove Timeline view text only */
 
-/* ✅ Remove ONLY the Experience subtitle (Timeline view...) */
-#experience .section-sub{ display:none !important; }
-
-/* -------------------------
-   ITEMS (Education)
-------------------------- */
+/* Education items */
 .item{
   display:flex;
   justify-content: space-between;
@@ -701,21 +674,10 @@ button.brand{
   padding: 14px 16px;
   border-radius: 16px;
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   position: relative;
 }
 .item + .item{ margin-top: 12px; }
-
-.item .left{
-  min-width: 0;
-  display:flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-.item .textblock{ min-width:0; }
-.item .title{ font-weight: 900; margin: 0 0 4px; font-size: var(--h3); }
-.item .meta{ margin: 0; color: var(--muted); line-height: 1.6; }
-.item .date{ color: var(--muted2); font-weight: 900; white-space: nowrap; padding-left: 10px; }
 
 .logo,
 .issuer-logo{
@@ -724,15 +686,13 @@ button.brand{
   border-radius: 14px;
   object-fit: contain;
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   padding: 8px;
   flex: 0 0 auto;
   box-shadow: var(--shadow);
 }
 
-/* -------------------------
-   PROJECTS
-------------------------- */
+/* Projects */
 .projects-grid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -741,23 +701,16 @@ button.brand{
 @media (max-width: 900px){
   .projects-grid{ grid-template-columns: 1fr; }
 }
-
 .project-card{
   border-radius: var(--radius2);
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   overflow: hidden;
   display: grid;
   grid-template-rows: 150px auto;
 }
 .project-card:hover{ border-color: var(--border); }
-
-.project-thumb{
-  position: relative;
-  overflow: hidden;
-  background-color: var(--panel);
-}
-
+.project-thumb{ position: relative; overflow: hidden; background-color: var(--panel); }
 .thumb-badge{
   position:absolute;
   left: 14px;
@@ -767,12 +720,11 @@ button.brand{
   gap: 8px;
   padding: 10px 12px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background-color: var(--panel2);
   font-weight: 900;
 }
 .thumb-badge:hover{ border-color: var(--border); }
-
 .thumb-icon{
   width: 34px; height: 34px;
   border-radius: 12px;
@@ -780,20 +732,18 @@ button.brand{
   align-items:center;
   justify-content:center;
   background-color: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
 }
-
 .project-body{ padding: 16px 16px 18px; }
 .project-title{ margin: 0 0 8px; font-size: 18px; font-weight: 900; }
 .project-desc{ margin: 0 0 12px; color: var(--muted); line-height: 1.65; font-weight: 600; }
 .tags{ display:flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
-
 .tag{
   font-size: 12px;
   font-weight: 900;
   padding: 8px 10px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background: rgba(127,127,127,0.10);
 }
 .tag:hover{
@@ -802,9 +752,7 @@ button.brand{
   transform: translateY(-1px);
 }
 
-/* -------------------------
-   TIMELINE (Experience & Awards)
-------------------------- */
+/* Timeline */
 .timeline{
   position: relative;
   padding-left: 18px;
@@ -821,20 +769,18 @@ button.brand{
   border-radius: 999px;
   opacity: 0.9;
 }
-
 .timeline-item{
   position: relative;
   margin: 0 0 14px;
   padding: 14px 16px;
   border-radius: 16px;
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 12px;
 }
 .timeline-item:hover{ border-color: var(--border); }
-
 .timeline-item::before{
   content:"";
   position:absolute;
@@ -846,35 +792,16 @@ button.brand{
   background: linear-gradient(135deg, var(--accent2), var(--accent));
   box-shadow: var(--shadow);
 }
-
 .t-title{ margin: 0 0 6px; font-weight: 900; }
 .t-meta{ margin: 0; color: var(--muted); font-weight: 650; line-height: 1.65; }
 .t-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; padding-left: 12px; }
 
-    /* =========================
-   EDUCATION = SAME TIMELINE STYLE
-   (uses .timeline + .timeline-item)
-   ========================= */
-#education .timeline{
-  margin-top: 14px;      /* space under Education title */
-  padding-left: 18px;    /* same as awards */
-}
+/* Education = same timeline */
+#education .timeline{ margin-top: 14px; padding-left: 18px; }
+#education .timeline::before{ top: 10px; bottom: 10px; }
+#education .timeline-item::before{ top: 20px; }
 
-#education .timeline::before{
-  top: 10px;             /* start line a bit lower (fix "broken" look) */
-  bottom: 10px;
-}
-
-#education .timeline-item::before{
-  top: 20px;             /* dot aligned nicely with logo/text */
-}
-
-
-    
-
-/* -------------------------
-   CERTIFICATES
-------------------------- */
+/* Certificates */
 .cert-grid{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -889,7 +816,7 @@ button.brand{
 .cert{
   border-radius: 16px;
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   padding: 14px 14px;
   display:flex;
   flex-direction: column;
@@ -901,15 +828,7 @@ button.brand{
   transform: translateY(-6px);
 }
 
-.cert-top{ display:flex; justify-content: space-between; gap: 10px; align-items: baseline; }
-.cert-name{ font-weight: 900; line-height: 1.3; }
-.cert-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; }
-.cert-by{ color: var(--muted); margin: 0; line-height: 1.5; }
-.issuer-row{ display:flex; align-items:center; gap: 10px; margin-top: 4px; }
-
-/* -------------------------
-   TIME WIDGET
-------------------------- */
+/* Time widget */
 .meta-wrap{ display: flex; justify-content: center; margin: 14px 0 6px; width: 100%; }
 .time-card{
   display:flex;
@@ -919,28 +838,24 @@ button.brand{
   gap: 6px;
   padding: 14px 18px;
   border-radius: 20px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background: var(--panel);
   box-shadow: var(--shadow);
   min-width: 190px;
 }
 .time-card:hover{ border-color: var(--border); }
-
 .time-label{ font-size: 12px; font-weight: 900; letter-spacing: 0.4px; color: var(--muted2); }
 .time-value{ font-size: 22px; font-weight: 900; letter-spacing: 0.3px; color: var(--text); }
 
-/* -------------------------
-   VERIFICATION
-------------------------- */
+/* Verification */
 .verify{ margin-top: 18px; padding-top: 18px; border-top: 0 !important; }
 .verify h3{ margin: 0 0 8px; font-size: 22px; }
 .verify p{ margin: 0 0 14px; color: var(--muted); font-weight: 650; }
 .verify-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 560px){ .verify-grid{ grid-template-columns: 1fr; } }
-
 .verify-card{
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   border-radius: 18px;
   padding: 16px;
   display: grid;
@@ -948,21 +863,17 @@ button.brand{
   min-height: 92px;
 }
 .verify-card:hover{ border-color: var(--border); }
-
 .verify-num{ font-size: 34px; font-weight: 950; letter-spacing: -0.6px; line-height: 1; }
 .verify-label{ color: var(--muted); font-weight: 900; }
 .verify-card small{ color: var(--muted2); font-weight: 800; }
 
-/* -------------------------
-   SOCIAL ICON BUTTONS
-------------------------- */
+/* Social icon buttons */
 .icon-row{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 8px; }
-
 .icon-btn{
   width: 46px;
   height: 46px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background: var(--panel);
   display:inline-flex;
   align-items:center;
@@ -976,10 +887,8 @@ button.brand{
 }
 .icon-btn:hover i{ transform: scale(1.10); }
 
-/* Brand style */
 .icon-btn.brand{ background: var(--brand, rgba(127,127,127,0.10)); box-shadow: var(--shadow); }
 .icon-btn.brand i{ color: #fff !important; }
-
 .icon-btn.github   { --brand:#181717; }
 .icon-btn.linkedin { --brand:#0A66C2; }
 .icon-btn.email    { --brand:#6c7bff; }
@@ -989,9 +898,7 @@ button.brand{
   background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
 }
 
-/* -------------------------
-   BACK TO TOP
-------------------------- */
+/* Back to top */
 .to-top{
   position: fixed;
   right: 18px;
@@ -1014,9 +921,7 @@ button.brand{
 .to-top.show{ opacity: 1; transform: translateY(0); pointer-events: auto; }
 .to-top:hover{ filter: brightness(1.05); }
 
-/* -------------------------
-   REVEAL
-------------------------- */
+/* Reveal */
 .reveal{
   opacity: 0;
   transform: translateY(12px);
@@ -1032,6 +937,7 @@ button.brand{
 
 /* -------------------------
    INTRO OVERLAY
+   ✅ NO WRAP so cursor never drops on narrow screens
 ------------------------- */
 #introOverlay{
   position: fixed;
@@ -1072,16 +978,30 @@ body:not(.light) #introOverlay{
   margin: 0 0 10px;
   color: var(--text);
 }
+
+/* ✅ key fix: typing stays ONE line, no cursor drop */
 .intro-type{
   font-size: clamp(20px, 3vw, 34px);
   font-weight: 900;
-  display: inline-block;
+  display: inline-flex;         /* ✅ keeps cursor aligned */
+  align-items: center;
+  justify-content: center;
+  gap: 0;
   padding: 10px 12px;
   border-radius: 18px;
   background: rgba(127,127,127,0.10);
   border: 1px solid transparent;
   min-height: 52px;
   color: var(--text);
+
+  white-space: nowrap;          /* ✅ NO wrap */
+  overflow: hidden;             /* ✅ no second line ever */
+  text-overflow: ellipsis;      /* if extremely narrow */
+  max-width: 100%;
+}
+#introText{
+  display: inline-block;        /* ✅ stable baseline */
+  white-space: nowrap;          /* ✅ NO wrap */
 }
 .cursor{
   display:inline-block;
@@ -1093,6 +1013,7 @@ body:not(.light) #introOverlay{
   background: var(--text);
   opacity: 0.7;
   animation: blink 1s steps(1) infinite;
+  flex: 0 0 auto;               /* ✅ cursor never shrinks */
 }
 @keyframes blink{ 50%{ opacity: 0; } }
 
@@ -1105,9 +1026,7 @@ body:not(.light) #introOverlay{
   pointer-events: none !important;
 }
 
-/* -------------------------
-   THEME TOGGLE ICON
-------------------------- */
+/* Theme toggle icon */
 #themeToggle{
   position: relative;
   width: 46px;
@@ -1132,9 +1051,7 @@ body:not(.light) #introOverlay{
 #themeToggle.is-light .moon{ opacity: 0; transform: rotate(90deg) scale(0.6); }
 #themeToggle.is-light .sun { opacity: 1; transform: rotate(0) scale(1); }
 
-/* -------------------------
-   HERO ACTIONS
-------------------------- */
+/* Hero actions */
 .hero-actions{
   display: flex;
   flex-wrap: wrap;
@@ -1145,15 +1062,13 @@ body:not(.light) #introOverlay{
   .hero-actions{ flex-direction: column; align-items: stretch; }
   .hero-actions .btn{ width: 100%; }
 }
-</style>
-
-
-
+  </style>
 </head>
 
-<body>
+  <body>
   <!-- Intro typing overlay -->
   <div id="themeFade" aria-hidden="true"></div>
+
   <div id="introOverlay" aria-hidden="false">
     <div class="intro-box">
       <div class="intro-title">Welcome</div>
@@ -1170,10 +1085,11 @@ body:not(.light) #introOverlay{
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
       <div class="nav-inner">
+
         <!-- MS click will replay intro -->
-            <button class="brand" type="button" aria-label="Home" id="brandHome">
-      <span class="brand-initials">MS</span>
-    </button>
+        <button class="brand" type="button" aria-label="Home" id="brandHome">
+          <span class="brand-initials">MS</span>
+        </button>
 
         <div class="nav-links" id="navLinks">
           <a href="#top">Home</a>
@@ -1193,10 +1109,10 @@ body:not(.light) #introOverlay{
             <span class="dot3"></span>
           </button>
 
-<button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme">
-  <span class="ticon moon" aria-hidden="true">🌙</span>
-  <span class="ticon sun" aria-hidden="true">☀️</span>
-</button>
+          <button class="btn btn-ghost" id="themeToggle" aria-label="Toggle theme" type="button">
+            <span class="ticon moon" aria-hidden="true">🌙</span>
+            <span class="ticon sun" aria-hidden="true">☀️</span>
+          </button>
 
           <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
         </div>
@@ -1215,13 +1131,14 @@ body:not(.light) #introOverlay{
     </div>
 
     <div id="home" class="grid anchor">
+      <!-- LEFT: HERO -->
       <div class="card reveal">
         <div class="hero-title">
           <img class="profile-avatar" src="assets/profile.png" alt="Mohammad Saleem profile photo">
           <h1>Mohammad Saleem</h1>
         </div>
- 
-                <div class="subtitle subtitle-row">
+
+        <div class="subtitle subtitle-row">
           <span class="mini-pc">
             <i class="fa-solid fa-computer"></i>
           </span>
@@ -1240,60 +1157,57 @@ body:not(.light) #introOverlay{
         <div class="objective">
           <h3>What I’m Looking For</h3>
           <p>
-            Research assistantships or software roles where I can build reliable systems in blockchain security, networking/cloud security, and applied AI for cybersecurity.
+            Research assistantships or software roles where I can build reliable systems in blockchain security,
+            networking/cloud security, and applied AI for cybersecurity.
           </p>
         </div>
 
-        <!-- HERO ACTIONS (4 buttons like old version) -->
-<div class="hero-actions">
-  <a class="btn btn-primary" href="#projects">View Projects</a>
+        <!-- HERO ACTIONS -->
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
 
-  <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">
-    View Resume (PDF)
-  </a>
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">
+            View Resume (PDF)
+          </a>
 
-  <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
-    Download Resume
-  </a>
+          <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
+            Download Resume
+          </a>
 
-  <a class="btn" href="#contact">Contact</a>
-</div>
+          <a class="btn" href="#contact">Contact</a>
+        </div>
 
+        <div class="skill-icons" aria-label="Key technologies">
+          <span class="icon-chip">
+            <span class="sicon java"><i class="fa-brands fa-java"></i></span>
+            Java
+          </span>
 
+          <span class="icon-chip">
+            <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
+            C++
+          </span>
 
-<div class="skill-icons" aria-label="Key technologies">
-  <span class="icon-chip">
-    <span class="sicon java"><i class="fa-brands fa-java"></i></span>
-    Java
-  </span>
+          <span class="icon-chip">
+            <span class="sicon python"><i class="fa-brands fa-python"></i></span>
+            Python
+          </span>
 
-  <span class="icon-chip">
-    <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
-    C++
-  </span>
+          <span class="icon-chip">
+            <span class="sicon js"><i class="fa-brands fa-js"></i></span>
+            JavaScript
+          </span>
 
-  <span class="icon-chip">
-    <span class="sicon python"><i class="fa-brands fa-python"></i></span>
-    Python
-  </span>
+          <span class="icon-chip">
+            <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
+            Ethereum
+          </span>
 
-  <span class="icon-chip">
-    <span class="sicon js"><i class="fa-brands fa-js"></i></span>
-    JavaScript
-  </span>
-
-  <span class="icon-chip">
-    <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
-    Ethereum
-  </span>
-
-  <span class="icon-chip">
-    <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
-    Blockchain
-  </span>
-</div>
-
-        
+          <span class="icon-chip">
+            <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
+            Blockchain
+          </span>
+        </div>
 
         <div class="stats">
           <div class="stat">
@@ -1311,21 +1225,21 @@ body:not(.light) #introOverlay{
         </div>
       </div>
 
+      <!-- RIGHT: QUICK LINKS -->
       <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
 
-      <div class="icon-row" aria-label="Quick links icons">
-        <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
-          <i class="fa-brands fa-github"></i>
-        </a>
-      
-        <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <i class="fa-brands fa-linkedin-in"></i>
-        </a>
-      
-        <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
-      </div>
+        <div class="icon-row" aria-label="Quick links icons">
+          <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
+            <i class="fa-brands fa-github"></i>
+          </a>
 
+          <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+        </div>
 
         <div class="pill-row" style="margin-top: 14px;">
           <span class="pill">Amman, Jordan</span>
@@ -1336,31 +1250,31 @@ body:not(.light) #introOverlay{
         <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
         </p>
+
         <div class="verify">
-  <h3>Verification</h3>
-  <p>Quick proof signals: badges and awards.</p>
+          <h3>Verification</h3>
+          <p>Quick proof signals: badges and awards.</p>
 
-  <div class="verify-grid">
-    <!-- Credly -->
-    <a class="verify-card" href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly" target="_blank" rel="noopener">
-      <div class="verify-num js-count" data-target="7" data-suffix="+">0</div>
-      <div class="verify-label">Credly Badges</div>
-      <small>Open Credly profile</small>
-    </a>
+          <div class="verify-grid">
+            <!-- Credly -->
+            <a class="verify-card" href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly" target="_blank" rel="noopener">
+              <div class="verify-num js-count" data-target="7" data-suffix="+">0</div>
+              <div class="verify-label">Credly Badges</div>
+              <small>Open Credly profile</small>
+            </a>
 
-    <!-- Awards -->
-    <a class="verify-card" href="#awards">
-      <div class="verify-num js-count" data-target="2" data-suffix="">0</div>
-      <div class="verify-label">Awards</div>
-      <small>Jump to awards section</small>
-    </a>
-  </div>
-</div>
-
+            <!-- Awards -->
+            <a class="verify-card" href="#awards">
+              <div class="verify-num js-count" data-target="2" data-suffix="">0</div>
+              <div class="verify-label">Awards</div>
+              <small>Jump to awards section</small>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- PROJECTS (Upgraded) -->
+    <!-- PROJECTS -->
     <section id="projects" class="anchor reveal">
       <h2 class="section-title">Projects</h2>
       <p class="section-sub">Selected projects with tech tags and quick actions.</p>
@@ -1459,44 +1373,43 @@ body:not(.light) #introOverlay{
 
     <div class="section-divider"></div>
 
+        <!-- SKILLS + EDUCATION (SIDE BY SIDE) -->
     <section class="two-col">
+      <!-- SKILLS -->
       <div id="skills" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Skills</h2>
 
-      <div class="skill-icons" aria-label="Key technologies">
-      
-        <span class="icon-chip">
-          <span class="sicon java"><i class="fa-brands fa-java"></i></span>
-          Java
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
-          C++
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon python"><i class="fa-brands fa-python"></i></span>
-          Python
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon js"><i class="fa-brands fa-js"></i></span>
-          JavaScript
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
-          Ethereum
-        </span>
-      
-        <span class="icon-chip">
-          <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
-          Blockchain
-        </span>
-      
-      </div>
+        <div class="skill-icons" aria-label="Key technologies">
+          <span class="icon-chip">
+            <span class="sicon java"><i class="fa-brands fa-java"></i></span>
+            Java
+          </span>
 
+          <span class="icon-chip">
+            <span class="sicon cpp"><span class="cpp-badge">C++</span></span>
+            C++
+          </span>
+
+          <span class="icon-chip">
+            <span class="sicon python"><i class="fa-brands fa-python"></i></span>
+            Python
+          </span>
+
+          <span class="icon-chip">
+            <span class="sicon js"><i class="fa-brands fa-js"></i></span>
+            JavaScript
+          </span>
+
+          <span class="icon-chip">
+            <span class="sicon eth"><i class="fa-brands fa-ethereum"></i></span>
+            Ethereum
+          </span>
+
+          <span class="icon-chip">
+            <span class="sicon chain"><i class="fa-solid fa-link"></i></span>
+            Blockchain
+          </span>
+        </div>
 
         <ul class="list">
           <li><b>Programming:</b> Java, Python, C++, Assembly, JavaScript, Solidity, MATLAB, Node.js, SQL</li>
@@ -1508,6 +1421,7 @@ body:not(.light) #introOverlay{
         </ul>
       </div>
 
+      <!-- EDUCATION -->
       <div id="education" class="card anchor reveal">
         <h2 class="section-title" style="margin-top:0;">Education</h2>
 
@@ -1523,7 +1437,7 @@ body:not(.light) #introOverlay{
             </div>
             <div class="t-date">2020 – 2025</div>
           </div>
-  
+
           <!-- Education 2 -->
           <div class="timeline-item">
             <div style="display:flex; gap:12px; align-items:flex-start; min-width:0;">
@@ -1536,6 +1450,7 @@ body:not(.light) #introOverlay{
             </div>
             <div class="t-date">2019 – 2020</div>
           </div>
+        </div><!-- ✅ FIX: close .timeline properly -->
 
         <h3 style="margin: 18px 0 8px; font-size: 18px;">Research Interests</h3>
         <p class="lead" style="margin: 0;">
@@ -1551,7 +1466,7 @@ body:not(.light) #introOverlay{
     <section id="experience" class="anchor reveal">
       <h2 class="section-title">Experience</h2>
       <p class="section-sub">Timeline view for quick scanning.</p>
-    
+
       <div class="card reveal">
         <div class="timeline">
           <div class="timeline-item">
@@ -1572,7 +1487,6 @@ body:not(.light) #introOverlay{
         </div>
       </div>
     </section>
-
 
     <!-- AWARDS (Timeline) -->
     <section id="awards" class="anchor reveal">
@@ -1600,6 +1514,7 @@ body:not(.light) #introOverlay{
       </div>
     </section>
 
+    <!-- CERTIFICATES -->
     <section id="certificates" class="anchor reveal">
       <h2 class="section-title">Certificates</h2>
 
@@ -1681,10 +1596,12 @@ body:not(.light) #introOverlay{
               <p class="cert-by">Awarded by Coursera.</p>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
+        <!-- CONTACT -->
     <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
       <div class="card reveal">
@@ -1692,7 +1609,7 @@ body:not(.light) #introOverlay{
           Feel free to reach out for research collaboration, assistantships, or software roles.
         </p>
 
-      <div class="icon-row" aria-label="Contact links">
+        <div class="icon-row" aria-label="Contact links">
           <a class="icon-btn brand email"
              href="mailto:mohammadssaleem2001@gmail.com"
              target="_blank"
@@ -1701,41 +1618,38 @@ body:not(.light) #introOverlay{
             <i class="fa-solid fa-envelope"></i>
           </a>
 
-      
-        <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub">
-          <i class="fa-brands fa-github"></i>
-        </a>
-      
-        <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <i class="fa-brands fa-linkedin-in"></i>
-        </a>
-      
-        <a class="icon-btn brand x" href="https://x.com/MoTech00" target="_blank" rel="noopener" aria-label="X (Twitter)">
-          <i class="fa-brands fa-x-twitter"></i>
-        </a>
-      
-        <a class="icon-btn brand facebook" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener" aria-label="Facebook">
-          <i class="fa-brands fa-facebook-f"></i>
-        </a>
-      
-        <a class="icon-btn brand instagram" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener" aria-label="Instagram">
-          <i class="fa-brands fa-instagram"></i>
-        </a>
-      </div>
+          <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
 
+          <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
 
-              <div class="hero-actions" style="margin-top:14px;">
-        <a class="btn btn-primary" href="#projects">View Projects</a>
-      
-        <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">
-          View Resume (PDF)
-        </a>
-      
-        <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
-          Download Resume
-        </a>
-      </div>
+          <a class="icon-btn brand x" href="https://x.com/MoTech00" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
 
+          <a class="icon-btn brand facebook" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <a class="icon-btn brand instagram" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        </div>
+
+        <div class="hero-actions" style="margin-top:14px;">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+
+          <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">
+            View Resume (PDF)
+          </a>
+
+          <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
+            Download Resume
+          </a>
+        </div>
       </div>
     </section>
 
@@ -1750,12 +1664,18 @@ body:not(.light) #introOverlay{
   </button>
 
   <script>
-// Theme toggle (no white flash) + stable icon crossfade
+/* =========================================================
+   1) THEME TOGGLE (sync speed for all cards)
+   2) INTRO typing overlay (no glitch on refresh)
+   3) Narrow screen cursor drop fix
+   ========================================================= */
+
+// --- Theme toggle ---
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
 const syncToggleIcon = () => {
-  toggle.classList.toggle("is-light", document.body.classList.contains("light"));
+  toggle?.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
 (function initTheme(){
@@ -1763,161 +1683,150 @@ const syncToggleIcon = () => {
   if (saved === "light") document.body.classList.add("light");
   syncToggleIcon();
 
+  if (!toggle) return;
+
   toggle.addEventListener("click", () => {
-    // Prevent hover transforms / weird mid-toggle pops
+    // freeze hover jumps while switching
     document.body.classList.add("theme-switching");
 
-    // snapshot current background into overlay
-    const cs = getComputedStyle(document.body);
-    fade.style.backgroundColor = cs.backgroundColor;
-    fade.style.backgroundImage = cs.backgroundImage;
-    fade.style.backgroundSize = cs.backgroundSize;
-    fade.style.backgroundPosition = cs.backgroundPosition;
-    fade.style.backgroundRepeat = cs.backgroundRepeat;
+    // snapshot current bg into overlay (no flash)
+    if (fade) {
+      const cs = getComputedStyle(document.body);
+      fade.style.backgroundColor = cs.backgroundColor;
+      fade.style.backgroundImage = cs.backgroundImage;
+      fade.style.backgroundSize = cs.backgroundSize;
+      fade.style.backgroundPosition = cs.backgroundPosition;
+      fade.style.backgroundRepeat = cs.backgroundRepeat;
+      fade.classList.add("show");
+    }
 
-    // show overlay
-    fade.classList.add("show");
-
-    // switch theme next frame
     requestAnimationFrame(() => {
       document.body.classList.toggle("light");
       localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-      // update meta theme-color
+      // update theme-color meta
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {
         themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
       }
 
-      // icon crossfade (no emoji swapping)
       syncToggleIcon();
 
-      // fade overlay out
-      requestAnimationFrame(() => fade.classList.remove("show"));
+      requestAnimationFrame(() => fade?.classList.remove("show"));
 
-      // release "theme-switching" after transition finishes
+      // end switching after css duration (match your --theme-dur ~520ms)
       window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, 460);
+      }, 540);
     });
   });
 })();
 
-    // Optimize background orb on slow devices
-    (function optimizeBackground(){
-      const orb = document.getElementById("bgOrb");
-      if (!orb) return;
+// --- Mobile menu ---
+(function () {
+  const btn = document.getElementById("menuBtn");
+  const links = document.getElementById("navLinks");
+  if (!btn || !links) return;
 
-      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const lowEnd =
-        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
-        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+  const closeMenu = () => {
+    links.classList.remove("is-open");
+    btn.setAttribute("aria-expanded", "false");
+  };
 
-      if (reduceMotion || lowEnd) orb.style.animation = "none";
-    })();
+  btn.addEventListener("click", () => {
+    const open = links.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
 
-    // Mobile/Tablet menu toggle (<=1024px)
-    (function () {
-      const btn = document.getElementById("menuBtn");
-      const links = document.getElementById("navLinks");
-      if (!btn || !links) return;
+  links.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
 
-      const closeMenu = () => {
-        links.classList.remove("is-open");
-        btn.setAttribute("aria-expanded", "false");
-      };
+  document.addEventListener("click", (e) => {
+    if (!links.classList.contains("is-open")) return;
+    const clickedInside = links.contains(e.target) || btn.contains(e.target);
+    if (!clickedInside) closeMenu();
+  });
 
-      btn.addEventListener("click", () => {
-        const open = links.classList.toggle("is-open");
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-      });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 1024) closeMenu();
+  }, { passive: true });
+})();
 
-      links.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+// --- Reveal on scroll ---
+(function () {
+  const els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) {
+    els.forEach(el => el.classList.add("show"));
+    return;
+  }
 
-      document.addEventListener("click", (e) => {
-        if (!links.classList.contains("is-open")) return;
-        const clickedInside = links.contains(e.target) || btn.contains(e.target);
-        if (!clickedInside) closeMenu();
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerWidth > 1024) closeMenu();
-      }, { passive: true });
-    })();
-
-    // Scroll reveal (disconnect once done)
-    (function () {
-      const els = document.querySelectorAll(".reveal");
-      if (!("IntersectionObserver" in window)) {
-        els.forEach(el => el.classList.add("show"));
-        return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("show");
+        io.unobserve(e.target);
       }
-
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add("show");
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12 });
-
-      els.forEach(el => io.observe(el));
-    })();
-
-    // Back to top button
-    (function(){
-      const btn = document.getElementById("toTop");
-      if (!btn) return;
-
-      const toggleBtn = () => {
-        if (window.scrollY > 600) btn.classList.add("show");
-        else btn.classList.remove("show");
-      };
-      window.addEventListener("scroll", toggleBtn, { passive: true });
-      toggleBtn();
-
-      btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    })();
-
-    // Live Clock aligned to second boundaries (less drift)
-    (function(){
-      const el = document.getElementById("liveTime");
-      if (!el) return;
-
-    const fmt = () => new Date().toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true
     });
+  }, { threshold: 0.12 });
 
+  els.forEach(el => io.observe(el));
+})();
 
-      const tick = () => { el.textContent = fmt(); };
+// --- Back to top ---
+(function(){
+  const btn = document.getElementById("toTop");
+  if (!btn) return;
 
-      tick();
-      const now = Date.now();
-      const delay = 1000 - (now % 1000);
+  const toggleBtn = () => {
+    if (window.scrollY > 600) btn.classList.add("show");
+    else btn.classList.remove("show");
+  };
+  window.addEventListener("scroll", toggleBtn, { passive: true });
+  toggleBtn();
 
-      setTimeout(() => {
-        tick();
-        setInterval(tick, 1000);
-      }, delay);
-    })();
+  btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+})();
 
-    /* =========================
-   INTRO typing screen + replay on MS click (NO LAG / NO SCROLL JUMP)
-   ========================= */
+// --- Live Clock (stable tick) ---
+(function(){
+  const el = document.getElementById("liveTime");
+  if (!el) return;
+
+  const fmt = () => new Date().toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+
+  const tick = () => { el.textContent = fmt(); };
+  tick();
+
+  const now = Date.now();
+  const delay = 1000 - (now % 1000);
+
+  setTimeout(() => {
+    tick();
+    setInterval(tick, 1000);
+  }, delay);
+})();
+
+/* =========================================================
+   INTRO typing overlay (FIXES):
+   ✅ No “flash” where it types, clears, retypes on refresh
+   ✅ No cursor dropping on narrow screens
+   ✅ Replay works without scroll jump
+   ✅ Prevent double-run on load + bfcache
+   ========================================================= */
 (function () {
   const overlay = document.getElementById("introOverlay");
   const introTextEl = document.getElementById("introText");
   const skipBtn = document.getElementById("skipIntroBtn");
   const brand = document.getElementById("brandHome");
-
   if (!overlay || !introTextEl || !skipBtn) return;
 
   const FULL_TEXT = "Eng Mohammad Saleem";
-  let isRunning = false;
+
+  let running = false;
   let rafId = 0;
   let hideTimer = 0;
 
@@ -1947,20 +1856,25 @@ const syncToggleIcon = () => {
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Make sure text never “flickers” due to layout rebuild:
+    introTextEl.textContent = "";
+    introTextEl.style.whiteSpace = "nowrap";        // ✅ keeps cursor on same line
+    introTextEl.style.display = "inline-block";
+
     if (reduceMotion) {
       introTextEl.textContent = FULL_TEXT;
-      hideTimer = setTimeout(() => { hideOverlay(); isRunning = false; }, 450);
+      hideTimer = setTimeout(() => { hideOverlay(); running = false; }, 450);
       return;
     }
 
     let i = 0;
     const start = performance.now();
-    const speed = 55; // ms per character feel
+    const speed = 55; // ms per char
 
     const step = (t) => {
-      // compute characters by time (stable even if tab lags)
       const elapsed = t - start;
       const nextI = Math.min(FULL_TEXT.length, Math.floor(elapsed / speed));
+
       if (nextI !== i) {
         i = nextI;
         introTextEl.textContent = FULL_TEXT.slice(0, i);
@@ -1971,7 +1885,7 @@ const syncToggleIcon = () => {
       } else {
         hideTimer = setTimeout(() => {
           hideOverlay();
-          isRunning = false;
+          running = false;
         }, 650);
       }
     };
@@ -1980,51 +1894,66 @@ const syncToggleIcon = () => {
   };
 
   const runIntro = ({ goTop }) => {
-    if (isRunning) return;
-    isRunning = true;
+    if (running) return;
+    running = true;
     clearAll();
 
-    // First load: go to top. Replay: do NOT touch scroll.
     if (goTop) {
       try { window.scrollTo({ top: 0, behavior: "auto" }); }
       catch { window.scrollTo(0, 0); }
     }
 
-    introTextEl.textContent = "";
     showOverlay();
     typeText();
   };
 
-  // Skip button: just hide, no scroll restore
+  // Skip
   skipBtn.addEventListener("click", () => {
     clearAll();
     hideOverlay();
-    isRunning = false;
+    running = false;
   });
 
-  // Replay intro on MS click (no scroll changes)
-  if (brand) {
-    brand.addEventListener("click", () => runIntro({ goTop: false }));
-  }
+  // Replay on MS click (no scroll)
+  if (brand) brand.addEventListener("click", () => runIntro({ goTop: false }));
 
-  // ESC to skip
+  // ESC skip
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && overlay.style.display !== "none") {
       clearAll();
       hideOverlay();
-      isRunning = false;
+      running = false;
     }
   });
 
-  // First load only
-  window.addEventListener("load", () => runIntro({ goTop: true }), { once: true });
+  // ✅ Run exactly once per real load (prevents refresh/bfcache double run)
+  const KEY = "intro_played_once";
+  const already = sessionStorage.getItem(KEY);
+
+  // if user refreshes quickly, it won't run twice
+  if (!already) {
+    sessionStorage.setItem(KEY, "1");
+    window.addEventListener("load", () => runIntro({ goTop: true }), { once: true });
+  } else {
+    // If already played in this tab, hide overlay instantly
+    overlay.style.display = "none";
+    overlay.classList.add("intro-hide");
+    overlay.setAttribute("aria-hidden", "true");
+  }
+
+  // ✅ If browser restores page from cache (back/forward), hide overlay
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) {
+      clearAll();
+      overlay.style.display = "none";
+      overlay.classList.add("intro-hide");
+      overlay.setAttribute("aria-hidden", "true");
+      running = false;
+    }
+  });
 })();
 
-
-    // =========================
-// Verification counters (animate when visible)
-// Uses IntersectionObserver + requestAnimationFrame
-// =========================
+// --- Verification counters ---
 (function () {
   const counters = document.querySelectorAll(".js-count");
   if (!counters.length) return;
@@ -2037,17 +1966,17 @@ const syncToggleIcon = () => {
 
     const target = Number(el.getAttribute("data-target") || "0");
     const suffix = el.getAttribute("data-suffix") || "";
+
     if (prefersReduced) {
       el.textContent = `${target}${suffix}`;
       return;
     }
 
-    const duration = 900; // ms
+    const duration = 900;
     const start = performance.now();
 
     const step = (t) => {
       const p = Math.min(1, (t - start) / duration);
-      // easeOutCubic
       const eased = 1 - Math.pow(1 - p, 3);
       const val = Math.round(eased * target);
       el.textContent = `${val}${suffix}`;
@@ -2073,8 +2002,6 @@ const syncToggleIcon = () => {
 
   counters.forEach((el) => io.observe(el));
 })();
-
-    
   </script>
 </body>
 </html>
