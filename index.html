@@ -1075,7 +1075,17 @@ body:not(.light) #introOverlay{
 .intro-type{
   font-size: clamp(20px, 3vw, 34px);
   font-weight: 900;
-  display: inline-block;
+
+  display: inline-flex;          /* ✅ keep text + cursor together */
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  white-space: nowrap;           /* ✅ no wrapping */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   padding: 10px 12px;
   border-radius: 18px;
   background: rgba(127,127,127,0.10);
@@ -1083,6 +1093,20 @@ body:not(.light) #introOverlay{
   min-height: 52px;
   color: var(--text);
 }
+#introText{ display:inline-block; }
+.cursor{
+  display:inline-block;
+  width: 10px;
+  height: 1.05em;
+  margin-left: 0;               /* handled by gap */
+  transform: none;              /* ✅ avoid baseline weirdness */
+  border-radius: 2px;
+  background: var(--text);
+  opacity: 0.7;
+  animation: blink 1s steps(1) infinite;
+  flex: 0 0 auto;
+}
+
 .cursor{
   display:inline-block;
   width: 10px;
@@ -1915,6 +1939,8 @@ const syncToggleIcon = () => {
   const brand = document.getElementById("brandHome");
 
   if (!overlay || !introTextEl || !skipBtn) return;
+  // Prevent any restored DOM text from flashing
+  introTextEl.textContent = "";
 
   const FULL_TEXT = "Eng Mohammad Saleem";
   let isRunning = false;
@@ -2016,8 +2042,31 @@ const syncToggleIcon = () => {
     }
   });
 
-  // First load only
-  window.addEventListener("load", () => runIntro({ goTop: true }), { once: true });
+// Run intro once per actual page-show, and handle BFCache restore cleanly
+const startOnce = () => {
+  if (overlay.dataset.ran === "1") return;   // hard guard
+  overlay.dataset.ran = "1";
+  runIntro({ goTop: true });
+};
+
+// pageshow fires on normal load + BFCache restore
+window.addEventListener("pageshow", (e) => {
+  // If restored from BFCache, the old typed text can flash.
+  // Reset to a clean hidden state BEFORE running again.
+  if (e.persisted) {
+    clearAll();
+    isRunning = false;
+    introTextEl.textContent = "";
+    overlay.classList.add("intro-hide");
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.style.display = "none";
+    overlay.dataset.ran = ""; // allow startOnce() to run
+  }
+
+  // Start on the next frame so styles/layout settle first
+  requestAnimationFrame(startOnce);
+});
+
 })();
 
 
