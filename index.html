@@ -755,7 +755,11 @@ button.brand{
 .project-thumb{
   position: relative;
   overflow: hidden;
-  background-color: var(--panel);
+  background:
+    radial-gradient(600px 200px at 10% 0%,
+      rgba(88,166,255,0.18),
+      transparent 60%),
+    var(--panel);
 }
 
 .thumb-badge{
@@ -786,7 +790,12 @@ button.brand{
 }
 
 .project-body{ padding: 16px 16px 18px; }
-.project-title{ margin: 0 0 8px; font-size: 18px; font-weight: 900; }
+.project-title{ 
+  margin: 0 0 8px; 
+  font-size: clamp(18px, 1.4vw, 21px); /* ✅ bigger but balanced */
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
 .project-desc{ margin: 0 0 12px; color: var(--muted); line-height: 1.65; font-weight: 600; }
 .tags{ display:flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
 
@@ -849,7 +858,12 @@ button.brand{
   box-shadow: var(--shadow);
 }
 
-.t-title{ margin: 0 0 6px; font-weight: 900; }
+.t-title{ 
+  margin: 0 0 6px; 
+  font-weight: 900;
+  font-size: clamp(17px, 1.25vw, 19px); 
+  letter-spacing: -0.2px;
+}
 .t-meta{ margin: 0; color: var(--muted); font-weight: 650; line-height: 1.65; }
 .t-date{ color: var(--muted2); font-weight: 900; white-space: nowrap; padding-left: 12px; }
 
