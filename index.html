@@ -71,7 +71,7 @@
   --shadow: 0 10px 26px rgba(0,0,0,0.35);
   --glow: 0 12px 26px rgba(0,0,0,0.40);
 
-  --hover-lift: translateY(-4px);
+  --hover-lift: translateY(-8px);
   --hover-shadow: 0 18px 55px rgba(0,0,0,0.35);
 
   /* hover border ring */
@@ -166,9 +166,9 @@ a:focus-visible, button:focus-visible{
     border-color var(--theme-dur) var(--theme-ease),
     box-shadow var(--theme-dur) var(--theme-ease),
     filter var(--theme-dur) var(--theme-ease),
-    opacity var(--theme-dur) var(--theme-ease);
+    opacity var(--theme-dur) var(--theme-ease),
+    transform var(--hover-dur) var(--hover-ease); /* ✅ THIS fixes instant hover */
 }
-
     /* icons/chips visual smoothness */
 .icon-chip .sicon,
 .thumb-icon,
@@ -474,24 +474,6 @@ button.brand{
   overflow: hidden;
   contain: content;
 }
-
-  /* =========================
-   HOVER SMOOTHNESS (single source of truth)
-   ========================= */
-.card, .item, .timeline-item, .project-card, .cert, .verify-card, .stat, .time-card, .objective{
-  transition: transform var(--hover-dur) var(--hover-ease),
-              box-shadow var(--hover-dur) var(--hover-ease),
-              border-color var(--hover-dur) var(--hover-ease);
-}
-
-.icon-chip, .pill, .tag, .icon-btn, .thumb-badge, .thumb-icon{
-  transition: transform var(--hover-dur) var(--hover-ease),
-              box-shadow var(--hover-dur) var(--hover-ease),
-              border-color var(--hover-dur) var(--hover-ease),
-              background-color var(--theme-dur) var(--theme-ease),
-              color var(--theme-dur) var(--theme-ease);
-}
-
 
 /* Hover lift */
 .card:hover,
@@ -940,7 +922,7 @@ button.brand{
 .cert:hover{
   border-color: var(--border);
   box-shadow: var(--hover-shadow), var(--hover-ring);
-  transform: translateY(-3px);
+  transform: translateY(-6px);
 }
 
 .cert-top{ display:flex; justify-content: space-between; gap: 10px; align-items: baseline; }
@@ -1013,10 +995,9 @@ button.brand{
 .icon-btn i{ font-size: 18px; color: var(--text); transition: transform 260ms var(--ease); }
 .icon-btn:hover{
   border-color: var(--border);
-  transform: translateY(-2px);
+  transform: translateY(-6px);
   box-shadow: var(--glow), var(--hover-ring);
 }
-
 .icon-btn:hover i{ transform: scale(1.10); }
 
 /* Brand style */
