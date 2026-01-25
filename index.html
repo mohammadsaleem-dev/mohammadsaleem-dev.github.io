@@ -1044,9 +1044,20 @@ button.brand{
 .reveal{
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 520ms var(--theme-ease), transform 520ms var(--theme-ease);
+  will-change: opacity, transform;
 }
-.reveal.show{ opacity: 1; transform: translateY(0); }
+
+.reveal.show{
+  animation: revealIn 520ms var(--theme-ease) forwards;
+}
+
+@keyframes revealIn{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .section-divider{
   height:1px;
@@ -1070,25 +1081,6 @@ button.brand{
 #themeFade.show{
   opacity: 1;
 }
-
-    /* -------------------------
-   THEME FADE OVERLAY (fix background switching faster)
-------------------------- */
-#themeFade{
-  position: fixed;
-  inset: 0;
-  z-index: 9998;          /* under introOverlay (9999), over the page */
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--theme-dur) var(--theme-ease);
-  will-change: opacity;
-}
-
-#themeFade.show{
-  opacity: 1;
-}
-
-
 
 /* -------------------------
    INTRO OVERLAY
