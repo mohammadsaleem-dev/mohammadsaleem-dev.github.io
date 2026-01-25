@@ -733,17 +733,32 @@ button.brand{
 .item .meta{ margin: 0; color: var(--muted); line-height: 1.6; }
 .item .date{ color: var(--muted2); font-weight: 900; white-space: nowrap; padding-left: 10px; }
 
+/* Logos: stable at browser zoom changes */
 .logo,
 .issuer-logo{
   width: 46px;
   height: 46px;
+  aspect-ratio: 1 / 1;
+  display: block;                 /* prevents inline-img baseline jitter */
+  flex: 0 0 46px;
+
   border-radius: 14px;
   object-fit: contain;
+
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   padding: 8px;
-  flex: 0 0 auto;
+
   box-shadow: var(--shadow);
+
+  /* anti-flicker / stable compositing */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+
+  /* IMPORTANT: don’t animate image rendering props */
+  transition: background-color var(--theme-dur) var(--theme-ease),
+              border-color var(--theme-dur) var(--theme-ease),
+              box-shadow var(--theme-dur) var(--theme-ease);
 }
 
 /* -------------------------
