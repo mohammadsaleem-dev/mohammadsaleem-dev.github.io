@@ -325,10 +325,11 @@ button.brand{
   padding: 10px 12px;
   border-radius: 999px;
   transition:
-    background-color 240ms ease,
-    color 240ms ease;
+    background-color var(--theme-dur) var(--theme-ease),
+    color var(--theme-dur) var(--theme-ease);
   flex: 0 0 auto;
 }
+
 .nav-links a:hover{
   color: var(--text);
   background: rgba(127,127,127,0.10);
@@ -416,14 +417,18 @@ button.brand{
       visibility 0ms;
   }
 
-  .nav-links a{
-    padding: 12px 12px;
-    border-radius: 14px;
-    background: rgba(127,127,127,0.08);
-    color: var(--text);
-  }
-  .nav-links a:hover{ background: rgba(127,127,127,0.14); }
+  /* ✅ Force theme sync for any element you forgot to list */
+body, body * , body *::before, body *::after{
+  transition-property: background-color, color, border-color, box-shadow, filter, opacity;
+  transition-duration: var(--theme-dur);
+  transition-timing-function: var(--theme-ease);
 }
+
+  /* Keep hover transform speed independent */
+body *{
+  transition-property: background-color, color, border-color, box-shadow, filter, opacity, transform;
+}
+
 
 /* -------------------------
    BUTTONS
@@ -1090,6 +1095,13 @@ body:not(.light) #introOverlay{
   border: 1px solid transparent;
   min-height: 52px;
   color: var(--text);
+  white-space: nowrap;     /* ✅ prevents wrap (cursor won't drop) */
+  max-width: 100%;
+  overflow: hidden;
+}
+
+  @media (max-width: 420px){
+  .intro-type{ font-size: 18px; }
 }
 .cursor{
   display:inline-block;
@@ -1988,7 +2000,8 @@ const syncToggleIcon = () => {
   };
 
   const runIntro = ({ goTop }) => {
-    if (isRunning) return;
+    if (isRunning || introPlayed) return;
+    introPlayed = true;
     isRunning = true;
     clearAll();
 
@@ -2025,7 +2038,7 @@ const syncToggleIcon = () => {
   });
 
   // First load only
-  window.addEventListener("load", () => runIntro({ goTop: true }), { once: true });
+  document.addEventListener("DOMContentLoaded", () => runIntro({ goTop: true }), { once: true });
 })();
 
 
