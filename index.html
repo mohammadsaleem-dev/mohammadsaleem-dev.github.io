@@ -118,7 +118,7 @@ body{
   min-height: 100vh;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  background: var(--bg) !important;
+  background-color: var(--bg) !important;
 
   transition:
     background-color var(--theme-dur) var(--theme-ease),
@@ -1071,6 +1071,24 @@ button.brand{
   opacity: 1;
 }
 
+    /* -------------------------
+   THEME FADE OVERLAY (fix background switching faster)
+------------------------- */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  z-index: 9998;          /* under introOverlay (9999), over the page */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--theme-dur) var(--theme-ease);
+  will-change: opacity;
+}
+
+#themeFade.show{
+  opacity: 1;
+}
+
+
 
 /* -------------------------
    INTRO OVERLAY
@@ -1140,14 +1158,13 @@ body:not(.light) #introOverlay{
   display:inline-block;
   width: 10px;
   height: 1.05em;
-  margin-left: 0;               /* handled by gap */
-  transform: none;              /* ✅ avoid baseline weirdness */
   border-radius: 2px;
   background: var(--text);
   opacity: 0.7;
   animation: blink 1s steps(1) infinite;
   flex: 0 0 auto;
 }
+
 
 @keyframes blink{ 50%{ opacity: 0; } }
 
