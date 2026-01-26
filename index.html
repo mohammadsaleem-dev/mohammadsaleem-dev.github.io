@@ -1308,7 +1308,14 @@ body:not(.light) #introOverlay{
 }
 
 /* SVG colors (matches your theme accent) */
-.v-icon path:first-child{ fill: var(--accent); }
+.v-icon .v-circle{
+  fill: #1877F2; /* Facebook Blue */
+}
+
+.v-icon .v-check{
+  fill: #ffffff;
+}
+
 .v-icon .v-check{ fill: #fff; }
 
 /* Hover animation */
@@ -1466,17 +1473,23 @@ body:not(.light) #introOverlay{
           <div class="name-wrap">
             <h1>Mohammad Saleem</h1>
         
-            <!-- Verification Badge -->
-            <a class="v-badge"
-               href="#contact"
-               aria-label="Verified profile badge"
-               title="Verified profile">
-              <!-- Option A (recommended): SVG badge (no extra image file needed) -->
-              <svg class="v-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2.2l2.2 1.3 2.5-.5 1.6 2 2.5.6.6 2.5 2 1.6-.5 2.5 1.3 2.2-1.3 2.2.5 2.5-2 1.6-.6 2.5-2.5.6-1.6 2-2.5-.5L12 21.8l-2.2 1.3-2.5.5-1.6-2-2.5-.6-.6-2.5-2-1.6.5-2.5L2.2 12l1.3-2.2-.5-2.5 2-1.6.6-2.5 2.5-.6 1.6-2 2.5.5L12 2.2z"/>
-                <path class="v-check" d="M10.2 12.9l-1.6-1.6-1.3 1.3 2.9 2.9 6.2-6.2-1.3-1.3-4.9 4.9z"/>
-              </svg>
-            </a>
+          <!-- Verification Badge -->
+          <a class="v-badge"
+             href="#contact"
+             aria-label="Verified profile badge"
+             title="Verified profile">
+          
+            <svg class="v-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <!-- Blue Circle -->
+              <circle class="v-circle" cx="12" cy="12" r="10"></circle>
+          
+              <!-- White Check -->
+              <path class="v-check"
+                    d="M10.2 12.9l-1.6-1.6-1.3 1.3 2.9 2.9 6.2-6.2-1.3-1.3-4.9 4.9z"/>
+            </svg>
+          
+          </a>
+
           </div>
         </div>
         
