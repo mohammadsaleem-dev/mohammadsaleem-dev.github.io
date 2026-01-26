@@ -47,6 +47,8 @@ The site is optimized for performance, accessibility, responsive design, and pro
 - GitHub Pages Hosting  
 
 ---
+## 📂 Project Structure
+
 
 /
 ├── index.html
@@ -74,7 +76,4 @@ This project is licensed under the MIT License — see the LICENSE file for deta
 ---
 
 ⭐ If you like this portfolio, feel free to star the repository.
-
-
-## 📂 Project Structure
 
