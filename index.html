@@ -1140,7 +1140,7 @@ button.brand{
 }
 
 /* -------------------------
-   INTRO OVERLAY
+   INTRO OVERLAY (MATCH MAIN BACKGROUND EXACTLY)
 ------------------------- */
 #introOverlay{
   position: fixed;
@@ -1149,20 +1149,22 @@ button.brand{
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg) !important;
-  overflow: hidden;
 
+  /* ✅ SAME as page background */
+  background: var(--bg) !important;
+
+  overflow: hidden;
   opacity: 1;
   visibility: visible;
   transition: opacity 520ms var(--theme-ease), visibility 0ms linear 520ms;
 }
-body:not(.light) #introOverlay{
-  background:
-    radial-gradient(900px 520px at 15% 10%, rgba(88,166,255,0.10), transparent 60%),
-    radial-gradient(700px 420px at 85% 0%, rgba(47,129,247,0.10), transparent 60%),
-    var(--bg) !important;
+
+/* ✅ remove any extra overlay decorations */
+#introOverlay::before,
+#introOverlay::after{
+  content: none !important;
+  display: none !important;
 }
-#introOverlay::after{ display:none !important; }
 
 .intro-box{
   width: min(720px, calc(100% - 36px));
@@ -1243,21 +1245,6 @@ body:not(.light) #introOverlay{
   }
 }
 
-
-
-    
-  white-space: nowrap;           /* ✅ no wrapping */
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  padding: 10px 12px;
-  border-radius: 18px;
-  background: rgba(127,127,127,0.10);
-  border: 1px solid transparent;
-  min-height: 52px;
-  color: var(--text);
-}
 
 #introText{ display:inline-block; }
 .cursor{
