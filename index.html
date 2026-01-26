@@ -17,6 +17,20 @@
   <meta property="og:image" content="assets/preview.png">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#0a1020" />
+  <meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  base-uri 'self';
+  object-src 'none';
+  frame-ancestors 'none';
+  img-src 'self' https: data:;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+  font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+  script-src 'self' 'unsafe-inline';
+  connect-src 'self';
+  upgrade-insecure-requests;
+">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- ================= GOOGLE PERSON STRUCTURED DATA ================= -->
   <script type="application/ld+json">
@@ -46,7 +60,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Icons (Font Awesome) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  integrity="sha512-PASTE_THE_OFFICIAL_CDNJS_HASH_HERE"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer">
 
   <style>
 /* =========================================================
@@ -1517,9 +1535,9 @@ button.brand{
         
           <!-- Verification Badge -->
           <a class="v-badge"
-             href="#contact"
-             aria-label="Verified profile badge"
-             title="Verified profile">
+          href="#contact"
+          aria-label="Official profile links"
+          title="Official profile links">
           
             <svg class="v-icon" viewBox="0 0 24 24" aria-hidden="true">
               <!-- Blue Circle -->
