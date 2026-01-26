@@ -1071,6 +1071,80 @@ button.brand{
   text-align: right;
 }
 
+    /* =========================
+   MINI ID CARD (Quick Links)
+   ========================= */
+.mini-id{
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--panel);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow);
+}
+.mini-id:hover{
+  border-color: var(--border);
+  box-shadow: var(--hover-shadow), var(--hover-ring);
+}
+.mini-id-top{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+.mini-id-avatar{
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: var(--shadow);
+  flex: 0 0 auto;
+}
+.mini-id-text{ min-width: 0; }
+.mini-id-name{
+  font-weight: 950;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mini-id-role{
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mini-id-rows{
+  margin-top: 12px;
+  display:grid;
+  gap: 8px;
+}
+.mini-id-row{
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(127,127,127,0.08);
+  border: 1px solid transparent;
+}
+.mini-id-row:hover{ border-color: var(--border); }
+.mini-id-row .k{
+  color: var(--muted2);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+.mini-id-row .v{
+  color: var(--text);
+  font-weight: 900;
+  font-size: 12px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
 
 /* -------------------------
    SOCIAL ICON BUTTONS
@@ -1514,86 +1588,76 @@ body:not(.light) #introOverlay{
           <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
         </div>
 
-        <!-- ✅ MINI ID CARD (Google-style) -->
-        <div class="mini-id">
-          <div class="mini-id-top">
-            <img class="mini-id-avatar" src="assets/profile.png" alt="Mohammad Saleem">
-            <div class="mini-id-text">
-              <div class="mini-id-name">Mohammad Saleem</div>
-              <div class="mini-id-role">Computer Engineering Graduate</div>
-            </div>
-          </div>
-      
-          <div class="mini-id-rows">
-            <div class="mini-id-row">
-              <span class="k">Location</span>
-              <span class="v">Amman, Jordan</span>
-            </div>
-            <div class="mini-id-row">
-              <span class="k">Institution</span>
-              <span class="v">University of Jordan</span>
-            </div>
-            <div class="mini-id-row">
-              <span class="k">Email</span>
-              <span class="v">mohammadssaleem2001@gmail.com</span>
-            </div>
-          </div>
-        </div>
-        <!-- ✅ END MINI ID CARD -->
-      
-        <div class="pill-row" style="margin-top: 14px;">
-          <span class="pill">Amman, Jordan</span>
-          <span class="pill">University of Jordan</span>
-        </div>
-      </div>
+<!-- ✅ MINI ID CARD (Google-style) -->
+<div class="mini-id">
+  <div class="mini-id-top">
+    <img class="mini-id-avatar" src="assets/profile.png" alt="Mohammad Saleem">
+    <div class="mini-id-text">
+      <div class="mini-id-name">Mohammad Saleem</div>
+      <div class="mini-id-role">Computer Engineering Graduate</div>
+    </div>
+  </div>
 
+  <div class="mini-id-rows">
+    <div class="mini-id-row">
+      <span class="k">Location</span>
+      <span class="v">Amman, Jordan</span>
+    </div>
+    <div class="mini-id-row">
+      <span class="k">Institution</span>
+      <span class="v">University of Jordan</span>
+    </div>
+    <div class="mini-id-row">
+      <span class="k">Email</span>
+      <span class="v">mohammadssaleem2001@gmail.com</span>
+    </div>
+  </div>
+</div>
+<!-- ✅ END MINI ID CARD -->
 
-        <p class="lead" style="margin: 14px 0 0;">
-          Prefer email? Scroll to the Contact section for direct links.
-        </p>
-        <div class="verify">
+<div class="pill-row" style="margin-top: 14px;">
+  <span class="pill">Amman, Jordan</span>
+  <span class="pill">University of Jordan</span>
+</div>
+
+<p class="lead" style="margin: 14px 0 0;">
+  Prefer email? Scroll to the Contact section for direct links.
+</p>
+
+<div class="verify">
   <h3>Verification</h3>
   <p>Quick proof signals: badges and awards.</p>
 
   <div class="verify-strip">
-  
     <!-- Credly -->
     <a class="verify-chip"
        href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly"
        target="_blank"
        rel="noopener">
-  
       <i class="fa-solid fa-certificate"></i>
       <span class="big js-count" data-target="7" data-suffix="+">0</span>
       <span class="label">Credly Badges</span>
-  
     </a>
-  
+
     <!-- Awards -->
     <a class="verify-chip" href="#awards">
-  
       <i class="fa-solid fa-trophy"></i>
       <span class="big js-count" data-target="2" data-suffix="">0</span>
       <span class="label">Awards</span>
-  
     </a>
-  
+
     <!-- GitHub -->
     <a class="verify-chip"
        href="https://github.com/mohammadsaleem-dev"
        target="_blank"
        rel="noopener">
-  
       <i class="fa-brands fa-github"></i>
       <span class="big">GitHub</span>
       <span class="label">Profile</span>
-  
     </a>
   </div>
-  </div>
+</div>
 
-      </div>
-    </div>
 
     <!-- PROJECTS (Upgraded) -->
     <section id="projects" class="anchor reveal">
