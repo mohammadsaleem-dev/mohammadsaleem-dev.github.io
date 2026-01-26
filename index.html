@@ -198,17 +198,17 @@ a:focus-visible, button:focus-visible{
   .project-card, .timeline-item, .item,
   .cert, .verify-card, .stat, .time-card,
   .objective, .icon-chip, .pill, .tag, .icon-btn,
-  .thumb-badge, .thumb-icon
+  .thumb-badge, .thumb-icon, .logo, .issuer-logo
 ){
   transition:
     background-color var(--theme-dur) var(--theme-ease),
     color var(--theme-dur) var(--theme-ease),
     border-color var(--theme-dur) var(--theme-ease),
     box-shadow var(--theme-dur) var(--theme-ease),
+    filter var(--theme-dur) var(--theme-ease),
     opacity var(--theme-dur) var(--theme-ease),
-    transform var(--hover-dur) var(--hover-ease);
+    transform var(--hover-dur) var(--hover-ease); /* ✅ THIS fixes instant hover */
 }
-
     /* icons/chips visual smoothness */
 .icon-chip .sicon,
 .thumb-icon,
@@ -811,12 +811,6 @@ button.brand{
               border-color var(--theme-dur) var(--theme-ease),
               box-shadow var(--theme-dur) var(--theme-ease);
 }
-
-    /* ✅ Logos should NOT animate during theme switch (prevents raster glitches) */
-.logo, .issuer-logo{
-  transition: none !important;
-}
-
 
 /* -------------------------
    PROJECTS
@@ -1949,7 +1943,7 @@ button.brand{
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1960,7 +1954,7 @@ button.brand{
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1982,7 +1976,7 @@ button.brand{
               <div class="cert-date">May 2023</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1993,7 +1987,7 @@ button.brand{
               <div class="cert-date">Jul 2022</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -2092,33 +2086,20 @@ button.brand{
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
-const getThemeMs = () => {
-  const dur = getComputedStyle(document.documentElement)
-    .getPropertyValue("--theme-dur")
-    .trim();
-  const value = parseFloat(dur || "520");
-  return dur.endsWith("ms") ? value : value * 1000;
-};
-
 const syncToggleIcon = () => {
   toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
-(function initTheme() {
-  // Apply saved theme instantly
+(function initTheme(){
   const saved = localStorage.getItem("theme");
   if (saved === "light") document.body.classList.add("light");
-
-  // Sync icon after first paint (no undefined ms)
-  requestAnimationFrame(() => syncToggleIcon());
+  syncToggleIcon();
 
   toggle.addEventListener("click", () => {
-    const ms = getThemeMs();
-
-    // lock hover transforms during theme switch
+    // Prevent hover transforms / weird mid-toggle pops
     document.body.classList.add("theme-switching");
 
-    // snapshot current background into overlay (prevents white flash)
+    // snapshot current background into overlay
     const cs = getComputedStyle(document.body);
     fade.style.backgroundColor = cs.backgroundColor;
     fade.style.backgroundImage = cs.backgroundImage;
@@ -2132,34 +2113,27 @@ const syncToggleIcon = () => {
     // switch theme next frame
     requestAnimationFrame(() => {
       document.body.classList.toggle("light");
-      localStorage.setItem(
-        "theme",
-        document.body.classList.contains("light") ? "light" : "dark"
-      );
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-      // update theme-color meta
+      // update meta theme-color
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {
-        themeMeta.setAttribute(
-          "content",
-          document.body.classList.contains("light") ? "#ffffff" : "#0d1117"
-        );
+        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
       }
 
-      // icon crossfade slightly after change (feels smoother)
-      setTimeout(syncToggleIcon, ms * 0.65);
+      // icon crossfade (no emoji swapping)
+      syncToggleIcon();
 
       // fade overlay out
       requestAnimationFrame(() => fade.classList.remove("show"));
 
-      // release lock exactly after CSS duration
-      setTimeout(() => {
+      // release "theme-switching" after transition finishes
+      window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, ms + 60);
+      }, 540);
     });
   });
 })();
-
 
     // Optimize background orb on slow devices
     (function optimizeBackground(){
