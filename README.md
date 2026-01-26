@@ -1,72 +1,80 @@
-# Mohammad Saleem — Computer Engineer Portfolio 🚀
+# Mohammad Saleem — Portfolio Website
+
+![Website](https://img.shields.io/badge/Live%20Website-Online-success)
+![HTML](https://img.shields.io/badge/HTML-5-orange)
+![CSS](https://img.shields.io/badge/CSS-3-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
 
 🌐 **Live Website:**  
 https://mohammadsaleem-dev.github.io
 
 ---
 
-## 👋 About Me
+## 📌 About This Project
 
-I am **Mohammad Saleem**, a Computer Engineering graduate specializing in **Blockchain, Web Development, Cybersecurity, and AI-based systems**.  
-This repository hosts my **personal portfolio website** showcasing my projects, certifications, and professional experience.
+This repository contains my **personal portfolio website** showcasing my work and experience in:
+
+- Blockchain Engineering  
+- Cybersecurity & Secure Systems  
+- Software Development  
+- Embedded & Automation Projects  
+- ROS & Systems Simulation  
+
+The site is optimized for performance, accessibility, responsive design, and professional presentation.
 
 ---
 
-## 🧰 Technologies Used
+## 🚀 Features
+
+- Responsive modern UI (Desktop & Mobile)
+- Dark / Light theme toggle
+- Animated intro screen
+- Project showcase cards
+- Live clock widget
+- Scroll animations
+- GitHub Pages hosting
+- SEO optimized meta tags
+
+---
+
+## 🛠️ Tech Stack
 
 - HTML5  
-- CSS3  
-- JavaScript  
-- GitHub Pages  
+- CSS3 (Custom Animations + Responsive Grid)  
+- JavaScript (Vanilla)  
+- Font Awesome Icons  
+- Google Fonts (Inter)  
+- GitHub Pages Hosting  
 
 ---
-
-## 📌 Featured Areas
-
-✔ Blockchain Development  
-✔ Full-Stack Web Projects  
-✔ Smart Contracts (Ethereum)  
-✔ Cybersecurity Fundamentals  
-✔ Software Engineering  
-
----
-
-## 📂 Project Structure
 
 /
 ├── index.html
 ├── assets/
-├── README.md
+│ ├── images
+│ ├── icons
+│ └── resume.pdf
+└── README.md
 
 
 ---
 
-## 🚀 Deployment Information
+## 📜 License
 
-This website is deployed using **GitHub Pages**.
-
-### Website Link:
-👉 https://mohammadsaleem-dev.github.io
-
-GitHub Pages Documentation:  
-https://docs.github.com/en/pages
+This project is licensed under the MIT License — see the LICENSE file for details.
 
 ---
 
-## 📬 Contact & Profiles
+## 📬 Contact
 
+- Email: mohammadssaleem2001@gmail.com  
+- LinkedIn: https://www.linkedin.com/in/mohammad-saleem-7b977621a/  
 - GitHub: https://github.com/mohammadsaleem-dev  
-- LinkedIn: https://www.linkedin.com/in/mohammad-saleem-7b977621a  
-- Location: Amman, Jordan 🇯🇴  
 
 ---
 
-## ⭐ Support This Project
+⭐ If you like this portfolio, feel free to star the repository.
 
-If you like my portfolio:
 
-- ⭐ Star this repository  
-- 🔗 Share the website  
-- 🤝 Connect with me on LinkedIn  
+## 📂 Project Structure
 
-Thank you for visiting!
