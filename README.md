@@ -7,6 +7,7 @@
 
 🌐 **Live Website:**  
 https://mohammadsaleem-dev.github.io
+![Lighthouse Performance](https://img.shields.io/badge/Lighthouse-Performance%2095%25-brightgreen)
 
 ---
 
