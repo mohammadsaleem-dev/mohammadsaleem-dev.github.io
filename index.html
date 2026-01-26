@@ -1268,83 +1268,50 @@ body:not(.light) #introOverlay{
 #themeToggle.is-light .moon{ opacity: 0; transform: rotate(90deg) scale(0.6); }
 #themeToggle.is-light .sun { opacity: 1; transform: rotate(0) scale(1); }
 
-    /* =========================
-   VERIFICATION BADGE (Hero name)
+/* =========================
+   FACEBOOK STYLE VERIFIED BADGE
    ========================= */
+
 .name-wrap{
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-width: 0;
+  gap: 8px;
 }
 
-/* Badge button */
+/* Badge container */
 .v-badge{
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  border: 1px solid transparent;
-  background: rgba(127,127,127,0.10);
-  box-shadow: var(--shadow);
+  background: none;
+  border: none;
+  box-shadow: none;
 
-  transform: translateY(2px);
-  transition:
-    transform var(--hover-dur) var(--hover-ease),
-    box-shadow var(--hover-dur) var(--hover-ease),
-    filter var(--hover-dur) var(--hover-ease),
-    background-color var(--theme-dur) var(--theme-ease),
-    border-color var(--theme-dur) var(--theme-ease);
+  transform: translateY(3px);
+  cursor: pointer;
+
+  transition: transform 180ms ease, filter 180ms ease;
 }
 
-/* Icon inside */
+/* Badge icon */
 .v-icon{
   width: 20px;
   height: 20px;
   display: block;
 }
 
-/* SVG colors (matches your theme accent) */
-.v-icon path:first-child{ fill: var(--accent); }
-.v-icon .v-check{ fill: #fff; }
-
-/* Hover animation */
-.v-badge:hover{
-  border-color: var(--border);
-  box-shadow: var(--glow), 0 0 0 6px rgba(88,166,255,0.12);
-  transform: translateY(0) scale(1.06) rotate(-6deg);
-  filter: brightness(1.05);
+/* Blue circle */
+.v-icon .fb-circle{
+  fill: #1877F2; /* Facebook official blue */
 }
 
-/* Fancy “shine” */
-.v-badge::after{
-  content:"";
-  position:absolute;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  pointer-events: none;
-  opacity: 0;
-  background: conic-gradient(from 180deg, transparent 0 70%, rgba(255,255,255,0.45), transparent 100%);
-  transition: opacity 220ms ease;
-}
+/* White check */
+.v-icon .fb-check{
+  fill:
 
-.v-badge:hover::after{
-  opacity: 0.9;
-  animation: vSpin 900ms linear infinite;
-}
-
-@keyframes vSpin{
-  to{ transform: rotate(360deg); }
-}
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .v-badge, .v-badge::after{ animation: none !important; transition: none !important; }
-}
 
 
 /* -------------------------
