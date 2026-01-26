@@ -1182,7 +1182,7 @@ body:not(.light) #introOverlay{
   color: var(--text);
 }
 /* =========================
-   INTRO NAME BOX (WELCOME) — MOVING BORDER ONLY
+   INTRO NAME BOX (WELCOME) — SOFT CENTER GLOW
 ========================= */
 .intro-type{
   font-size: clamp(20px, 3vw, 34px);
@@ -1202,66 +1202,45 @@ body:not(.light) #introOverlay{
   background: rgba(127,127,127,0.10);
   color: var(--text);
 
-  overflow: hidden;          /* ✅ clips border cleanly */
+  overflow: hidden;
   z-index: 1;
 }
 
-/* keep text/cursor above everything */
+/* Keep text + cursor above glow */
 .intro-type > *{
   position: relative;
-  z-index: 3;
+  z-index: 2;
 }
 
 /* =========================
-   Animated border ring (rotates, NOT the box)
+   CENTER GLOW EFFECT
 ========================= */
-.intro-type::before{
-  content:"";
-  position:absolute;
-  inset:-2px;                /* border thickness area */
-  border-radius: 20px;
-  padding: 2px;              /* border thickness */
-
-  background: conic-gradient(
-    from 0deg,
-    transparent 0%,
-    #58a6ff 20%,
-    #2f81f7 35%,
-    #58a6ff 50%,
-    transparent 65%,
-    transparent 100%
-  );
-
-  animation: introRingSpin 1.4s linear infinite;
-  pointer-events:none;
-  z-index: 2;
-
-  /* show only border ring */
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-}
-
-/* ✅ soft glow (can extend outside without rotating the text) */
 .intro-type::after{
   content:"";
   position:absolute;
-  inset:-12px;
-  border-radius: 28px;
-  background: radial-gradient(circle, rgba(88,166,255,.22), transparent 60%);
-  filter: blur(10px);
-  opacity: .50;
+  inset: 0;
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(88,166,255,0.35),
+      rgba(88,166,255,0.15) 35%,
+      transparent 70%
+    );
+
+  filter: blur(12px);
+  opacity: .7;
+
   pointer-events:none;
   z-index: 0;
 }
 
-@keyframes introRingSpin{
-  to{ transform: rotate(360deg); }
-}
-
-/* Reduced motion */
+/* Reduced motion safety */
 @media (prefers-reduced-motion: reduce){
-  .intro-type::before{ animation: none; }
+  .intro-type::after{
+    filter: none;
+  }
 }
 
 
