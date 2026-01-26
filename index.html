@@ -2092,20 +2092,33 @@ button.brand{
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
+const getThemeMs = () => {
+  const dur = getComputedStyle(document.documentElement)
+    .getPropertyValue("--theme-dur")
+    .trim();
+  const value = parseFloat(dur || "520");
+  return dur.endsWith("ms") ? value : value * 1000;
+};
+
 const syncToggleIcon = () => {
   toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
-(function initTheme(){
+(function initTheme() {
+  // Apply saved theme instantly
   const saved = localStorage.getItem("theme");
   if (saved === "light") document.body.classList.add("light");
-  setTimeout(syncToggleIcon, ms * 0.65);
+
+  // Sync icon after first paint (no undefined ms)
+  requestAnimationFrame(() => syncToggleIcon());
 
   toggle.addEventListener("click", () => {
-    // Prevent hover transforms / weird mid-toggle pops
+    const ms = getThemeMs();
+
+    // lock hover transforms during theme switch
     document.body.classList.add("theme-switching");
 
-    // snapshot current background into overlay
+    // snapshot current background into overlay (prevents white flash)
     const cs = getComputedStyle(document.body);
     fade.style.backgroundColor = cs.backgroundColor;
     fade.style.backgroundImage = cs.backgroundImage;
@@ -2119,31 +2132,34 @@ const syncToggleIcon = () => {
     // switch theme next frame
     requestAnimationFrame(() => {
       document.body.classList.toggle("light");
-      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+      localStorage.setItem(
+        "theme",
+        document.body.classList.contains("light") ? "light" : "dark"
+      );
 
-      // update meta theme-color
+      // update theme-color meta
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {
-        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
+        themeMeta.setAttribute(
+          "content",
+          document.body.classList.contains("light") ? "#ffffff" : "#0d1117"
+        );
       }
 
-      // icon crossfade (no emoji swapping)
+      // icon crossfade slightly after change (feels smoother)
       setTimeout(syncToggleIcon, ms * 0.65);
 
       // fade overlay out
       requestAnimationFrame(() => fade.classList.remove("show"));
 
-      // release theme-switching exactly after CSS duration
-      const dur = getComputedStyle(document.documentElement).getPropertyValue("--theme-dur").trim();
-      const ms = dur.endsWith("ms") ? parseFloat(dur) : parseFloat(dur) * 1000;
-      
-      window.setTimeout(() => {
+      // release lock exactly after CSS duration
+      setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, ms + 50);
-
+      }, ms + 60);
     });
   });
 })();
+
 
     // Optimize background orb on slow devices
     (function optimizeBackground(){
