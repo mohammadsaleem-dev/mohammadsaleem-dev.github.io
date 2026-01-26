@@ -1312,6 +1312,15 @@ body:not(.light) #introOverlay{
 .v-icon .fb-check{
   fill:
 
+/* FORCE Facebook badge colors (override global SVG rules) */
+
+.v-icon.fb .fb-circle{
+  fill: #1877F2 !important; /* Facebook Blue */
+}
+
+.v-icon.fb .fb-check{
+  fill: #ffffff !important;
+}
 
 
 /* -------------------------
