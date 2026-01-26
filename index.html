@@ -1180,29 +1180,6 @@ body:not(.light) #introOverlay{
   min-height: 52px;
   color: var(--text);
 }
-    /* ✅ Step 2: scan-line shimmer */
-.intro-type::after{
-  content:"";
-  position:absolute;
-  inset:-40%;
-  background: linear-gradient(
-    115deg,
-    transparent 45%,
-    rgba(88,166,255,0.14) 50%,
-    transparent 55%
-  );
-  transform: translateX(-45%);
-  animation: scanShimmer 3.6s ease-in-out infinite;
-  pointer-events:none;
-}
-
-@keyframes scanShimmer{
-  0%   { transform: translateX(-45%); opacity: 0; }
-  15%  { opacity: 1; }
-  55%  { opacity: 1; }
-  70%  { opacity: 0; }
-  100% { transform: translateX(45%); opacity: 0; }
-}
 
 #introText{ display:inline-block; }
 .cursor{
@@ -1215,7 +1192,7 @@ body:not(.light) #introOverlay{
   flex: 0 0 auto;
 
   /* new */
-  animation: cursorBlink 1s steps(1) infinite, cursorBreathe 1.6s ease-in-out infinite;
+  animation: cursorBlink 1s steps(1) infinite;
   transform-origin: center bottom;
 }
 
