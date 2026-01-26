@@ -1949,7 +1949,7 @@ button.brand{
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1960,7 +1960,7 @@ button.brand{
               <div class="cert-date">Jan 2026</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1982,7 +1982,7 @@ button.brand{
               <div class="cert-date">May 2023</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -1993,7 +1993,7 @@ button.brand{
               <div class="cert-date">Jul 2022</div>
             </div>
             <div class="issuer-row">
-              <img class="issuer-logo" src="assets/cisco.png" alt="Cisco logo" onerror="this.style.display='none'">
+              <img class="issuer-logo" src="assets/cisco.png?v=2" alt="Cisco logo" onerror="this.style.display='none'">
               <p class="cert-by">Awarded by Cisco.</p>
             </div>
           </div>
@@ -2099,7 +2099,7 @@ const syncToggleIcon = () => {
 (function initTheme(){
   const saved = localStorage.getItem("theme");
   if (saved === "light") document.body.classList.add("light");
-  syncToggleIcon();
+  setTimeout(syncToggleIcon, ms * 0.65);
 
   toggle.addEventListener("click", () => {
     // Prevent hover transforms / weird mid-toggle pops
@@ -2128,15 +2128,19 @@ const syncToggleIcon = () => {
       }
 
       // icon crossfade (no emoji swapping)
-      syncToggleIcon();
+      setTimeout(syncToggleIcon, ms * 0.65);
 
       // fade overlay out
       requestAnimationFrame(() => fade.classList.remove("show"));
 
-      // release "theme-switching" after transition finishes
+      // release theme-switching exactly after CSS duration
+      const dur = getComputedStyle(document.documentElement).getPropertyValue("--theme-dur").trim();
+      const ms = dur.endsWith("ms") ? parseFloat(dur) : parseFloat(dur) * 1000;
+      
       window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, 540);
+      }, ms + 50);
+
     });
   });
 })();
