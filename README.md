@@ -4,10 +4,11 @@
 ![HTML](https://img.shields.io/badge/HTML-5-orange)
 ![CSS](https://img.shields.io/badge/CSS-3-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
+![Lighthouse Performance](https://img.shields.io/badge/Lighthouse-Performance%2095%25-brightgreen)
+
 
 🌐 **Live Website:**  
 https://mohammadsaleem-dev.github.io
-![Lighthouse Performance](https://img.shields.io/badge/Lighthouse-Performance%2095%25-brightgreen)
 
 ---
 
