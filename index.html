@@ -159,7 +159,8 @@ a:focus-visible, button:focus-visible{
   .project-card, .timeline-item, .item,
   .cert, .verify-card, .stat, .time-card,
   .objective, .icon-chip, .pill, .tag, .icon-btn,
-  .thumb-badge, .thumb-icon, .logo, .issuer-logo
+  .thumb-badge, .thumb-icon, .logo, .issuer-logo, 
+  .verify-chip
 ){
   transition:
     background-color var(--theme-dur) var(--theme-ease),
@@ -1012,6 +1013,65 @@ button.brand{
 .verify-label{ color: var(--muted); font-weight: 900; }
 .verify-card small{ color: var(--muted2); font-weight: 800; }
 
+    /* =========================
+   VERIFICATION STRIP (1 row)
+   ========================= */
+.verify-strip{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+@media (max-width: 560px){
+  .verify-strip{ grid-template-columns: 1fr; }
+}
+
+.verify-chip{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 16px;
+  background: rgba(127,127,127,0.10);
+  border: 1px solid transparent; /* no border unless hover */
+  color: var(--text);
+}
+
+.verify-chip:hover{
+  border-color: var(--border);
+  box-shadow: var(--hover-shadow), var(--hover-ring);
+  transform: translateY(-2px);
+}
+
+.verify-chip i{
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background: var(--panel);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow);
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.verify-chip .big{
+  font-weight: 950;
+  letter-spacing: -0.2px;
+}
+
+.verify-chip .label{
+  color: var(--muted);
+  font-weight: 900;
+  margin-left: auto;
+  font-size: 12px;
+  text-align: right;
+}
+
+
 /* -------------------------
    SOCIAL ICON BUTTONS
 ------------------------- */
@@ -1441,25 +1501,52 @@ body:not(.light) #introOverlay{
 
       <div class="card reveal">
         <h2 style="margin:0 0 14px; font-size: 26px;">Quick Links</h2>
-
-      <div class="icon-row" aria-label="Quick links icons">
-        <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
-          <i class="fa-brands fa-github"></i>
-        </a>
       
-        <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <i class="fa-brands fa-linkedin-in"></i>
-        </a>
+        <div class="icon-row" aria-label="Quick links icons">
+          <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub Profile">
+            <i class="fa-brands fa-github"></i>
+          </a>
       
-        <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
-      </div>
+          <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+      
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+        </div>
 
-
+        <!-- ✅ MINI ID CARD (Google-style) -->
+        <div class="mini-id">
+          <div class="mini-id-top">
+            <img class="mini-id-avatar" src="assets/profile.png" alt="Mohammad Saleem">
+            <div class="mini-id-text">
+              <div class="mini-id-name">Mohammad Saleem</div>
+              <div class="mini-id-role">Computer Engineering Graduate</div>
+            </div>
+          </div>
+      
+          <div class="mini-id-rows">
+            <div class="mini-id-row">
+              <span class="k">Location</span>
+              <span class="v">Amman, Jordan</span>
+            </div>
+            <div class="mini-id-row">
+              <span class="k">Institution</span>
+              <span class="v">University of Jordan</span>
+            </div>
+            <div class="mini-id-row">
+              <span class="k">Email</span>
+              <span class="v">mohammadssaleem2001@gmail.com</span>
+            </div>
+          </div>
+        </div>
+        <!-- ✅ END MINI ID CARD -->
+      
         <div class="pill-row" style="margin-top: 14px;">
           <span class="pill">Amman, Jordan</span>
           <span class="pill">University of Jordan</span>
-          <span class="pill">Open to opportunities</span>
         </div>
+      </div>
+
 
         <p class="lead" style="margin: 14px 0 0;">
           Prefer email? Scroll to the Contact section for direct links.
@@ -1468,22 +1555,42 @@ body:not(.light) #introOverlay{
   <h3>Verification</h3>
   <p>Quick proof signals: badges and awards.</p>
 
-  <div class="verify-grid">
+  <div class="verify-strip">
+  
     <!-- Credly -->
-    <a class="verify-card" href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly" target="_blank" rel="noopener">
-      <div class="verify-num js-count" data-target="7" data-suffix="+">0</div>
-      <div class="verify-label">Credly Badges</div>
-      <small>Open Credly profile</small>
+    <a class="verify-chip"
+       href="https://www.credly.com/users/mohammad-saleem.df69c142/badges#credly"
+       target="_blank"
+       rel="noopener">
+  
+      <i class="fa-solid fa-certificate"></i>
+      <span class="big js-count" data-target="7" data-suffix="+">0</span>
+      <span class="label">Credly Badges</span>
+  
     </a>
-
+  
     <!-- Awards -->
-    <a class="verify-card" href="#awards">
-      <div class="verify-num js-count" data-target="2" data-suffix="">0</div>
-      <div class="verify-label">Awards</div>
-      <small>Jump to awards section</small>
+    <a class="verify-chip" href="#awards">
+  
+      <i class="fa-solid fa-trophy"></i>
+      <span class="big js-count" data-target="2" data-suffix="">0</span>
+      <span class="label">Awards</span>
+  
+    </a>
+  
+    <!-- GitHub -->
+    <a class="verify-chip"
+       href="https://github.com/mohammadsaleem-dev"
+       target="_blank"
+       rel="noopener">
+  
+      <i class="fa-brands fa-github"></i>
+      <span class="big">GitHub</span>
+      <span class="label">Profile</span>
+  
     </a>
   </div>
-</div>
+  </div>
 
       </div>
     </div>
