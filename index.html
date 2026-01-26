@@ -1244,6 +1244,35 @@ body:not(.light) #introOverlay{
   .hero-actions{ flex-direction: column; align-items: stretch; }
   .hero-actions .btn{ width: 100%; }
 }
+
+/* ✅ Mobile fix: prevent title/date collision in timeline items */
+@media (max-width: 520px){
+  .timeline-item{
+    grid-template-columns: 1fr;   /* stack instead of 2 columns */
+    gap: 10px;
+  }
+
+  .t-date{
+    padding-left: 0;
+    justify-self: start;
+    margin-top: 2px;
+    font-size: 13px;
+  }
+
+  /* make long titles wrap safely */
+  .t-title{
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* also wrap meta text nicely */
+  .t-meta{
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
 </style>
 
 
