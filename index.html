@@ -198,17 +198,17 @@ a:focus-visible, button:focus-visible{
   .project-card, .timeline-item, .item,
   .cert, .verify-card, .stat, .time-card,
   .objective, .icon-chip, .pill, .tag, .icon-btn,
-  .thumb-badge, .thumb-icon, .logo, .issuer-logo
+  .thumb-badge, .thumb-icon
 ){
   transition:
     background-color var(--theme-dur) var(--theme-ease),
     color var(--theme-dur) var(--theme-ease),
     border-color var(--theme-dur) var(--theme-ease),
     box-shadow var(--theme-dur) var(--theme-ease),
-    filter var(--theme-dur) var(--theme-ease),
     opacity var(--theme-dur) var(--theme-ease),
-    transform var(--hover-dur) var(--hover-ease); /* ✅ THIS fixes instant hover */
+    transform var(--hover-dur) var(--hover-ease);
 }
+
     /* icons/chips visual smoothness */
 .icon-chip .sicon,
 .thumb-icon,
@@ -811,6 +811,12 @@ button.brand{
               border-color var(--theme-dur) var(--theme-ease),
               box-shadow var(--theme-dur) var(--theme-ease);
 }
+
+    /* ✅ Logos should NOT animate during theme switch (prevents raster glitches) */
+.logo, .issuer-logo{
+  transition: none !important;
+}
+
 
 /* -------------------------
    PROJECTS
