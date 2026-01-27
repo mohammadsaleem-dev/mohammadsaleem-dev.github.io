@@ -569,24 +569,6 @@ button.brand{
 }
 
 
-/* -------------------------
-   HERO (NAME + SUBTITLE + LOCATION)
-------------------------- */
-.hero-title{
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;             /* ✅ allow wrap so badge never disappears */
-}
-
-.profile-avatar{
-  width: 60px;
-  height: 60px;
-  border-radius: 999px;
-  object-fit: cover;
-  flex-shrink: 0;
-  box-shadow: var(--shadow);
-}
 
 .hero-title h1{
   margin: 0 0 8px;
@@ -1225,47 +1207,6 @@ button.brand{
 #themeToggle.is-light .moon{ opacity: 0; transform: rotate(90deg) scale(0.6); }
 #themeToggle.is-light .sun { opacity: 1; transform: rotate(0) scale(1); }
 
-    /* =========================
-   VERIFICATION BADGE (Hero name)
-   ========================= */
-.name-wrap{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex-wrap: wrap;             /* ✅ keep badge visible */
-}
-
-
-/* Badge button */
-.v-badge{
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  position: relative;
-
-  border: 1px solid transparent;
-  background: rgba(127,127,127,0.10);
-  box-shadow: var(--shadow);
-
-  transform: translateY(2px);
-  transition:
-    transform var(--hover-dur) var(--hover-ease),
-    box-shadow var(--hover-dur) var(--hover-ease),
-    filter var(--hover-dur) var(--hover-ease),
-    background-color var(--theme-dur) var(--theme-ease),
-    border-color var(--theme-dur) var(--theme-ease);
-}
-
-/* Icon inside */
-.v-icon{
-  width: 20px;
-  height: 20px;
-  display: block;
-}
 
 /* SVG colors (matches your theme accent) */
 .v-icon .v-circle{
@@ -1278,13 +1219,118 @@ button.brand{
 
 .v-icon .v-check{ fill: #fff; }
 
-/* Hover animation */
+/* =========================
+   HERO HEADER (photo + name + badge)
+   ========================= */
+.hero-title{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;              /* ✅ keep in one row */
+}
+
+/* Avatar */
+.profile-avatar{
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex: 0 0 64px;
+  box-shadow: var(--shadow);
+}
+
+/* Name + badge (same row) */
+.name-wrap{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Name */
+.name-wrap h1{
+  margin: 0;
+  font-size: var(--h1);
+  font-weight: 900;
+  letter-spacing: -0.7px;
+
+  /* ✅ keeps the name clean and prevents overflow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge */
+.v-badge{
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 32px;
+
+  border: 1px solid transparent;
+  background: rgba(127,127,127,0.10);
+  box-shadow: var(--shadow);
+
+  transform: translateY(1px);
+  transition: transform var(--hover-dur) var(--hover-ease),
+              box-shadow var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease),
+              border-color var(--theme-dur) var(--theme-ease),
+              background-color var(--theme-dur) var(--theme-ease);
+}
+
+.v-icon{
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* Hover */
 .v-badge:hover{
   border-color: var(--border);
   box-shadow: var(--glow), 0 0 0 6px rgba(88,166,255,0.12);
-  transform: translateY(0) scale(1.06) rotate(-6deg);
+  transform: translateY(0) scale(1.06);
   filter: brightness(1.05);
 }
+
+/* =========================
+   MOBILE: keep name + badge beside photo (like old)
+   ========================= */
+@media (max-width: 520px){
+  .hero-title{
+    gap: 12px;
+  }
+
+  .profile-avatar{
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+  }
+
+  .name-wrap{
+    gap: 10px;
+  }
+
+  .name-wrap h1{
+    font-size: clamp(26px, 7vw, 36px);  /* ✅ looks like old */
+    letter-spacing: -0.5px;
+  }
+
+  .v-badge{
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+  }
+
+  .v-icon{
+    width: 18px;
+    height: 18px;
+  }
+}
+
 
 /* Fancy “shine” */
 .v-badge::after{
