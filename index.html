@@ -1350,18 +1350,19 @@ button.brand{
    ========================================================= */
 
 :root{
-  --welcome-bg: #061b44;            /* dark navy splash */
-  --welcome-stroke: #eaf2ff;
-  --welcome-text: #eaf2ff;
-  --welcome-subtle: rgba(234,242,255,.65);
+  --welcome-bg: #0d1117;            /* GitHub dark */
+  --welcome-stroke: #c9d1d9;
+  --welcome-text: #c9d1d9;
+  --welcome-subtle: rgba(201,209,217,.70);
 }
 
 body.light{
-  --welcome-bg: #f6f8ff;            /* light splash */
-  --welcome-stroke: #0b1b3b;
-  --welcome-text: #0b1b3b;
-  --welcome-subtle: rgba(11,27,59,.55);
+  --welcome-bg: #ffffff;            /* GitHub light */
+  --welcome-stroke: #24292f;
+  --welcome-text: #24292f;
+  --welcome-subtle: rgba(36,41,47,.55);
 }
+
 
 .welcome-splash{
   position: fixed;
@@ -1461,6 +1462,26 @@ body.light{
   margin-top: 6px;
 }
 
+    /* ✅ Theme fade overlay (prevents white flash) */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  z-index: 9998;          /* under welcome splash (9999) */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+#themeFade.show{ opacity: 1; }
+
+    .welcome-title{
+  color: var(--welcome-text);
+  font-weight: 900;
+  letter-spacing: .6px;
+  font-size: clamp(18px, 2.8vw, 30px);
+  opacity: .92;
+  margin-top: -4px;
+}
+
 
 </style>
 
@@ -1469,6 +1490,9 @@ body.light{
 </head>
 
 <body>
+  <!-- ✅ THEME FADE OVERLAY (required for theme toggle) -->
+<div id="themeFade" aria-hidden="true"></div>
+
   <!-- ✅ WELCOME SPLASH (NEW) -->
   <div id="welcomeSplash" class="welcome-splash" aria-hidden="false">
     <div class="welcome-inner">
@@ -1500,7 +1524,9 @@ body.light{
         </svg>
       </div>
 
-      <div class="welcome-name">Mohammad Saleem</div>
+      <div class="welcome-title">Welcome</div>
+<div class="welcome-name" id="welcomeTyped" data-text="Eng. Mohammad Saleem"></div>
+
 
       <button class="btn btn-primary welcome-skip" id="skipWelcomeBtn" type="button">
         Skip
@@ -1564,7 +1590,7 @@ body.light{
           <img class="profile-avatar" src="assets/profile.png" alt="Mohammad Saleem profile photo">
         
           <div class="name-wrap">
-            <h1>Mohammad Saleem</h1>
+            <h1 id="heroTyped" data-text="Eng. Mohammad Saleem"></h1>
         
           <!-- Verification Badge -->
           <a class="v-badge"
@@ -2116,11 +2142,12 @@ body.light{
   </button>
 
   <script>
-// Theme toggle (no white flash) + stable icon crossfade
+// ✅ Theme toggle (fixed) + hover stays working
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
 const syncToggleIcon = () => {
+  if (!toggle) return;
   toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
@@ -2129,42 +2156,39 @@ const syncToggleIcon = () => {
   if (saved === "light") document.body.classList.add("light");
   syncToggleIcon();
 
+  if (!toggle) return;
+
   toggle.addEventListener("click", () => {
-    // Prevent hover transforms / weird mid-toggle pops
     document.body.classList.add("theme-switching");
 
-    // snapshot current background into overlay
-    const cs = getComputedStyle(document.body);
-    fade.style.backgroundColor = cs.backgroundColor;
-    fade.style.backgroundImage = cs.backgroundImage;
-    fade.style.backgroundSize = cs.backgroundSize;
-    fade.style.backgroundPosition = cs.backgroundPosition;
-    fade.style.backgroundRepeat = cs.backgroundRepeat;
+    // if overlay exists, snapshot background
+    if (fade) {
+      const cs = getComputedStyle(document.body);
+      fade.style.backgroundColor = cs.backgroundColor;
+      fade.style.backgroundImage = cs.backgroundImage;
+      fade.style.backgroundSize = cs.backgroundSize;
+      fade.style.backgroundPosition = cs.backgroundPosition;
+      fade.style.backgroundRepeat = cs.backgroundRepeat;
+      fade.classList.add("show");
+    }
 
-    // show overlay
-    fade.classList.add("show");
-
-    // switch theme next frame
     requestAnimationFrame(() => {
       document.body.classList.toggle("light");
       localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-      // update meta theme-color
+      // update meta theme-color (mobile address bar color)
       const themeMeta = document.querySelector('meta[name="theme-color"]');
-      if (themeMeta) {
-        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
-      }
+      if (themeMeta) themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
 
-      // icon crossfade (no emoji swapping)
       syncToggleIcon();
 
-      // fade overlay out
-      requestAnimationFrame(() => fade.classList.remove("show"));
+      // hide overlay
+      if (fade) requestAnimationFrame(() => fade.classList.remove("show"));
 
-      // release "theme-switching" after transition finishes
+      // always release theme-switching (so hover returns)
       window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, 540);
+      }, 560);
     });
   });
 })();
@@ -2271,16 +2295,14 @@ const syncToggleIcon = () => {
       }, delay);
     })();
 
-/* =========================
-   ✅ NEW WELCOME SPLASH
-   - Keeps your theme toggle working
-   - Replays when clicking MS in navbar
-   - No scroll jump on replay
-   ========================= */
+/* ✅ WELCOME SPLASH (replay + re-type) */
 (function(){
   const splash = document.getElementById("welcomeSplash");
   const skipBtn = document.getElementById("skipWelcomeBtn");
   const brand = document.getElementById("brandHome");
+
+  const welcomeTyped = document.getElementById("welcomeTyped");
+  const heroTyped = document.getElementById("heroTyped");
 
   if (!splash) return;
 
@@ -2294,30 +2316,36 @@ const syncToggleIcon = () => {
     splash.setAttribute("aria-hidden", "false");
   };
 
+  const runTyping = () => {
+    // Welcome splash typing
+    if (welcomeTyped) typeText(welcomeTyped, welcomeTyped.dataset.text || "Eng. Mohammad Saleem", 45);
+    // Hero name typing
+    if (heroTyped) typeText(heroTyped, heroTyped.dataset.text || "Eng. Mohammad Saleem", 28);
+  };
+
   const runOnce = () => {
     if (splash.dataset.ran === "1") return;
     splash.dataset.ran = "1";
-    // auto hide after animation finishes
+    runTyping();
     setTimeout(hide, 1700);
   };
 
-  // Skip button
-  if (skipBtn) {
-    skipBtn.addEventListener("click", hide);
-  }
+  if (skipBtn) skipBtn.addEventListener("click", hide);
 
-  // Replay on MS click (no scroll changes)
   if (brand) {
-    brand.addEventListener("click", () => {
+    brand.addEventListener("click", (e) => {
+      e.preventDefault();
       show();
+      runTyping();              // ✅ re-type on replay
       setTimeout(hide, 1700);
     });
   }
 
-  // First load
   window.addEventListener("pageshow", (e) => {
+    // Always type hero name on load (refresh / back / normal)
+    runTyping();
+
     if (e.persisted) {
-      // BFCache restore: reset to hidden then rerun cleanly
       splash.classList.add("hide");
       splash.dataset.ran = "";
       requestAnimationFrame(() => {
@@ -2329,6 +2357,7 @@ const syncToggleIcon = () => {
     runOnce();
   });
 })();
+
 
 
     // =========================
@@ -2383,6 +2412,19 @@ const syncToggleIcon = () => {
 
   counters.forEach((el) => io.observe(el));
 })();
+
+    // ✅ Typewriter helper (for Welcome + Hero name)
+function typeText(el, text, speed = 45){
+  if (!el) return;
+  el.textContent = "";
+  let i = 0;
+  const tick = () => {
+    el.textContent = text.slice(0, i);
+    i++;
+    if (i <= text.length) requestAnimationFrame(() => setTimeout(tick, speed));
+  };
+  tick();
+}
 
     
   </script>
