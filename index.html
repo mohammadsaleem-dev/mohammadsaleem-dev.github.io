@@ -90,7 +90,7 @@
 
   --font: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
 
-  --h1: clamp(40px, 5vw, 60px);
+  --h1: clamp(34px, 3.6vw, 50px);
   --h2: clamp(26px, 2.6vw, 34px);
   --h3: 18px;
   --body: 16px;
@@ -152,7 +152,7 @@ body{
   margin: 0;
 
   /* ✅ Safe area padding (iPhone notch + home indicator) */
-  padding-top: env(safe-area-inset-top);
+  padding-top: 0;
   padding-bottom: env(safe-area-inset-bottom);
 
   font-family: var(--font);
@@ -308,10 +308,15 @@ footer{
   position: sticky;
   top: 0;
   z-index: 50;
-  padding-top: calc(14px + env(safe-area-inset-top));
-  backdrop-filter: 6px;
-  -webkit-backdrop-filter: 6px;
+
+  /* ✅ only notch-safe padding (no extra 14px) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: 10px; /* adjust: 6px–12px */
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
+
 
 /* ✅ no border unless hover */
 .nav-inner{
@@ -571,7 +576,7 @@ button.brand{
   display: flex;
   align-items: center;
   gap: 14px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;             /* ✅ allow wrap so badge never disappears */
 }
 
 .profile-avatar{
@@ -604,18 +609,21 @@ button.brand{
 }
 
 
-/* Mobile: add space AFTER NAME */
+/* Mobile: title wrapping */
 @media (max-width: 520px){
   .hero-title{ align-items: flex-start; gap: 12px; }
-  .hero-title h1{
-    white-space: normal;
-    line-height: 1.05;
-    font-size: clamp(28px, 7vw, 40px);
-    margin: 0 0 14px !important;
-  }
-  .profile-avatar{ width: 46px; height: 46px; }
-}
 
+  .hero-title h1{
+    margin: 0 0 8px;
+    font-size: var(--h1);
+    letter-spacing: -0.6px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+} /* ✅ THIS closing brace was missing */
+
+/* Subtitle row (GLOBAL, not stuck inside media) */
 .subtitle-row{
   display: inline-flex;
   align-items: center;
@@ -624,6 +632,7 @@ button.brand{
   line-height: 1;
   margin-bottom: 10px;
 }
+
 .mini-pc{
   width: 28px;
   height: 28px;
@@ -645,7 +654,6 @@ button.brand{
   margin-bottom: 10px;
 }
 
-/* Location row */
 .locline{
   display: flex;
   align-items: center;
@@ -658,6 +666,7 @@ button.brand{
 }
 .locline i{ font-size: 18px; transform: translateY(1px); color: var(--accent); }
 .locline span{ padding-left: 6px; }
+
 
 /* -------------------------
    OBJECTIVE BOX (no border unless hover)
@@ -1187,166 +1196,7 @@ button.brand{
   margin: 48px 0;
 }
 
-  /* -------------------------
-   THEME FADE OVERLAY (prevents white flash + sync feel)
-------------------------- */
-#themeFade{
-  position: fixed;
-  inset: 0;
-  z-index: 9998;            /* below introOverlay (9999), above page */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--theme-dur) var(--theme-ease);
-  will-change: opacity;
-}
 
-#themeFade.show{
-  opacity: 1;
-}
-
-/* -------------------------
-   INTRO OVERLAY (MATCH MAIN BACKGROUND EXACTLY)
-------------------------- */
-#introOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* ✅ SAME as page background */
-  background: var(--bg) !important;
-
-  overflow: hidden;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 520ms var(--theme-ease), visibility 0ms linear 520ms;
-}
-
-/* ✅ remove any extra overlay decorations */
-#introOverlay::before,
-#introOverlay::after{
-  content: none !important;
-  display: none !important;
-}
-
-.intro-box{
-  width: min(720px, calc(100% - 36px));
-  border-radius: 26px;
-  border: 1px solid transparent;
-  background: var(--panel);
-  box-shadow: var(--shadow);
-  padding: 26px 22px;
-  text-align: center;
-}
-.intro-box:hover{ border-color: var(--border); }
-
-.intro-title{
-  font-size: clamp(26px, 3.2vw, 36px);
-  font-weight: 900;
-  margin: 0 0 10px;
-  color: var(--text);
-}
-/* =========================
-   INTRO NAME BOX (WELCOME) — SOFT CENTER GLOW
-========================= */
-.intro-type{
-  font-size: clamp(20px, 3vw, 34px);
-  font-weight: 900;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
-  white-space: nowrap;
-  padding: 10px 14px;
-  min-height: 52px;
-
-  border-radius: 18px;
-  background: rgba(127,127,127,0.10);
-  color: var(--text);
-
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Keep text + cursor above glow */
-.intro-type > *{
-  position: relative;
-  z-index: 2;
-}
-
-/* =========================
-   CENTER GLOW EFFECT
-========================= */
-.intro-type::after{
-  content:"";
-  position:absolute;
-  inset: 0;
-  border-radius: inherit;
-
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(88,166,255,0.35),
-      rgba(88,166,255,0.15) 35%,
-      transparent 70%
-    );
-
-  filter: blur(12px);
-  opacity: .7;
-
-  pointer-events:none;
-  z-index: 0;
-}
-
-/* Reduced motion safety */
-@media (prefers-reduced-motion: reduce){
-  .intro-type::after{
-    filter: none;
-  }
-}
-
-
-#introText{ display:inline-block; }
-.cursor{
-  display:inline-block;
-  width: 10px;
-  height: 1.05em;
-  border-radius: 2px;
-  background: var(--text);
-  opacity: 0.7;
-  flex: 0 0 auto;
-
-  /* new */
-  animation: cursorBlink 1s steps(1) infinite;
-  transform-origin: center bottom;
-}
-
-@keyframes cursorBlink{
-  50%{ opacity: 0; }
-}
-
-@keyframes cursorBreathe{
-  0%, 100%{ transform: scaleY(0.92); opacity: 0.55; }
-  50%     { transform: scaleY(1.12); opacity: 0.9; }
-}
-
-
-
-@keyframes blink{ 50%{ opacity: 0; } }
-
-.intro-sub{ margin: 12px 0 0; color: var(--muted); font-weight: 700; }
-.intro-actions{ margin-top: 16px; display:flex; justify-content:center; gap: 10px; flex-wrap: wrap; }
-
-#introOverlay.intro-hide{
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none !important;
-}
 
 /* -------------------------
    THEME TOGGLE ICON
@@ -1383,7 +1233,9 @@ button.brand{
   align-items: center;
   gap: 10px;
   min-width: 0;
+  flex-wrap: wrap;             /* ✅ keep badge visible */
 }
+
 
 /* Badge button */
 .v-badge{
@@ -1393,6 +1245,7 @@ button.brand{
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
+  position: relative;
 
   border: 1px solid transparent;
   background: rgba(127,127,127,0.10);
@@ -1503,6 +1356,141 @@ button.brand{
   }
 }
 
+    /* =========================================================
+   ✅ NEW WELCOME SPLASH (MS + Mohammad Saleem)
+   Uses your theme system: dark = default, light = body.light
+   ========================================================= */
+
+:root{
+  --welcome-bg: var(--bg);              /* ✅ match GitHub dark */
+  --welcome-stroke: var(--accent);      /* ✅ BLUE logo */
+  --welcome-text: var(--text);          /* ✅ match theme text */
+  --welcome-subtle: rgba(88,166,255,.35);
+}
+
+body.light{
+  --welcome-bg: var(--bg);              /* ✅ match GitHub light */
+  --welcome-stroke: var(--accent);      /* ✅ BLUE logo */
+  --welcome-text: var(--text);
+  --welcome-subtle: rgba(9,105,218,.28);
+}
+
+
+
+.welcome-splash{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--welcome-bg);
+  display: grid;
+  place-items: center;
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+.welcome-splash.hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.welcome-inner{
+  display: grid;
+  place-items: center;
+  gap: 22px;
+  transform: translateY(-2px);
+  width: min(740px, calc(100% - 36px));
+}
+
+.ms-logo{
+  width: min(190px, 46vw);
+  height: auto;
+}
+
+/* hex draw */
+.logo-stroke{
+  fill: none;
+  stroke: var(--welcome-stroke);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: drawHex 1400ms ease forwards;
+}
+
+.logo-stroke.s2{
+  opacity: .65;
+  stroke-width: 3.2;
+  animation-delay: 140ms;
+}
+
+@keyframes drawHex{
+  to{ stroke-dashoffset: 0; }
+}
+
+/* MS letters draw */
+.logo-text{
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: 76px;
+  fill: transparent;
+  stroke: var(--welcome-stroke);
+  stroke-width: 2.8;
+  paint-order: stroke;
+  letter-spacing: 2px;
+
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: drawText 1200ms ease forwards;
+  animation-delay: 260ms;
+}
+
+@keyframes drawText{
+  to{
+    stroke-dashoffset: 0;
+    fill: var(--welcome-subtle);
+  }
+}
+
+/* signature name */
+.welcome-name{
+  color: var(--welcome-text);
+  font-size: clamp(22px, 3.6vw, 46px);
+  line-height: 1;
+  font-family: "Segoe Script", "Brush Script MT", "Apple Chancery", cursive;
+
+  /* ✅ JS typing controls appearance */
+  opacity: 1;
+  transform: none;
+}
+
+/* skip button position */
+.welcome-skip{
+  margin-top: 6px;
+}
+
+    /* ✅ Theme fade overlay (prevents white flash) */
+#themeFade{
+  position: fixed;
+  inset: 0;
+  z-index: 9998;          /* under welcome splash (9999) */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+#themeFade.show{ opacity: 1; }
+
+    .welcome-title{
+  color: var(--welcome-text);
+  font-weight: 900;
+  letter-spacing: .6px;
+  font-size: clamp(18px, 2.8vw, 30px);
+  opacity: .92;
+  margin-top: -4px;
+}
+
+
 </style>
 
 
@@ -1510,20 +1498,52 @@ button.brand{
 </head>
 
 <body>
-  <!-- Intro typing overlay -->
-  <div id="themeFade" aria-hidden="true"></div>
-  <div id="introOverlay" aria-hidden="false">
-    <div class="intro-box">
-      <div class="intro-title">Welcome</div>
-      <div class="intro-type" aria-label="Intro typing text">
-        <span id="introText"></span><span class="cursor" aria-hidden="true"></span>
+  <!-- ✅ THEME FADE OVERLAY (required for theme toggle) -->
+<div id="themeFade" aria-hidden="true"></div>
+
+  <!-- ✅ WELCOME SPLASH (NEW) -->
+  <div id="welcomeSplash" class="welcome-splash" aria-hidden="false">
+    <div class="welcome-inner">
+
+      <div class="welcome-logo" aria-hidden="true">
+        <svg class="ms-logo" viewBox="0 0 220 220">
+          <!-- Outer hex -->
+          <path class="logo-stroke s1"
+            d="M110 18
+               L186 62
+               L186 158
+               L110 202
+               L34 158
+               L34 62
+               Z" />
+
+          <!-- Inner hex -->
+          <path class="logo-stroke s2"
+            d="M110 30
+               L176 70
+               L176 150
+               L110 190
+               L44 150
+               L44 70
+               Z" />
+
+          <!-- MS letters -->
+          <text class="logo-text" x="110" y="132" text-anchor="middle">MS</text>
+        </svg>
       </div>
-      <p class="intro-sub">Entering portfolio…</p>
-      <div class="intro-actions">
-        <button class="btn btn-primary" id="skipIntroBtn" type="button">Skip</button>
-      </div>
+
+      <div class="welcome-title">Welcome</div>
+<div class="welcome-name" id="welcomeTyped" data-text="Eng. Mohammad Saleem"></div>
+
+
+      <button class="btn btn-primary welcome-skip" id="skipWelcomeBtn" type="button">
+        Skip
+      </button>
+
     </div>
   </div>
+  <!-- ✅ END WELCOME SPLASH -->
+
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
@@ -1578,7 +1598,7 @@ button.brand{
           <img class="profile-avatar" src="assets/profile.png" alt="Mohammad Saleem profile photo">
         
           <div class="name-wrap">
-            <h1>Mohammad Saleem</h1>
+            <h1 id="heroTyped" data-text="Mohammad Saleem"></h1>
         
           <!-- Verification Badge -->
           <a class="v-badge"
@@ -2130,11 +2150,12 @@ button.brand{
   </button>
 
   <script>
-// Theme toggle (no white flash) + stable icon crossfade
+// ✅ Theme toggle (fixed) + hover stays working
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
 const syncToggleIcon = () => {
+  if (!toggle) return;
   toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
@@ -2143,42 +2164,39 @@ const syncToggleIcon = () => {
   if (saved === "light") document.body.classList.add("light");
   syncToggleIcon();
 
+  if (!toggle) return;
+
   toggle.addEventListener("click", () => {
-    // Prevent hover transforms / weird mid-toggle pops
     document.body.classList.add("theme-switching");
 
-    // snapshot current background into overlay
-    const cs = getComputedStyle(document.body);
-    fade.style.backgroundColor = cs.backgroundColor;
-    fade.style.backgroundImage = cs.backgroundImage;
-    fade.style.backgroundSize = cs.backgroundSize;
-    fade.style.backgroundPosition = cs.backgroundPosition;
-    fade.style.backgroundRepeat = cs.backgroundRepeat;
+    // if overlay exists, snapshot background
+    if (fade) {
+      const cs = getComputedStyle(document.body);
+      fade.style.backgroundColor = cs.backgroundColor;
+      fade.style.backgroundImage = cs.backgroundImage;
+      fade.style.backgroundSize = cs.backgroundSize;
+      fade.style.backgroundPosition = cs.backgroundPosition;
+      fade.style.backgroundRepeat = cs.backgroundRepeat;
+      fade.classList.add("show");
+    }
 
-    // show overlay
-    fade.classList.add("show");
-
-    // switch theme next frame
     requestAnimationFrame(() => {
       document.body.classList.toggle("light");
       localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-      // update meta theme-color
+      // update meta theme-color (mobile address bar color)
       const themeMeta = document.querySelector('meta[name="theme-color"]');
-      if (themeMeta) {
-        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
-      }
+      if (themeMeta) themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
 
-      // icon crossfade (no emoji swapping)
       syncToggleIcon();
 
-      // fade overlay out
-      requestAnimationFrame(() => fade.classList.remove("show"));
+      // hide overlay
+      if (fade) requestAnimationFrame(() => fade.classList.remove("show"));
 
-      // release "theme-switching" after transition finishes
+      // always release theme-switching (so hover returns)
       window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
-      }, 540);
+      }, 560);
     });
   });
 })();
@@ -2285,145 +2303,87 @@ const syncToggleIcon = () => {
       }, delay);
     })();
 
-    /* =========================
-   INTRO typing screen + replay on MS click (NO LAG / NO SCROLL JUMP)
-   ========================= */
-(function () {
-  const overlay = document.getElementById("introOverlay");
-  const introTextEl = document.getElementById("introText");
-  const skipBtn = document.getElementById("skipIntroBtn");
+/* ✅ WELCOME SPLASH (replay + re-type) */
+(function(){
+  const splash = document.getElementById("welcomeSplash");
+  const skipBtn = document.getElementById("skipWelcomeBtn");
   const brand = document.getElementById("brandHome");
 
-  if (!overlay || !introTextEl || !skipBtn) return;
-  // Prevent any restored DOM text from flashing
-  introTextEl.textContent = "";
+  const welcomeTyped = document.getElementById("welcomeTyped");
+  const heroTyped = document.getElementById("heroTyped");
 
-  const FULL_TEXT = "Eng Mohammad Saleem";
-  let isRunning = false;
-  let rafId = 0;
-  let hideTimer = 0;
+  if (!splash) return;
 
-  const clearAll = () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
-    if (hideTimer) clearTimeout(hideTimer);
-    hideTimer = 0;
+    const restartWelcomeLogo = () => {
+    const logoWrap = splash.querySelector(".welcome-logo");
+    if (!logoWrap) return;
+
+    const svg = logoWrap.querySelector("svg");
+    if (!svg) return;
+
+    // ✅ Replacing the SVG forces CSS animations to restart
+    const clone = svg.cloneNode(true);
+    svg.replaceWith(clone);
   };
 
-  const showOverlay = () => {
-    overlay.style.display = "flex";
-    overlay.classList.remove("intro-hide");
-    overlay.setAttribute("aria-hidden", "false");
+
+  const hide = () => {
+    splash.classList.add("hide");
+    splash.setAttribute("aria-hidden", "true");
   };
 
-  const hideOverlay = () => {
-    overlay.classList.add("intro-hide");
-    overlay.setAttribute("aria-hidden", "true");
-    hideTimer = setTimeout(() => {
-      overlay.style.display = "none";
-    }, 520);
+    const show = () => {
+    splash.classList.remove("hide");
+    splash.setAttribute("aria-hidden", "false");
+
+    restartWelcomeLogo();  // ✅ restart MS logo draw animation
+    runTyping();           // ✅ restart typing
   };
 
-  const typeText = () => {
-    const reduceMotion =
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const runTyping = () => {
+    // Welcome splash typing
+    if (welcomeTyped) typeText(welcomeTyped, welcomeTyped.dataset.text || "Eng. Mohammad Saleem", 45);
+    // Hero name typing
+    if (heroTyped) typeText(heroTyped, heroTyped.dataset.text || "Eng. Mohammad Saleem", 28);
+  };
 
-    if (reduceMotion) {
-      introTextEl.textContent = FULL_TEXT;
-      hideTimer = setTimeout(() => { hideOverlay(); isRunning = false; }, 450);
+    const runOnce = () => {
+    if (splash.dataset.ran === "1") return;
+    splash.dataset.ran = "1";
+    restartWelcomeLogo();  // ✅ ensure first load animation always runs
+    runTyping();
+    setTimeout(hide, 1700);
+  };
+
+
+  if (skipBtn) skipBtn.addEventListener("click", hide);
+
+  if (brand) {
+    brand.addEventListener("click", (e) => {
+      e.preventDefault();
+      show();                   // show() now handles typing
+      setTimeout(hide, 1700);
+    });
+  }
+
+
+  window.addEventListener("pageshow", (e) => {
+    // Always type hero name on load (refresh / back / normal)
+    runTyping();
+
+    if (e.persisted) {
+      splash.classList.add("hide");
+      splash.dataset.ran = "";
+      requestAnimationFrame(() => {
+        show();
+        runOnce();
+      });
       return;
     }
-
-    let i = 0;
-    const start = performance.now();
-    const speed = 55; // ms per character feel
-
-    const step = (t) => {
-      // compute characters by time (stable even if tab lags)
-      const elapsed = t - start;
-      const nextI = Math.min(FULL_TEXT.length, Math.floor(elapsed / speed));
-      if (nextI !== i) {
-        i = nextI;
-        introTextEl.textContent = FULL_TEXT.slice(0, i);
-      }
-
-      if (i < FULL_TEXT.length) {
-        rafId = requestAnimationFrame(step);
-      } else {
-        hideTimer = setTimeout(() => {
-          hideOverlay();
-          isRunning = false;
-        }, 650);
-      }
-    };
-
-    rafId = requestAnimationFrame(step);
-  };
-
-  const runIntro = ({ goTop }) => {
-    if (isRunning) return;
-    isRunning = true;
-    clearAll();
-
-    // First load: go to top. Replay: do NOT touch scroll.
-    if (goTop) {
-      try { window.scrollTo({ top: 0, behavior: "auto" }); }
-      catch { window.scrollTo(0, 0); }
-    }
-
-    introTextEl.textContent = "";
-    showOverlay();
-    typeText();
-  };
-
-  // Skip button: just hide, no scroll restore
-  skipBtn.addEventListener("click", () => {
-    clearAll();
-    hideOverlay();
-    isRunning = false;
+    runOnce();
   });
-
-  // Replay intro on MS click (no scroll changes)
-  if (brand) {
-    brand.addEventListener("click", () => runIntro({ goTop: false }));
-  }
-
-  // ESC to skip
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && overlay.style.display !== "none") {
-      clearAll();
-      hideOverlay();
-      isRunning = false;
-    }
-  });
-
-// Run intro once per actual page-show, and handle BFCache restore cleanly
-const startOnce = () => {
-  if (overlay.dataset.ran === "1") return;   // hard guard
-  overlay.dataset.ran = "1";
-  runIntro({ goTop: true });
-};
-
-// pageshow fires on normal load + BFCache restore
-window.addEventListener("pageshow", (e) => {
-  // If restored from BFCache, the old typed text can flash.
-  // Reset to a clean hidden state BEFORE running again.
-  if (e.persisted) {
-    clearAll();
-    isRunning = false;
-    introTextEl.textContent = "";
-    overlay.classList.add("intro-hide");
-    overlay.setAttribute("aria-hidden", "true");
-    overlay.style.display = "none";
-    overlay.dataset.ran = ""; // allow startOnce() to run
-  }
-
-  // Start on the next frame so styles/layout settle first
-  requestAnimationFrame(startOnce);
-});
-
 })();
+
 
 
     // =========================
@@ -2478,6 +2438,19 @@ window.addEventListener("pageshow", (e) => {
 
   counters.forEach((el) => io.observe(el));
 })();
+
+    // ✅ Typewriter helper (for Welcome + Hero name)
+function typeText(el, text, speed = 45){
+  if (!el) return;
+  el.textContent = "";
+  let i = 0;
+  const tick = () => {
+    el.textContent = text.slice(0, i);
+    i++;
+    if (i <= text.length) requestAnimationFrame(() => setTimeout(tick, speed));
+  };
+  tick();
+}
 
     
   </script>
