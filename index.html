@@ -152,7 +152,7 @@ body{
   margin: 0;
 
   /* ✅ Safe area padding (iPhone notch + home indicator) */
-  padding-top: env(safe-area-inset-top);
+  padding-top: 0;
   padding-bottom: env(safe-area-inset-bottom);
 
   font-family: var(--font);
@@ -308,10 +308,15 @@ footer{
   position: sticky;
   top: 0;
   z-index: 50;
-  padding-top: calc(14px + env(safe-area-inset-top));
+
+  /* ✅ only notch-safe padding (no extra 14px) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: 10px; /* adjust: 6px–12px */
+
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
+
 
 /* ✅ no border unless hover */
 .nav-inner{
