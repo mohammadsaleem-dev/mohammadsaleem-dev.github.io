@@ -584,12 +584,10 @@ button.brand{
 }
 
 .hero-title h1{
-  margin: 0;                 /* ✅ remove bottom margin (align badge) */
+  margin: 0 0 8px;
   font-size: var(--h1);
   letter-spacing: -0.7px;
-  line-height: 1.05;         /* ✅ tighter baseline */
   white-space: nowrap;
-  display: inline-block;     /* ✅ keeps badge aligned on same row */
 }
 
   /* ✅ Stop the NAME from fading through gray on theme toggle */
@@ -1248,7 +1246,7 @@ button.brand{
   background: rgba(127,127,127,0.10);
   box-shadow: var(--shadow);
 
-  transform: translateY(0);
+  transform: translateY(2px);
   transition:
     transform var(--hover-dur) var(--hover-ease),
     box-shadow var(--hover-dur) var(--hover-ease),
@@ -2323,7 +2321,7 @@ const syncToggleIcon = () => {
     svg.replaceWith(clone);
   };
 
-  
+
   const hide = () => {
     splash.classList.add("hide");
     splash.setAttribute("aria-hidden", "true");
@@ -2336,8 +2334,6 @@ const syncToggleIcon = () => {
     restartWelcomeLogo();  // ✅ restart MS logo draw animation
     runTyping();           // ✅ restart typing
   };
-
-
 
   const runTyping = () => {
     // Welcome splash typing
