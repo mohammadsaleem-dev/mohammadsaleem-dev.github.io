@@ -1187,166 +1187,7 @@ button.brand{
   margin: 48px 0;
 }
 
-  /* -------------------------
-   THEME FADE OVERLAY (prevents white flash + sync feel)
-------------------------- */
-#themeFade{
-  position: fixed;
-  inset: 0;
-  z-index: 9998;            /* below introOverlay (9999), above page */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--theme-dur) var(--theme-ease);
-  will-change: opacity;
-}
 
-#themeFade.show{
-  opacity: 1;
-}
-
-/* -------------------------
-   INTRO OVERLAY (MATCH MAIN BACKGROUND EXACTLY)
-------------------------- */
-#introOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* ✅ SAME as page background */
-  background: var(--bg) !important;
-
-  overflow: hidden;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 520ms var(--theme-ease), visibility 0ms linear 520ms;
-}
-
-/* ✅ remove any extra overlay decorations */
-#introOverlay::before,
-#introOverlay::after{
-  content: none !important;
-  display: none !important;
-}
-
-.intro-box{
-  width: min(720px, calc(100% - 36px));
-  border-radius: 26px;
-  border: 1px solid transparent;
-  background: var(--panel);
-  box-shadow: var(--shadow);
-  padding: 26px 22px;
-  text-align: center;
-}
-.intro-box:hover{ border-color: var(--border); }
-
-.intro-title{
-  font-size: clamp(26px, 3.2vw, 36px);
-  font-weight: 900;
-  margin: 0 0 10px;
-  color: var(--text);
-}
-/* =========================
-   INTRO NAME BOX (WELCOME) — SOFT CENTER GLOW
-========================= */
-.intro-type{
-  font-size: clamp(20px, 3vw, 34px);
-  font-weight: 900;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
-  white-space: nowrap;
-  padding: 10px 14px;
-  min-height: 52px;
-
-  border-radius: 18px;
-  background: rgba(127,127,127,0.10);
-  color: var(--text);
-
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Keep text + cursor above glow */
-.intro-type > *{
-  position: relative;
-  z-index: 2;
-}
-
-/* =========================
-   CENTER GLOW EFFECT
-========================= */
-.intro-type::after{
-  content:"";
-  position:absolute;
-  inset: 0;
-  border-radius: inherit;
-
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(88,166,255,0.35),
-      rgba(88,166,255,0.15) 35%,
-      transparent 70%
-    );
-
-  filter: blur(12px);
-  opacity: .7;
-
-  pointer-events:none;
-  z-index: 0;
-}
-
-/* Reduced motion safety */
-@media (prefers-reduced-motion: reduce){
-  .intro-type::after{
-    filter: none;
-  }
-}
-
-
-#introText{ display:inline-block; }
-.cursor{
-  display:inline-block;
-  width: 10px;
-  height: 1.05em;
-  border-radius: 2px;
-  background: var(--text);
-  opacity: 0.7;
-  flex: 0 0 auto;
-
-  /* new */
-  animation: cursorBlink 1s steps(1) infinite;
-  transform-origin: center bottom;
-}
-
-@keyframes cursorBlink{
-  50%{ opacity: 0; }
-}
-
-@keyframes cursorBreathe{
-  0%, 100%{ transform: scaleY(0.92); opacity: 0.55; }
-  50%     { transform: scaleY(1.12); opacity: 0.9; }
-}
-
-
-
-@keyframes blink{ 50%{ opacity: 0; } }
-
-.intro-sub{ margin: 12px 0 0; color: var(--muted); font-weight: 700; }
-.intro-actions{ margin-top: 16px; display:flex; justify-content:center; gap: 10px; flex-wrap: wrap; }
-
-#introOverlay.intro-hide{
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none !important;
-}
 
 /* -------------------------
    THEME TOGGLE ICON
@@ -1503,6 +1344,124 @@ button.brand{
   }
 }
 
+    /* =========================================================
+   ✅ NEW WELCOME SPLASH (MS + Mohammad Saleem)
+   Uses your theme system: dark = default, light = body.light
+   ========================================================= */
+
+:root{
+  --welcome-bg: #061b44;            /* dark navy splash */
+  --welcome-stroke: #eaf2ff;
+  --welcome-text: #eaf2ff;
+  --welcome-subtle: rgba(234,242,255,.65);
+}
+
+body.light{
+  --welcome-bg: #f6f8ff;            /* light splash */
+  --welcome-stroke: #0b1b3b;
+  --welcome-text: #0b1b3b;
+  --welcome-subtle: rgba(11,27,59,.55);
+}
+
+.welcome-splash{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--welcome-bg);
+  display: grid;
+  place-items: center;
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+.welcome-splash.hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.welcome-inner{
+  display: grid;
+  place-items: center;
+  gap: 22px;
+  transform: translateY(-2px);
+  width: min(740px, calc(100% - 36px));
+}
+
+.ms-logo{
+  width: min(190px, 46vw);
+  height: auto;
+}
+
+/* hex draw */
+.logo-stroke{
+  fill: none;
+  stroke: var(--welcome-stroke);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: drawHex 1400ms ease forwards;
+}
+
+.logo-stroke.s2{
+  opacity: .65;
+  stroke-width: 3.2;
+  animation-delay: 140ms;
+}
+
+@keyframes drawHex{
+  to{ stroke-dashoffset: 0; }
+}
+
+/* MS letters draw */
+.logo-text{
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: 76px;
+  fill: transparent;
+  stroke: var(--welcome-stroke);
+  stroke-width: 2.8;
+  paint-order: stroke;
+  letter-spacing: 2px;
+
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: drawText 1200ms ease forwards;
+  animation-delay: 260ms;
+}
+
+@keyframes drawText{
+  to{
+    stroke-dashoffset: 0;
+    fill: var(--welcome-subtle);
+  }
+}
+
+/* signature name */
+.welcome-name{
+  color: var(--welcome-text);
+  font-size: clamp(22px, 3.6vw, 46px);
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(6px);
+  font-family: "Segoe Script", "Brush Script MT", "Apple Chancery", cursive;
+
+  animation: nameIn 700ms ease forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes nameIn{
+  to{ opacity: .98; transform: translateY(0); }
+}
+
+/* skip button position */
+.welcome-skip{
+  margin-top: 6px;
+}
+
+
 </style>
 
 
@@ -1510,20 +1469,47 @@ button.brand{
 </head>
 
 <body>
-  <!-- Intro typing overlay -->
-  <div id="themeFade" aria-hidden="true"></div>
-  <div id="introOverlay" aria-hidden="false">
-    <div class="intro-box">
-      <div class="intro-title">Welcome</div>
-      <div class="intro-type" aria-label="Intro typing text">
-        <span id="introText"></span><span class="cursor" aria-hidden="true"></span>
+  <!-- ✅ WELCOME SPLASH (NEW) -->
+  <div id="welcomeSplash" class="welcome-splash" aria-hidden="false">
+    <div class="welcome-inner">
+
+      <div class="welcome-logo" aria-hidden="true">
+        <svg class="ms-logo" viewBox="0 0 220 220">
+          <!-- Outer hex -->
+          <path class="logo-stroke s1"
+            d="M110 18
+               L186 62
+               L186 158
+               L110 202
+               L34 158
+               L34 62
+               Z" />
+
+          <!-- Inner hex -->
+          <path class="logo-stroke s2"
+            d="M110 30
+               L176 70
+               L176 150
+               L110 190
+               L44 150
+               L44 70
+               Z" />
+
+          <!-- MS letters -->
+          <text class="logo-text" x="110" y="132" text-anchor="middle">MS</text>
+        </svg>
       </div>
-      <p class="intro-sub">Entering portfolio…</p>
-      <div class="intro-actions">
-        <button class="btn btn-primary" id="skipIntroBtn" type="button">Skip</button>
-      </div>
+
+      <div class="welcome-name">Mohammad Saleem</div>
+
+      <button class="btn btn-primary welcome-skip" id="skipWelcomeBtn" type="button">
+        Skip
+      </button>
+
     </div>
   </div>
+  <!-- ✅ END WELCOME SPLASH -->
+
 
   <div class="nav">
     <div class="container" style="padding-bottom: 0;">
@@ -2285,144 +2271,63 @@ const syncToggleIcon = () => {
       }, delay);
     })();
 
-    /* =========================
-   INTRO typing screen + replay on MS click (NO LAG / NO SCROLL JUMP)
+/* =========================
+   ✅ NEW WELCOME SPLASH
+   - Keeps your theme toggle working
+   - Replays when clicking MS in navbar
+   - No scroll jump on replay
    ========================= */
-(function () {
-  const overlay = document.getElementById("introOverlay");
-  const introTextEl = document.getElementById("introText");
-  const skipBtn = document.getElementById("skipIntroBtn");
+(function(){
+  const splash = document.getElementById("welcomeSplash");
+  const skipBtn = document.getElementById("skipWelcomeBtn");
   const brand = document.getElementById("brandHome");
 
-  if (!overlay || !introTextEl || !skipBtn) return;
-  // Prevent any restored DOM text from flashing
-  introTextEl.textContent = "";
+  if (!splash) return;
 
-  const FULL_TEXT = "Eng Mohammad Saleem";
-  let isRunning = false;
-  let rafId = 0;
-  let hideTimer = 0;
-
-  const clearAll = () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
-    if (hideTimer) clearTimeout(hideTimer);
-    hideTimer = 0;
+  const hide = () => {
+    splash.classList.add("hide");
+    splash.setAttribute("aria-hidden", "true");
   };
 
-  const showOverlay = () => {
-    overlay.style.display = "flex";
-    overlay.classList.remove("intro-hide");
-    overlay.setAttribute("aria-hidden", "false");
+  const show = () => {
+    splash.classList.remove("hide");
+    splash.setAttribute("aria-hidden", "false");
   };
 
-  const hideOverlay = () => {
-    overlay.classList.add("intro-hide");
-    overlay.setAttribute("aria-hidden", "true");
-    hideTimer = setTimeout(() => {
-      overlay.style.display = "none";
-    }, 520);
+  const runOnce = () => {
+    if (splash.dataset.ran === "1") return;
+    splash.dataset.ran = "1";
+    // auto hide after animation finishes
+    setTimeout(hide, 1700);
   };
 
-  const typeText = () => {
-    const reduceMotion =
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Skip button
+  if (skipBtn) {
+    skipBtn.addEventListener("click", hide);
+  }
 
-    if (reduceMotion) {
-      introTextEl.textContent = FULL_TEXT;
-      hideTimer = setTimeout(() => { hideOverlay(); isRunning = false; }, 450);
+  // Replay on MS click (no scroll changes)
+  if (brand) {
+    brand.addEventListener("click", () => {
+      show();
+      setTimeout(hide, 1700);
+    });
+  }
+
+  // First load
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) {
+      // BFCache restore: reset to hidden then rerun cleanly
+      splash.classList.add("hide");
+      splash.dataset.ran = "";
+      requestAnimationFrame(() => {
+        show();
+        runOnce();
+      });
       return;
     }
-
-    let i = 0;
-    const start = performance.now();
-    const speed = 55; // ms per character feel
-
-    const step = (t) => {
-      // compute characters by time (stable even if tab lags)
-      const elapsed = t - start;
-      const nextI = Math.min(FULL_TEXT.length, Math.floor(elapsed / speed));
-      if (nextI !== i) {
-        i = nextI;
-        introTextEl.textContent = FULL_TEXT.slice(0, i);
-      }
-
-      if (i < FULL_TEXT.length) {
-        rafId = requestAnimationFrame(step);
-      } else {
-        hideTimer = setTimeout(() => {
-          hideOverlay();
-          isRunning = false;
-        }, 650);
-      }
-    };
-
-    rafId = requestAnimationFrame(step);
-  };
-
-  const runIntro = ({ goTop }) => {
-    if (isRunning) return;
-    isRunning = true;
-    clearAll();
-
-    // First load: go to top. Replay: do NOT touch scroll.
-    if (goTop) {
-      try { window.scrollTo({ top: 0, behavior: "auto" }); }
-      catch { window.scrollTo(0, 0); }
-    }
-
-    introTextEl.textContent = "";
-    showOverlay();
-    typeText();
-  };
-
-  // Skip button: just hide, no scroll restore
-  skipBtn.addEventListener("click", () => {
-    clearAll();
-    hideOverlay();
-    isRunning = false;
+    runOnce();
   });
-
-  // Replay intro on MS click (no scroll changes)
-  if (brand) {
-    brand.addEventListener("click", () => runIntro({ goTop: false }));
-  }
-
-  // ESC to skip
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && overlay.style.display !== "none") {
-      clearAll();
-      hideOverlay();
-      isRunning = false;
-    }
-  });
-
-// Run intro once per actual page-show, and handle BFCache restore cleanly
-const startOnce = () => {
-  if (overlay.dataset.ran === "1") return;   // hard guard
-  overlay.dataset.ran = "1";
-  runIntro({ goTop: true });
-};
-
-// pageshow fires on normal load + BFCache restore
-window.addEventListener("pageshow", (e) => {
-  // If restored from BFCache, the old typed text can flash.
-  // Reset to a clean hidden state BEFORE running again.
-  if (e.persisted) {
-    clearAll();
-    isRunning = false;
-    introTextEl.textContent = "";
-    overlay.classList.add("intro-hide");
-    overlay.setAttribute("aria-hidden", "true");
-    overlay.style.display = "none";
-    overlay.dataset.ran = ""; // allow startOnce() to run
-  }
-
-  // Start on the next frame so styles/layout settle first
-  requestAnimationFrame(startOnce);
-});
-
 })();
 
 
