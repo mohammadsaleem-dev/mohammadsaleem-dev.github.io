@@ -1095,7 +1095,13 @@ button.brand{
   display:inline-flex;
   align-items:center;
   justify-content:center;
+
+  overflow: hidden;                 /* ✅ fixes jagged edges */
+  background-clip: padding-box;     /* ✅ cleaner border-radius */
+  isolation: isolate;               /* ✅ prevents blending artifacts */
+  -webkit-mask-image: -webkit-radial-gradient(white, black); /* ✅ best fix on mobile */
 }
+
 .icon-btn i{ font-size: 18px; color: var(--text); transition: transform 260ms var(--ease); }
 .icon-btn:hover{
   border-color: var(--border);
@@ -1114,7 +1120,15 @@ button.brand{
 .icon-btn.x        { --brand:#000000; }
 .icon-btn.facebook { --brand:#1877F2; }
 .icon-btn.instagram{
-  background: radial-gradient(circle at 30% 30%, #feda75 0%, #fa7e1e 25%, #d62976 55%, #962fbf 75%, #4f5bd5 100%) !important;
+  background: radial-gradient(circle at 30% 30%,
+    #feda75 0%,
+    #fa7e1e 25%,
+    #d62976 55%,
+    #962fbf 75%,
+    #4f5bd5 100%
+  ) !important;
+
+  transform: translateZ(0); /* ✅ stabilizes gradient edges during hover */
 }
 
 /* -------------------------
