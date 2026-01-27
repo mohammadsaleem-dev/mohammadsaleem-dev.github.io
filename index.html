@@ -385,32 +385,6 @@ button.brand{
     transform 220ms cubic-bezier(.22,.61,.36,1);
 }
 
-  /* ✅ Active nav link (current section highlight) */
-.nav-links a.active{
-  color: var(--accent);
-  font-weight: 900;
-}
-
-/* Small dot indicator under active link (desktop only) */
-.nav-links a.active::after{
-  content:"";
-  display:block;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  margin: 6px auto 0;
-  background: var(--accent);
-}
-
-/* Hide dot in mobile dropdown */
-@media (max-width: 1024px){
-  .nav-links a.active::after{
-    display:none;
-  }
-}
-
-    
-
 .nav-links a:hover{
   color: var(--accent);          /* BLUE like mobile */
   background: transparent;      /* remove gray box */
@@ -2485,70 +2459,6 @@ window.addEventListener("pageshow", (e) => {
   }, { threshold: 0.35 });
 
   counters.forEach((el) => io.observe(el));
-})();
-
-
-    // =========================
-// Scroll Spy (active nav link follows scroll position)
-// =========================
-(function () {
-  const nav = document.querySelector(".nav-links");
-  if (!nav) return;
-
-  const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
-
-  const sections = links
-    .map(a => document.getElementById(a.getAttribute("href").substring(1)))
-    .filter(Boolean);
-
-  if (!sections.length) return;
-
-  const setActive = (id) => {
-    links.forEach(link => {
-      link.classList.toggle(
-        "active",
-        link.getAttribute("href") === `#${id}`
-      );
-    });
-  };
-
-  // Instant highlight on click
-  links.forEach(link => {
-    link.addEventListener("click", () => {
-      const id = link.getAttribute("href").substring(1);
-      if (id) setActive(id);
-    });
-  });
-
-  let current = "";
-
-  const observer = new IntersectionObserver((entries) => {
-    let best = { id: current, ratio: 0 };
-
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.intersectionRatio > best.ratio) {
-        best = {
-          id: entry.target.id,
-          ratio: entry.intersectionRatio
-        };
-      }
-    });
-
-    if (best.id && best.id !== current) {
-      current = best.id;
-      setActive(current);
-    }
-  }, {
-    rootMargin: "-35% 0px -55% 0px",
-    threshold: [0.2, 0.35, 0.5]
-  });
-
-  sections.forEach(section => observer.observe(section));
-
-  // Set correct item on reload
-  window.addEventListener("load", () => {
-    if (window.scrollY < 20) setActive("top");
-  });
 })();
 
     
