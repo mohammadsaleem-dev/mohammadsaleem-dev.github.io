@@ -309,8 +309,8 @@ footer{
   top: 0;
   z-index: 50;
   padding-top: calc(14px + env(safe-area-inset-top));
-  backdrop-filter: 6px;
-  -webkit-backdrop-filter: 6px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 /* ✅ no border unless hover */
@@ -604,17 +604,21 @@ button.brand{
 }
 
 
-/* Mobile: add space AFTER NAME */
+/* Mobile: title wrapping */
 @media (max-width: 520px){
   .hero-title{ align-items: flex-start; gap: 12px; }
-.hero-title h1{
-  margin: 0 0 8px;
-  font-size: var(--h1);
-  letter-spacing: -0.6px;
-  white-space: normal;         /* ✅ allow wrapping */
-  overflow-wrap: anywhere;      /* ✅ prevent pushing badge off-screen */
-  max-width: min(720px, 100%);  /* ✅ keeps layout stable on desktop */
-}
+
+  .hero-title h1{
+    margin: 0 0 8px;
+    font-size: var(--h1);
+    letter-spacing: -0.6px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+} /* ✅ THIS closing brace was missing */
+
+/* Subtitle row (GLOBAL, not stuck inside media) */
 .subtitle-row{
   display: inline-flex;
   align-items: center;
@@ -623,6 +627,7 @@ button.brand{
   line-height: 1;
   margin-bottom: 10px;
 }
+
 .mini-pc{
   width: 28px;
   height: 28px;
@@ -644,7 +649,6 @@ button.brand{
   margin-bottom: 10px;
 }
 
-/* Location row */
 .locline{
   display: flex;
   align-items: center;
@@ -657,6 +661,7 @@ button.brand{
 }
 .locline i{ font-size: 18px; transform: translateY(1px); color: var(--accent); }
 .locline span{ padding-left: 6px; }
+
 
 /* -------------------------
    OBJECTIVE BOX (no border unless hover)
@@ -1235,6 +1240,7 @@ button.brand{
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
+  position: relative;
 
   border: 1px solid transparent;
   background: rgba(127,127,127,0.10);
