@@ -150,6 +150,11 @@ html{
 
 body{
   margin: 0;
+
+  /* ✅ Safe area padding (iPhone notch + home indicator) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+
   font-family: var(--font);
   font-size: var(--body);
   line-height: var(--leading);
@@ -160,7 +165,7 @@ body{
   background-color: var(--bg) !important;
 
   transition:
-    background-color var(--theme-dur) var(--theme-ease),
+    background-color var(--theme-dur) var(--theme-ease);
 }
 
 /* ✅ Only animate theme changes while toggling (does NOT kill hover animations) */
@@ -303,7 +308,7 @@ footer{
   position: sticky;
   top: 0;
   z-index: 50;
-  padding-top: 14px;
+  padding-top: calc(14px + env(safe-area-inset-top));
   backdrop-filter: 6px;
   -webkit-backdrop-filter: 6px;
 }
@@ -1118,7 +1123,7 @@ button.brand{
 .to-top{
   position: fixed;
   right: 18px;
-  bottom: 18px;
+  bottom: calc(18px + env(safe-area-inset-bottom));
   width: 54px;
   height: 54px;
   border-radius: 999px;
