@@ -495,17 +495,21 @@ button.brand{
   gap: 10px;
   padding: 12px 16px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden unless hover */
-  background: var(--panel);
+  border: 1px solid transparent;
+  background: transparent;     /* remove gray fill */
   color: var(--text);
   font-weight: 800;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  transition:
+    color 220ms ease,
+    transform 220ms cubic-bezier(.22,.61,.36,1);
 }
 .btn:hover{
-  border-color: var(--border);
-  box-shadow: var(--glow), var(--hover-ring);
+  color: var(--accent);     /* BLUE */
+  border-color: transparent;
+  box-shadow: none;
   transform: translateY(-1px);
 }
 
