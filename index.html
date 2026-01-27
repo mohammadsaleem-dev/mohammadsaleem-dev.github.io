@@ -372,14 +372,18 @@ button.brand{
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
-  transition:
-    background-color 240ms ease,
-    color 240ms ease;
   flex: 0 0 auto;
+
+  /* Smooth premium animation */
+  transition:
+    color 220ms ease,
+    transform 220ms cubic-bezier(.22,.61,.36,1);
 }
+
 .nav-links a:hover{
-  color: var(--text);
-  background: rgba(127,127,127,0.10);
+  color: var(--accent);          /* BLUE like mobile */
+  background: transparent;      /* remove gray box */
+  transform: translateY(-1px);  /* subtle premium motion */
 }
 
 .nav-actions{
