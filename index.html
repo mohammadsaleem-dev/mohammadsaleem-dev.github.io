@@ -416,62 +416,70 @@ button.brand{
   opacity: .85;
 }
 
-/* Mobile dropdown */
 @media (max-width: 1024px){
   .menu-btn{ display: inline-flex; }
 
+  /* Dropdown panel animation: smooth open/close */
   .nav-links{
     display: flex;
     position: absolute;
     left: 14px;
     right: 14px;
     top: calc(100% + 10px);
-    padding: 12px;
-    border-radius: 18px;
-    border: 1px solid transparent; /* ✅ hidden */
-    background: var(--panel);
-    box-shadow: var(--shadow);
-    flex-direction: column;
-    gap: 8px;
-    white-space: normal;
-    z-index: 60;
 
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--panel);
+    border: 1px solid transparent;
+    box-shadow: var(--shadow);
+
+    flex-direction: column;
+    gap: 14px;
+
+    /* Smooth animation */
     opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-    max-height: 0;
-    overflow: hidden;
+    transform: translateY(-10px) scale(0.98);
     pointer-events: none;
     visibility: hidden;
 
     transition:
-      opacity 200ms ease,
-      transform 220ms ease,
-      max-height 260ms ease,
+      opacity 220ms var(--theme-ease),
+      transform 260ms var(--theme-ease),
       visibility 0ms linear 260ms;
   }
 
   .nav-links.is-open{
     opacity: 1;
     transform: translateY(0) scale(1);
-    max-height: 520px;
     pointer-events: auto;
     visibility: visible;
-    border-color: var(--border);
+
     transition:
-      opacity 200ms ease,
-      transform 220ms ease,
-      max-height 260ms ease,
+      opacity 220ms var(--theme-ease),
+      transform 260ms var(--theme-ease),
       visibility 0ms;
   }
 
+  /* ✅ Links: text-only (no gray boxes, no borders) */
   .nav-links a{
-    padding: 12px 12px;
-    border-radius: 14px;
-    background: rgba(127,127,127,0.08);
+    padding: 0;                  /* no box */
+    background: transparent;      /* no gray */
+    border: 0;                    /* no border */
+    border-radius: 0;
     color: var(--text);
+    font-weight: 800;
+    text-align: left;
+
+    transition: color 200ms ease, transform 220ms var(--theme-ease);
   }
-  .nav-links a:hover{ background: rgba(127,127,127,0.14); }
+
+  .nav-links a:hover{
+    background: transparent;      /* keep it clean */
+    color: var(--accent);
+    transform: translateX(2px);
+  }
 }
+
 
 /* -------------------------
    BUTTONS
