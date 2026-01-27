@@ -1102,7 +1102,13 @@ button.brand{
   clip-path: circle(50% at 50% 50%);
 }
 
-.icon-btn i{ font-size: 18px; color: var(--text); transition: transform 260ms var(--ease); }
+.icon-btn i{
+  font-size: 24px;          /* ✅ bigger logo */
+  color: var(--text);
+  line-height: 1;
+  transition: transform 260ms var(--ease);
+}
+
 .icon-btn:hover{
   border-color: var(--border);
   transform: translateY(-6px);
