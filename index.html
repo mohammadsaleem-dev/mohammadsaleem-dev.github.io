@@ -90,7 +90,7 @@
 
   --font: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
 
-  --h1: clamp(40px, 5vw, 60px);
+  --h1: clamp(34px, 3.6vw, 50px);
   --h2: clamp(26px, 2.6vw, 34px);
   --h3: 18px;
   --body: 16px;
@@ -571,7 +571,7 @@ button.brand{
   display: flex;
   align-items: center;
   gap: 14px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;             /* ✅ allow wrap so badge never disappears */
 }
 
 .profile-avatar{
@@ -607,15 +607,14 @@ button.brand{
 /* Mobile: add space AFTER NAME */
 @media (max-width: 520px){
   .hero-title{ align-items: flex-start; gap: 12px; }
-  .hero-title h1{
-    white-space: normal;
-    line-height: 1.05;
-    font-size: clamp(28px, 7vw, 40px);
-    margin: 0 0 14px !important;
-  }
-  .profile-avatar{ width: 46px; height: 46px; }
+.hero-title h1{
+  margin: 0 0 8px;
+  font-size: var(--h1);
+  letter-spacing: -0.6px;
+  white-space: normal;         /* ✅ allow wrapping */
+  overflow-wrap: anywhere;      /* ✅ prevent pushing badge off-screen */
+  max-width: min(720px, 100%);  /* ✅ keeps layout stable on desktop */
 }
-
 .subtitle-row{
   display: inline-flex;
   align-items: center;
@@ -1224,7 +1223,9 @@ button.brand{
   align-items: center;
   gap: 10px;
   min-width: 0;
+  flex-wrap: wrap;             /* ✅ keep badge visible */
 }
+
 
 /* Badge button */
 .v-badge{
@@ -1350,18 +1351,19 @@ button.brand{
    ========================================================= */
 
 :root{
-  --welcome-bg: #0d1117;            /* GitHub dark */
-  --welcome-stroke: #c9d1d9;
-  --welcome-text: #c9d1d9;
-  --welcome-subtle: rgba(201,209,217,.70);
+  --welcome-bg: var(--bg);              /* ✅ match GitHub dark */
+  --welcome-stroke: var(--accent);      /* ✅ BLUE logo */
+  --welcome-text: var(--text);          /* ✅ match theme text */
+  --welcome-subtle: rgba(88,166,255,.35);
 }
 
 body.light{
-  --welcome-bg: #ffffff;            /* GitHub light */
-  --welcome-stroke: #24292f;
-  --welcome-text: #24292f;
-  --welcome-subtle: rgba(36,41,47,.55);
+  --welcome-bg: var(--bg);              /* ✅ match GitHub light */
+  --welcome-stroke: var(--accent);      /* ✅ BLUE logo */
+  --welcome-text: var(--text);
+  --welcome-subtle: rgba(9,105,218,.28);
 }
+
 
 
 .welcome-splash{
@@ -1445,16 +1447,11 @@ body.light{
   color: var(--welcome-text);
   font-size: clamp(22px, 3.6vw, 46px);
   line-height: 1;
-  opacity: 0;
-  transform: translateY(6px);
   font-family: "Segoe Script", "Brush Script MT", "Apple Chancery", cursive;
 
-  animation: nameIn 700ms ease forwards;
-  animation-delay: 600ms;
-}
-
-@keyframes nameIn{
-  to{ opacity: .98; transform: translateY(0); }
+  /* ✅ JS typing controls appearance */
+  opacity: 1;
+  transform: none;
 }
 
 /* skip button position */
@@ -2314,7 +2311,11 @@ const syncToggleIcon = () => {
   const show = () => {
     splash.classList.remove("hide");
     splash.setAttribute("aria-hidden", "false");
+
+    // ✅ always re-type when splash is shown
+    runTyping();
   };
+
 
   const runTyping = () => {
     // Welcome splash typing
@@ -2335,11 +2336,11 @@ const syncToggleIcon = () => {
   if (brand) {
     brand.addEventListener("click", (e) => {
       e.preventDefault();
-      show();
-      runTyping();              // ✅ re-type on replay
+      show();                   // show() now handles typing
       setTimeout(hide, 1700);
     });
   }
+
 
   window.addEventListener("pageshow", (e) => {
     // Always type hero name on load (refresh / back / normal)
