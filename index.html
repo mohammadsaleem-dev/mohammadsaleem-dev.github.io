@@ -1099,7 +1099,7 @@ button.brand{
   overflow: hidden;                 /* ✅ fixes jagged edges */
   background-clip: padding-box;     /* ✅ cleaner border-radius */
   isolation: isolate;               /* ✅ prevents blending artifacts */
-  -webkit-mask-image: -webkit-radial-gradient(white, black); /* ✅ best fix on mobile */
+  clip-path: circle(50% at 50% 50%);
 }
 
 .icon-btn i{ font-size: 18px; color: var(--text); transition: transform 260ms var(--ease); }
@@ -1127,8 +1127,6 @@ button.brand{
     #962fbf 75%,
     #4f5bd5 100%
   ) !important;
-
-  transform: translateZ(0); /* ✅ stabilizes gradient edges during hover */
 }
 
 /* -------------------------
