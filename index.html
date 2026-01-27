@@ -244,6 +244,13 @@ body.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, 
   .container{ padding-left: 28px; padding-right: 28px; }
 }
 
+  /* NAV container spacing fix */
+.nav .container{
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+
 .grid{
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
@@ -297,8 +304,8 @@ footer{
   top: 0;
   z-index: 50;
   padding-top: 14px;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: 6px;
+  -webkit-backdrop-filter: 6px;
 }
 
 /* ✅ no border unless hover */
@@ -310,6 +317,8 @@ footer{
   gap: 14px;
   padding: 0 18px;
   border-radius: 999px;
+  padding-top: 0;
+  padding-bottom: 0;
 
   background-color: var(--panel);
   border: 1px solid transparent; /* ✅ hidden */
