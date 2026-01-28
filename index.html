@@ -1668,15 +1668,6 @@ button.brand{
   }
 }
 
-  /* Typewriter cursor */
-.sig-cursor{
-  opacity: 1;
-  animation: blink 700ms step-end infinite;
-}
-@keyframes blink{
-  50%{ opacity: 0; }
-}
-
 </style>
 
 
@@ -1724,7 +1715,9 @@ button.brand{
       <svg class="sig-svg" viewBox="0 0 900 220" role="img" aria-label="Eng Mohammad Saleem signature">
     
         <!-- Name -->
-        <text class="sig-text" id="sigText" x="450" y="140" text-anchor="middle"></text>
+        <text class="sig-text" x="450" y="140" text-anchor="middle">
+          Eng Mohammad Saleem
+        </text>
     
         <!-- Line UNDER the name (Ink + Neon Pulse) -->
         <path class="sig-path sig-ink" d="M60 140 L840 140" />
@@ -2510,52 +2503,6 @@ const syncToggleIcon = () => {
 (function () {
   const overlay = document.getElementById("introOverlay");
   const stage = overlay ? overlay.querySelector(".intro-stage") : null;
-  const sigTextEl = overlay ? overlay.querySelector("#sigText") : null;
-
-const TYPE_TEXT = "Eng Mohammad Saleem";
-const TYPE_SPEED = 70; // ms per character (adjust 50–90)
-let typeTimer = 0;
-
-const clearTypeTimer = () => {
-  if (typeTimer) clearInterval(typeTimer);
-  typeTimer = 0;
-};
-
-const resetTypedText = () => {
-  clearTypeTimer();
-  if (!sigTextEl) return;
-  sigTextEl.textContent = ""; // clear
-};
-
-const startTyping = (delayMs = 0) => {
-  if (!sigTextEl) return;
-
-  clearTypeTimer();
-  sigTextEl.textContent = ""; // start empty
-
-  // optional cursor
-  let i = 0;
-  const cursorChar = "▍";
-
-  const begin = () => {
-    typeTimer = setInterval(() => {
-      i++;
-      const shown = TYPE_TEXT.slice(0, i);
-
-      if (i >= TYPE_TEXT.length) {
-        sigTextEl.textContent = shown; // finish with no cursor
-        clearTypeTimer();
-        return;
-      }
-
-      sigTextEl.textContent = shown + cursorChar;
-    }, TYPE_SPEED);
-  };
-
-  if (delayMs > 0) setTimeout(begin, delayMs);
-  else begin();
-};
-
   const skipBtn = document.getElementById("skipIntroBtn");
   const brand = document.getElementById("brandHome");
 
@@ -2584,12 +2531,10 @@ const showOverlay = () => {
     void stage.offsetWidth; // force reflow
     stage.classList.add("play");
   }
-  resetTypedText();
 };
 
 
   const hideOverlay = () => {
-    resetTypedText();
     overlay.classList.add("intro-hide");
     overlay.setAttribute("aria-hidden", "true");
     hideTimer = setTimeout(() => {
@@ -2634,7 +2579,6 @@ const showOverlay = () => {
     showOverlay();
     resetAnimations();
     overlay.classList.add("play");
-    startTyping(1050); // ✅ same delay as your line drawing start
 
     hideTimer = setTimeout(() => {
       hideOverlay();
@@ -2644,7 +2588,6 @@ const showOverlay = () => {
 
   skipBtn.addEventListener("click", () => {
     clearAll();
-    resetTypedText();
     hideOverlay();
     isRunning = false;
   });
