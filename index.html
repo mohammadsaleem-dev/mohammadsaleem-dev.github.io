@@ -1296,6 +1296,36 @@ button.brand{
   stroke-dashoffset: var(--siglen, 2000);
 }
 
+/* ===== Ink Write + Neon Pulse (signature line) ===== */
+
+/* Base ink stroke */
+.sig-ink{
+  stroke: var(--accent);
+  stroke-width: 7;
+  opacity: 0.92;
+  filter: none;
+}
+
+/* Soft neon glow layer */
+.sig-glow{
+  stroke: var(--accent);
+  stroke-width: 14;
+  opacity: 0.18;
+  filter: blur(1.2px);
+}
+
+/* Pulse dot (travels after line is drawn) */
+.sig-pulse{
+  fill: var(--accent);
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(88,166,255,0.55))
+          drop-shadow(0 0 22px rgba(88,166,255,0.35));
+}
+
+  .sig-pulse{
+  transform: translateY(34px);
+}
+
 .sig-text{
   font-family: "Pacifico", cursive;
   font-size: 72px;
@@ -1448,6 +1478,20 @@ button.brand{
   animation: sigDraw 1200ms var(--theme-ease) forwards;
   animation-delay: 980ms;
 }
+
+/* after draw: glow breath + pulse travel */
+.intro-stage.play .sig-glow{
+  animation:
+    sigDraw 1200ms var(--theme-ease) 980ms forwards,
+    glowBreathe 900ms ease-in-out 2200ms infinite;
+}
+
+/* pulse dot appears after line finishes */
+.intro-stage.play .sig-pulse{
+  opacity: 1;
+  animation: pulseTravel 900ms var(--theme-ease) 2200ms forwards;
+}
+
 .intro-stage.play .sig-text{
   animation: sigIn 420ms var(--theme-ease) forwards;
   animation-delay: 1300ms;
@@ -1457,7 +1501,17 @@ button.brand{
 @keyframes sigDraw{ to{ stroke-dashoffset: 0; } }
 @keyframes markIn{ to{ opacity: 1; } }
 @keyframes sigIn{ to{ opacity: 1; } }
+@keyframes glowBreathe{
+  0%, 100%{ opacity: 0.14; filter: blur(1px); }
+  50%{ opacity: 0.28; filter: blur(2px); }
+}
 
+/* moves dot from left->right under your curve */
+@keyframes pulseTravel{
+  0%   { transform: translateX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translateX(780px); opacity: 0; }
+}
 
 /* -------------------------
    THEME TOGGLE ICON
@@ -1665,12 +1719,22 @@ button.brand{
           Eng Mohammad Saleem
         </text>
     
-        <!-- Line UNDER the name -->
-        <path class="sig-path"
+        <!-- Line UNDER the name (Ink + Neon Pulse) -->
+        <path class="sig-path sig-ink"
           d="M60 140
              C 150 60, 240 60, 330 140
              C 420 220, 510 220, 600 140
              C 690 60, 780 60, 840 140" />
+        
+        <path class="sig-path sig-glow"
+          d="M60 140
+             C 150 60, 240 60, 330 140
+             C 420 220, 510 220, 600 140
+             C 690 60, 780 60, 840 140" />
+        
+        <!-- pulse head (moves after draw) -->
+        <circle class="sig-pulse" r="7" cx="60" cy="140"></circle>
+
       </svg>
     </div>
 
