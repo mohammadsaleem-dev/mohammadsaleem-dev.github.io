@@ -1276,10 +1276,10 @@ button.brand{
 .ms-svg{
   width: 170px;
   height: 170px;
-  display:block;
-}
-  
-  /* ✅ Optical centering fix */
+  display: block;
+  overflow: visible;
+
+  /* ✅ Optical centering: move slightly LEFT */
   transform: translateX(-10px);
 }
 
@@ -1294,11 +1294,13 @@ button.brand{
 }
 
 .ms-stroke.ms-glow{
+  fill: none;
   stroke: url(#msGrad);
   stroke-width: 12;
-  opacity: 0.14;   /* ✅ softer glow */
+  opacity: 0.14;
   filter: url(#msGlow);
 }
+
 /* ✅ MS = stroke-only (no fill) */
 .ms-fill{ display:none !important; }
 
