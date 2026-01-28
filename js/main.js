@@ -214,10 +214,6 @@ const resetAnimations = () => {
   overlay.getBoundingClientRect();
   void overlay.offsetHeight;
 };
-  
-    // force reflow so animation restarts
-    void overlay.offsetWidth;
-  };
 
   const runIntro = ({ goTop }) => {
     if (isRunning) return;
