@@ -1278,6 +1278,10 @@ button.brand{
   height: 170px;
   display:block;
 }
+  
+  /* ✅ Optical centering fix */
+  transform: translateX(-10px);
+}
 
 .ms-stroke{
   fill: none;
@@ -1550,7 +1554,7 @@ button.brand{
   <div class="intro-stage">
     <!-- Logo -->
     <div class="intro-mark" aria-hidden="true">
-<svg class="mark-svg ms-svg" viewBox="0 0 220 220" role="img" aria-label="MS Logo">
+<svg class="mark-svg ms-svg" viewBox="0 0 240 220" role="img" aria-label="MS Logo">
   <defs>
     <linearGradient id="msGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#43e5ff"/>
@@ -1567,33 +1571,53 @@ button.brand{
     </filter>
   </defs>
 
-  <!-- ✅ Glow stroke (behind) -->
+  <!-- ================= M (SMOOTH) ================= -->
+
+  <!-- Glow -->
   <path class="ms-stroke ms-glow"
-        d="M45 160 L45 65 L70 65 L95 115 L120 65 L145 65 L145 160" />
+        d="
+        M50 160
+        C50 90, 60 70, 75 70
+        C90 70, 100 105, 110 120
+        C120 105, 130 70, 145 70
+        C160 70, 170 90, 170 160
+        " />
 
-  <!-- ✅ S (GLOW) moved right -->
+  <!-- Main -->
+  <path class="ms-stroke"
+        d="
+        M50 160
+        C50 90, 60 70, 75 70
+        C90 70, 100 105, 110 120
+        C120 105, 130 70, 145 70
+        C160 70, 170 90, 170 160
+        " />
+
+  <!-- ================= S (SHIFTED RIGHT) ================= -->
+
+  <!-- Glow -->
   <path class="ms-stroke ms-glow"
-        transform="translate(38 0)"
-        d="M178 78
-           C168 62 142 62 134 78
-           C125 95 134 112 156 116
-           C186 121 187 149 168 162
-           C149 175 123 167 118 150" />
+        transform="translate(35 0)"
+        d="
+        M178 78
+        C168 62 142 62 134 78
+        C125 95 134 112 156 116
+        C186 121 187 149 168 162
+        C149 175 123 167 118 150
+        " />
 
-  <!-- ✅ Main stroke -->
+  <!-- Main -->
   <path class="ms-stroke"
-        d="M45 160 L45 65 L70 65 L95 115 L120 65 L145 65 L145 160" />
+        transform="translate(35 0)"
+        d="
+        M178 78
+        C168 62 142 62 134 78
+        C125 95 134 112 156 116
+        C186 121 187 149 168 162
+        C149 175 123 167 118 150
+        " />
 
-  <!-- ✅ S (MAIN) moved right -->
-  <path class="ms-stroke"
-        transform="translate(38 0)"
-        d="M178 78
-           C168 62 142 62 134 78
-           C125 95 134 112 156 116
-           C186 121 187 149 168 162
-           C149 175 123 167 118 150" />
 </svg>
-
 
 
 
