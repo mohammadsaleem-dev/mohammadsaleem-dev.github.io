@@ -1,18 +1,21 @@
-// Theme toggle (no white flash) + smooth icon
+// Theme toggle (no white flash) + stable icon crossfade
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
-const setIcon = () => {
-  toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+const syncToggleIcon = () => {
+  toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
 (function initTheme(){
   const saved = localStorage.getItem("theme");
   if (saved === "light") document.body.classList.add("light");
-  setIcon();
+  syncToggleIcon();
 
   toggle.addEventListener("click", () => {
-    // 1) Freeze CURRENT background into overlay (pre-toggle)
+    // Prevent hover transforms / weird mid-toggle pops
+    document.body.classList.add("theme-switching");
+
+    // snapshot current background into overlay
     const cs = getComputedStyle(document.body);
     fade.style.backgroundColor = cs.backgroundColor;
     fade.style.backgroundImage = cs.backgroundImage;
@@ -20,236 +23,245 @@ const setIcon = () => {
     fade.style.backgroundPosition = cs.backgroundPosition;
     fade.style.backgroundRepeat = cs.backgroundRepeat;
 
-    // show overlay instantly (covers while switching)
-    fade.style.transition = "none";
-    fade.style.opacity = "1";
-    void fade.offsetHeight; // force reflow
-    fade.style.transition = "opacity 320ms ease";
+    // show overlay
+    fade.classList.add("show");
 
-    // 2) Animate icon
-    toggle.classList.remove("icon-swap");
-    void toggle.offsetWidth;
-    toggle.classList.add("icon-swap");
-
-    // 3) Toggle theme
-    document.body.classList.toggle("light");
-    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
-    setIcon();
-
-    // 4) Fade overlay OUT (reveals new theme smoothly)
+    // switch theme next frame
     requestAnimationFrame(() => {
-      fade.style.opacity = "0";
-    });
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-    // cleanup icon class
-    setTimeout(() => toggle.classList.remove("icon-swap"), 320);
-  }, { passive: true });
-})();
-
-
-// Optimize background orb on slow devices
-(function optimizeBackground(){
-  const orb = document.getElementById("bgOrb");
-  if (!orb) return;
-
-  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const lowEnd =
-    (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
-    (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-
-  if (reduceMotion || lowEnd) orb.style.animation = "none";
-})();
-
-// Scroll-to-top fix (only when no hash)
-(function () {
-  const hasHash = window.location.hash && window.location.hash.length > 1;
-  if (!hasHash) {
-    window.scrollTo(0, 0);
-    window.addEventListener("load", () => window.scrollTo(0, 0), { once: true, passive: true });
-  }
-})();
-
-// Mobile/Tablet menu toggle (<=1024px)
-(function () {
-  const btn = document.getElementById("menuBtn");
-  const links = document.getElementById("navLinks");
-  if (!btn || !links) return;
-
-  const closeMenu = () => {
-    links.classList.remove("is-open");
-    btn.setAttribute("aria-expanded", "false");
-  };
-
-  btn.addEventListener("click", () => {
-    const open = links.classList.toggle("is-open");
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
-  });
-
-  links.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
-
-  document.addEventListener("click", (e) => {
-    if (!links.classList.contains("is-open")) return;
-    const clickedInside = links.contains(e.target) || btn.contains(e.target);
-    if (!clickedInside) closeMenu();
-  });
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 1024) closeMenu();
-  }, { passive: true });
-})();
-
-// Scroll reveal (disconnect once done)
-(function () {
-  const els = document.querySelectorAll(".reveal");
-  if (!("IntersectionObserver" in window)) {
-    els.forEach(el => el.classList.add("show"));
-    return;
-  }
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add("show");
-        io.unobserve(e.target);
+      // update meta theme-color
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
       }
+
+      // icon crossfade (no emoji swapping)
+      syncToggleIcon();
+
+      // fade overlay out
+      requestAnimationFrame(() => fade.classList.remove("show"));
+
+      // release "theme-switching" after transition finishes
+      window.setTimeout(() => {
+        document.body.classList.remove("theme-switching");
+      }, 540);
     });
-  }, { threshold: 0.12 });
-
-  els.forEach(el => io.observe(el));
-})();
-
-// Back to top button
-(function(){
-  const btn = document.getElementById("toTop");
-  if (!btn) return;
-
-  const toggleBtn = () => {
-    if (window.scrollY > 600) btn.classList.add("show");
-    else btn.classList.remove("show");
-  };
-  window.addEventListener("scroll", toggleBtn, { passive: true });
-  toggleBtn();
-
-  btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-})();
-
-// Live Clock aligned to second boundaries (less drift)
-(function(){
-  const el = document.getElementById("liveTime");
-  if (!el) return;
-
-  const fmt = () => new Date().toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true
   });
-
-  const tick = () => { el.textContent = fmt(); };
-
-  tick();
-  const now = Date.now();
-  const delay = 1000 - (now % 1000);
-
-  setTimeout(() => {
-    tick();
-    setInterval(tick, 1000);
-  }, delay);
 })();
 
-// =========================
-// INTRO typing screen + replay on MS click
-// =========================
-(function(){
+    // Mobile/Tablet menu toggle (<=1024px)
+    (function () {
+      const btn = document.getElementById("menuBtn");
+      const links = document.getElementById("navLinks");
+      if (!btn || !links) return;
+
+      const closeMenu = () => {
+        links.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      };
+
+      btn.addEventListener("click", () => {
+        const open = links.classList.toggle("is-open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+
+      document.addEventListener("click", (e) => {
+        if (!links.classList.contains("is-open")) return;
+        const clickedInside = links.contains(e.target) || btn.contains(e.target);
+        if (!clickedInside) closeMenu();
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 1024) closeMenu();
+      }, { passive: true });
+    })();
+
+    // Scroll reveal (disconnect once done)
+    (function () {
+      const els = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        els.forEach(el => el.classList.add("show"));
+        return;
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add("show");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      els.forEach(el => io.observe(el));
+    })();
+
+    // Back to top button
+    (function(){
+      const btn = document.getElementById("toTop");
+      if (!btn) return;
+
+      const toggleBtn = () => {
+        if (window.scrollY > 600) btn.classList.add("show");
+        else btn.classList.remove("show");
+      };
+      window.addEventListener("scroll", toggleBtn, { passive: true });
+      toggleBtn();
+
+      btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    })();
+
+    // Live Clock aligned to second boundaries (less drift)
+    (function(){
+      const el = document.getElementById("liveTime");
+      if (!el) return;
+
+    const fmt = () => new Date().toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    });
+
+
+      const tick = () => { el.textContent = fmt(); };
+
+      tick();
+      const now = Date.now();
+      const delay = 1000 - (now % 1000);
+
+      setTimeout(() => {
+        tick();
+        setInterval(tick, 1000);
+      }, delay);
+    })();
+
+/* =========================
+   INTRO (LOGO DRAW + SIGNATURE DRAW) + replay on MS click
+========================= */
+(function () {
   const overlay = document.getElementById("introOverlay");
-  const introTextEl = document.getElementById("introText");
   const skipBtn = document.getElementById("skipIntroBtn");
   const brand = document.getElementById("brandHome");
 
-  const FULL_TEXT = "Eng Mohammad Saleem";
-  let typingTimer = null;
-  let stageTimer = null;
-  let isRunning = false;
+  if (!overlay || !skipBtn) return;
 
-  const clearTimers = () => {
-    if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
-    if (stageTimer) { clearTimeout(stageTimer); stageTimer = null; }
+  const msPaths = overlay.querySelectorAll(".ms-stroke");
+  const sigPaths = overlay.querySelectorAll(".sig-path");
+
+  let isRunning = false;
+  let hideTimer = 0;
+
+  const clearAll = () => {
+    if (hideTimer) clearTimeout(hideTimer);
+    hideTimer = 0;
   };
 
   const showOverlay = () => {
-    overlay.classList.remove("intro-hide");
     overlay.style.display = "flex";
+    overlay.classList.remove("intro-hide");
     overlay.setAttribute("aria-hidden", "false");
   };
 
   const hideOverlay = () => {
     overlay.classList.add("intro-hide");
     overlay.setAttribute("aria-hidden", "true");
-    stageTimer = setTimeout(() => {
+    hideTimer = setTimeout(() => {
       overlay.style.display = "none";
-    }, 280);
+    }, 520);
   };
 
-  const runIntro = () => {
-    clearTimers();
+  const setStrokeLen = (el, cssVarName) => {
+    if (!el || !el.getTotalLength) return;
+    const len = Math.ceil(el.getTotalLength());
+    el.style.setProperty(cssVarName, len);
+    el.style.strokeDasharray = len;
+    el.style.strokeDashoffset = len;
+  };
+
+  const resetAnimations = () => {
+    overlay.classList.remove("play");
+  
+    // ✅ MS draw lengths
+    msPaths.forEach(p => setStrokeLen(p, "--mslen"));
+  
+    // ✅ signature lines reset (ink + glow)
+    sigPaths.forEach(p => {
+      if (!p.getTotalLength) return;
+      const sl = Math.ceil(p.getTotalLength());
+      p.style.setProperty("--siglen", sl);
+      p.style.strokeDasharray = sl;
+      p.style.strokeDashoffset = sl;
+    });
+  
+    // force reflow so animation restarts
+    void overlay.offsetWidth;
+  };
+
+  const runIntro = ({ goTop }) => {
+    if (isRunning) return;
     isRunning = true;
-    showOverlay();
-    introTextEl.textContent = "";
+    clearAll();
 
-    try { window.scrollTo({ top: 0, behavior: "auto" }); } catch { window.scrollTo(0,0); }
-
-    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
-      introTextEl.textContent = FULL_TEXT;
-      stageTimer = setTimeout(() => { hideOverlay(); isRunning = false; }, 650);
-      return;
+    if (goTop) {
+      try { window.scrollTo({ top: 0, behavior: "auto" }); }
+      catch { window.scrollTo(0, 0); }
     }
 
-    let i = 0;
+    showOverlay();
+    resetAnimations();
+    overlay.classList.add("play");
 
-    typingTimer = setInterval(() => {
-      introTextEl.textContent = FULL_TEXT.slice(0, i + 1);
-      i++;
-
-      if (i >= FULL_TEXT.length) {
-        clearInterval(typingTimer);
-        typingTimer = null;
-
-        stageTimer = setTimeout(() => {
-          hideOverlay();
-          isRunning = false;
-        }, 700);
-      }
-    }, 55);
+    hideTimer = setTimeout(() => {
+      hideOverlay();
+      isRunning = false;
+    }, 2400);
   };
 
   skipBtn.addEventListener("click", () => {
-    clearTimers();
-    introTextEl.textContent = FULL_TEXT;
+    clearAll();
     hideOverlay();
     isRunning = false;
   });
 
-  brand.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (isRunning) return;
-    runIntro();
-  });
-
-  window.addEventListener("load", () => runIntro(), { once: true });
+  if (brand) {
+    brand.addEventListener("click", () => runIntro({ goTop: false }));
+  }
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && overlay.style.display !== "none") {
-      clearTimers();
+      clearAll();
       hideOverlay();
       isRunning = false;
     }
   });
+
+  const startOnce = () => {
+    if (overlay.dataset.ran === "1") return;
+    overlay.dataset.ran = "1";
+    runIntro({ goTop: true });
+  };
+
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) {
+      clearAll();
+      isRunning = false;
+      overlay.classList.add("intro-hide");
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.style.display = "none";
+      overlay.dataset.ran = "";
+    }
+    requestAnimationFrame(startOnce);
+  });
 })();
 
-
-// =========================
+    // =========================
 // Verification counters (animate when visible)
+// Uses IntersectionObserver + requestAnimationFrame
 // =========================
 (function () {
   const counters = document.querySelectorAll(".js-count");
@@ -268,11 +280,12 @@ const setIcon = () => {
       return;
     }
 
-    const duration = 900;
+    const duration = 900; // ms
     const start = performance.now();
 
     const step = (t) => {
       const p = Math.min(1, (t - start) / duration);
+      // easeOutCubic
       const eased = 1 - Math.pow(1 - p, 3);
       const val = Math.round(eased * target);
       el.textContent = `${val}${suffix}`;
@@ -297,4 +310,81 @@ const setIcon = () => {
   }, { threshold: 0.35 });
 
   counters.forEach((el) => io.observe(el));
+})();
+
+// =========================
+// Scroll-spy (single source of truth) + click lock
+// =========================
+(function () {
+  const navInner = document.querySelector(".nav-inner");
+  const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
+  if (!links.length) return;
+
+  const items = links
+    .map(a => {
+      const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
+      const el = document.getElementById(id);
+      return el ? { a, el, id } : null;
+    })
+    .filter(Boolean);
+
+  const setActive = (id) => {
+    items.forEach(({ a, id: sid }) => {
+      const on = sid === id;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  };
+
+  const getOffset = () => (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
+
+  let ticking = false;
+  let clickLockUntil = 0;
+
+const update = () => {
+  ticking = false;
+
+  // ✅ If we recently clicked a nav item, don't override highlight while smooth scroll is moving
+  if (performance.now() < clickLockUntil) return;
+
+  const y = window.scrollY + getOffset();
+
+  // ✅ Bottom-of-page fix: always highlight the last section (Contact)
+  const doc = document.documentElement;
+  const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
+  if (atBottom) {
+    const last = items[items.length - 1];
+    if (last) setActive(last.id);
+    return;
+  }
+
+  let current = items[0]?.id || "top";
+  for (const { id, el } of items) {
+    if (el.offsetTop <= y) current = id;
+  }
+
+  if (window.scrollY < 10) current = "top";
+  setActive(current);
+};
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
+  // ✅ Click: set active immediately and lock scroll-spy briefly
+  links.forEach(a => {
+    a.addEventListener("click", () => {
+      const id = decodeURIComponent(a.getAttribute("href")).slice(1);
+      setActive(id);
+      clickLockUntil = performance.now() + 1100; // lock for smooth-scroll duration
+    });
+  });
+
+  requestAnimationFrame(update);
 })();
