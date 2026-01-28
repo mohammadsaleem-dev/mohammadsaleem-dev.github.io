@@ -1296,6 +1296,60 @@ button.brand{
   stroke-dashoffset: var(--siglen, 2000);
 }
 
+
+  /* =========================
+   NEW MS LOGO (stroke draw + fill)
+========================= */
+.mark-svg.ms-mark .hex,
+.mark-svg.ms-mark .mono{
+  fill: none;
+  stroke: url(#msGrad);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 8;
+
+  stroke-dasharray: var(--mslen, 1200);
+  stroke-dashoffset: var(--mslen, 1200);
+}
+
+.mark-svg.ms-mark .hex-inner{
+  opacity: 0.55;
+  stroke-width: 6;
+}
+
+.mark-svg.ms-mark .mono{
+  stroke-width: 10;
+}
+
+/* The “fill appears after drawing” */
+.mark-svg.ms-mark .ms-fill{
+  fill: url(#msGrad);
+  opacity: 0;
+  transform-origin: 50% 50%;
+}
+
+/* Play sequence */
+#introOverlay.play .ms-path{
+  animation: drawStroke 900ms var(--theme-ease) forwards;
+}
+
+/* Delay the monogram draw a bit (feels premium) */
+#introOverlay.play .mono.ms-path{
+  animation-delay: 220ms;
+}
+
+/* Fill pop-in after stroke finishes */
+#introOverlay.play .ms-fill{
+  animation: msFillIn 360ms var(--theme-ease) forwards;
+  animation-delay: 980ms;
+}
+
+@keyframes msFillIn{
+  from{ opacity: 0; transform: scale(0.985); }
+  to  { opacity: 0.92; transform: scale(1); }
+}
+
+
 /* ===== Ink Write + Neon Pulse (signature line) ===== */
 
 /* Base ink stroke */
@@ -1661,29 +1715,78 @@ button.brand{
   <div class="intro-stage">
     <!-- Logo -->
     <div class="intro-mark" aria-hidden="true">
-      <svg class="mark-svg" viewBox="0 0 220 220" role="img" aria-label="MS Logo">
-        <!-- Outer hex -->
-        <path class="hex hex-outer"
-          d="M110 18
-             L186 60
-             L186 160
-             L110 202
-             L34 160
-             L34 60
-             Z" />
-        <!-- Inner hex (slightly inset look) -->
-        <path class="hex hex-inner"
-          d="M110 32
-             L174 68
-             L174 152
-             L110 188
-             L46 152
-             L46 68
-             Z" />
-
-        <!-- Initials -->
-        <text class="mark-initials" x="110" y="128" text-anchor="middle">MS</text>
-      </svg>
+<svg class="mark-svg ms-mark" viewBox="0 0 220 220" role="img" aria-label="MS Logo">
+  <defs>
+    <!-- Blue gradient like your awesome logo -->
+        <linearGradient id="msGrad" x1="40" y1="40" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#4fd1ff"></stop>
+          <stop offset="1" stop-color="#1f6feb"></stop>
+        </linearGradient>
+      </defs>
+    
+      <!-- Outer hex -->
+      <path class="hex ms-path"
+        d="M110 18
+           L186 60
+           L186 160
+           L110 202
+           L34 160
+           L34 60
+           Z" />
+    
+      <!-- Inner hex -->
+      <path class="hex hex-inner ms-path"
+        d="M110 32
+           L174 68
+           L174 152
+           L110 188
+           L46 152
+           L46 68
+           Z" />
+    
+      <!-- Monogram (stroke-drawn) -->
+      <!-- M (geometric, clean, matches the style) -->
+      <path class="mono ms-path"
+        d="M70 150
+           L70 85
+           L92 85
+           L110 110
+           L128 85
+           L150 85
+           L150 150
+           L130 150
+           L130 118
+           L110 145
+           L90 118
+           L90 150
+           Z" />
+    
+      <!-- S (smooth curve) -->
+      <path class="mono ms-path"
+        d="M150 100
+           C150 86, 138 78, 122 78
+           C106 78, 95 86, 95 99
+           C95 110, 104 116, 120 120
+           C138 124, 150 130, 150 146
+           C150 162, 136 172, 118 172
+           C100 172, 86 163, 84 148" />
+    
+      <!-- Filled “after draw” layer (subtle) -->
+      <path class="mono-fill ms-fill"
+        d="M70 150
+           L70 85
+           L92 85
+           L110 110
+           L128 85
+           L150 85
+           L150 150
+           L130 150
+           L130 118
+           L110 145
+           L90 118
+           L90 150
+           Z" />
+    </svg>
     </div>
 
         <!-- Welcome text -->
@@ -2487,9 +2590,8 @@ const syncToggleIcon = () => {
 
   if (!overlay || !skipBtn) return;
 
-  const hexOuter = overlay.querySelector(".hex-outer");
-  const hexInner = overlay.querySelector(".hex-inner");
-  const sigPath  = overlay.querySelector(".sig-path");
+  const msPaths = overlay.querySelectorAll(".ms-path");
+  const sigPath = overlay.querySelector(".sig-path");
 
   let isRunning = false;
   let hideTimer = 0;
@@ -2531,19 +2633,22 @@ const showOverlay = () => {
 
   const resetAnimations = () => {
     overlay.classList.remove("play");
-    setStrokeLen(hexOuter, "--len");
-    setStrokeLen(hexInner, "--len");
-
+  
+    // ✅ reset ALL logo strokes (hex + monogram)
+    msPaths.forEach(p => setStrokeLen(p, "--mslen"));
+  
+    // signature line reset (your existing)
     if (sigPath && sigPath.getTotalLength) {
       const sl = Math.ceil(sigPath.getTotalLength());
       sigPath.style.setProperty("--siglen", sl);
       sigPath.style.strokeDasharray = sl;
       sigPath.style.strokeDashoffset = sl;
     }
-
+  
     // force reflow so animation restarts
     void overlay.offsetWidth;
   };
+
 
   const runIntro = ({ goTop }) => {
     if (isRunning) return;
