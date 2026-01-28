@@ -100,15 +100,20 @@ body{
     background-color var(--theme-dur) var(--theme-ease);
 }
 
-/* ✅ Only animate theme changes while toggling (does NOT kill hover animations) */
-body.theme-switching,
-body.theme-switching *{
-  transition-property: background-color, border-color, box-shadow, filter, opacity;
+/* ✅ Only animate theme changes on major UI blocks (avoid * which breaks iOS SVG animations) */
+body.theme-switching :where(
+  html, body,
+  .nav-inner, .nav, .nav-links, .nav-actions,
+  .card, .btn,
+  .project-card, .timeline-item, .item,
+  .cert, .verify-card, .stat, .time-card,
+  .objective, .icon-chip, .pill, .tag, .icon-btn,
+  #themeFade
+){
+  transition-property: background-color, border-color, box-shadow, filter, opacity, color;
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
-
-
 
 a{ color: inherit; text-decoration: none; }
 footer p{ margin: 6px 0; }
