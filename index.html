@@ -1340,27 +1340,6 @@ button.brand{
   justify-content: center;
 }
 
-/* Play sequence */
-#introOverlay.play .hex-outer{
-  animation: drawStroke 950ms var(--theme-ease) forwards;
-}
-
-#introOverlay.play .hex-inner{
-  animation: drawStroke 850ms var(--theme-ease) 160ms forwards;
-}
-
-#introOverlay.play .mark-initials{
-  animation: popIn 520ms var(--theme-ease) 820ms forwards;
-}
-
-#introOverlay.play .sig-path{
-  animation: drawStroke 1200ms var(--theme-ease) 1050ms forwards;
-}
-
-#introOverlay.play .sig-text{
-  animation: fadeIn 520ms var(--theme-ease) 1650ms forwards;
-}
-
 @keyframes drawStroke{ to{ stroke-dashoffset: 0; } }
 @keyframes popIn{
   from{ opacity: 0; transform: scale(0.92); }
@@ -1493,8 +1472,8 @@ button.brand{
 }
 
 .intro-stage.play .sig-text{
-  animation: sigIn 280ms var(--theme-ease) forwards;
-  animation-delay: 0ms;
+  animation: sigIn 280ms var(--theme-ease) forwards !important;
+  animation-delay: 0ms !important;
 }
 
 @keyframes hexDraw{ to{ stroke-dashoffset: 0; } }
