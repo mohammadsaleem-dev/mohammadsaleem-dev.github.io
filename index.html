@@ -1348,6 +1348,117 @@ button.brand{
   #introOverlay.play .sig-text{ animation: none !important; }
 }
 
+    /* =========================
+   INTRO STAGE (logo + welcome + signature)
+========================= */
+.intro-stage{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 18px;
+  width: min(900px, calc(100% - 40px));
+}
+
+/* Logo sizing */
+.intro-mark{ margin-top: 4px; }
+.mark-svg{
+  width: 160px;
+  height: 160px;
+  display:block;
+}
+
+/* ✅ BLUE logo (works in dark + light) */
+.mark-svg .hex{
+  fill: transparent;
+  stroke: var(--accent);          /* BLUE */
+  stroke-width: 4.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  /* draw animation */
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+}
+
+/* Inner hex slightly lighter */
+.mark-svg .hex-inner{
+  opacity: 0.6;
+  stroke-width: 3.6;
+}
+
+.mark-initials{
+  font-family: var(--font);
+  font-weight: 950;
+  font-size: 72px;
+  fill: var(--accent);            /* BLUE initials */
+  opacity: 0;                     /* will fade in */
+}
+
+/* Welcome text between logo and signature */
+.intro-welcome{
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Signature container */
+.intro-sign{ width: min(900px, 92vw); }
+.sig-svg{
+  width: 100%;
+  height: auto;
+  display:block;
+}
+
+/* ✅ Put the line UNDER the name (no covering) */
+.sig-path{
+  fill: none;
+  stroke: var(--accent);          /* BLUE line (you can change to var(--text) if you want) */
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.95;
+
+  /* move the path DOWN so it sits under the name */
+  transform: translateY(34px);
+
+  /* draw animation */
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+}
+
+.sig-text{
+  font-family: "Pacifico", cursive; /* handwriting */
+  font-size: 86px;
+  fill: var(--text);                /* visible in dark + light */
+  opacity: 0;                       /* fade in */
+}
+
+/* PLAY animations only when overlay is shown */
+.intro-stage.play .hex{
+  animation: hexDraw 900ms var(--theme-ease) forwards;
+}
+.intro-stage.play .mark-initials{
+  animation: markIn 380ms var(--theme-ease) forwards;
+  animation-delay: 720ms;
+}
+.intro-stage.play .sig-path{
+  animation: sigDraw 1200ms var(--theme-ease) forwards;
+  animation-delay: 980ms;
+}
+.intro-stage.play .sig-text{
+  animation: sigIn 420ms var(--theme-ease) forwards;
+  animation-delay: 1300ms;
+}
+
+@keyframes hexDraw{ to{ stroke-dashoffset: 0; } }
+@keyframes sigDraw{ to{ stroke-dashoffset: 0; } }
+@keyframes markIn{ to{ opacity: 1; } }
+@keyframes sigIn{ to{ opacity: 1; } }
+
+
 /* -------------------------
    THEME TOGGLE ICON
 ------------------------- */
@@ -1542,24 +1653,27 @@ button.brand{
       </svg>
     </div>
 
+        <!-- Welcome text -->
+    <div class="intro-welcome">Welcome</div>
+    
     <!-- Signature -->
     <div class="intro-sign">
-      <svg class="sig-svg" viewBox="0 0 900 180" role="img" aria-label="Mohammad Saleem signature">
-        <!-- a clean “signature” path (stroke draw) -->
+      <svg class="sig-svg" viewBox="0 0 900 220" role="img" aria-label="Eng Mohammad Saleem signature">
+    
+        <!-- Name -->
+        <text class="sig-text" x="450" y="140" text-anchor="middle">
+          Eng Mohammad Saleem
+        </text>
+    
+        <!-- Line UNDER the name -->
         <path class="sig-path"
-          d="M40 120
-             C 90 70, 140 70, 180 110
-             C 210 140, 260 150, 290 120
-             C 320 90, 360 80, 395 110
-             C 430 145, 470 145, 505 110
-             C 545 70, 585 70, 620 110
-             C 650 140, 700 150, 730 120
-             C 760 95, 795 95, 840 115" />
-
-        <!-- Name text (white, script) that “appears” right after the stroke -->
-        <text class="sig-text" x="450" y="132" text-anchor="middle">Mohammad Saleem</text>
+          d="M60 140
+             C 150 60, 240 60, 330 140
+             C 420 220, 510 220, 600 140
+             C 690 60, 780 60, 840 140" />
       </svg>
     </div>
+
 
     <!-- Actions -->
     <div class="intro-actions">
@@ -2334,6 +2448,7 @@ const syncToggleIcon = () => {
 ========================= */
 (function () {
   const overlay = document.getElementById("introOverlay");
+  const stage = overlay ? overlay.querySelector(".intro-stage") : null;
   const skipBtn = document.getElementById("skipIntroBtn");
   const brand = document.getElementById("brandHome");
 
@@ -2351,11 +2466,19 @@ const syncToggleIcon = () => {
     hideTimer = 0;
   };
 
-  const showOverlay = () => {
-    overlay.style.display = "flex";
-    overlay.classList.remove("intro-hide");
-    overlay.setAttribute("aria-hidden", "false");
-  };
+const showOverlay = () => {
+  overlay.style.display = "flex";
+  overlay.classList.remove("intro-hide");
+  overlay.setAttribute("aria-hidden", "false");
+
+  // ✅ restart SVG animations every time
+  if (stage) {
+    stage.classList.remove("play");
+    void stage.offsetWidth; // force reflow
+    stage.classList.add("play");
+  }
+};
+
 
   const hideOverlay = () => {
     overlay.classList.add("intro-hide");
