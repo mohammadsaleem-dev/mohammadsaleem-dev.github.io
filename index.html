@@ -335,11 +335,9 @@ footer{
   box-shadow: var(--shadow), var(--hover-ring);
 }
 
-.brand{ justify-self: start; }
-.nav-links{ justify-self: center; }
-.nav-actions{ justify-self: end; }
-
 .brand{
+  justify-self: start;
+
   display: flex;
   align-items: center;
   gap: 0;
@@ -348,6 +346,10 @@ footer{
   white-space: nowrap;
   min-width: 0;
 }
+
+.nav-links{ justify-self: center; }
+.nav-actions{ justify-self: end; }
+
 button.brand{
   background: transparent;
   border: 0;
@@ -589,12 +591,8 @@ button.brand{
   font-size: var(--h1);
   letter-spacing: -0.7px;
   white-space: nowrap;
-}
-
-  /* ✅ Stop the NAME from fading through gray on theme toggle */
-.hero-title h1{
-  transition: none !important;     /* no color interpolation */
-  color: var(--text) !important;   /* always snap to the current theme text */
+  transition: none !important;
+  color: var(--text) !important;
 }
 
 /* Optional: if you also want the subtitle/location to snap instantly */
@@ -1344,16 +1342,12 @@ button.brand{
   filter: blur(1.2px);
 }
 
-/* Pulse dot (travels after line is drawn) */
 .sig-pulse{
   fill: var(--accent);
   opacity: 0;
+  transform: translateY(34px);
   filter: drop-shadow(0 0 10px rgba(88,166,255,0.55))
           drop-shadow(0 0 22px rgba(88,166,255,0.35));
-}
-
-  .sig-pulse{
-  transform: translateY(34px);
 }
 
 .sig-text{
@@ -1369,13 +1363,6 @@ button.brand{
   display: flex;
   justify-content: center;
 }
-
-@keyframes drawStroke{ to{ stroke-dashoffset: 0; } }
-@keyframes popIn{
-  from{ opacity: 0; transform: scale(0.92); }
-  to{ opacity: 1; transform: scale(1); }
-}
-@keyframes fadeIn{ to{ opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce){
   .hex, .sig-path{ stroke-dashoffset: 0 !important; }
@@ -1456,10 +1443,6 @@ button.brand{
 /* SVG colors (matches your theme accent) */
 .v-icon .v-circle{
   fill: #1877F2; /* Facebook Blue */
-}
-
-.v-icon .v-check{
-  fill: #ffffff;
 }
 
 .v-icon .v-check{ fill: #fff; }
@@ -2313,19 +2296,6 @@ const syncToggleIcon = () => {
   });
 })();
 
-    // Optimize background orb on slow devices
-    (function optimizeBackground(){
-      const orb = document.getElementById("bgOrb");
-      if (!orb) return;
-
-      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const lowEnd =
-        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
-        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-
-      if (reduceMotion || lowEnd) orb.style.animation = "none";
-    })();
-
     // Mobile/Tablet menu toggle (<=1024px)
     (function () {
       const btn = document.getElementById("menuBtn");
@@ -2420,7 +2390,6 @@ const syncToggleIcon = () => {
 ========================= */
 (function () {
   const overlay = document.getElementById("introOverlay");
-  const stage = overlay ? overlay.querySelector(".intro-stage") : null;
   const skipBtn = document.getElementById("skipIntroBtn");
   const brand = document.getElementById("brandHome");
 
@@ -2473,12 +2442,10 @@ const syncToggleIcon = () => {
       p.style.strokeDasharray = sl;
       p.style.strokeDashoffset = sl;
     });
-
   
     // force reflow so animation restarts
     void overlay.offsetWidth;
   };
-
 
   const runIntro = ({ goTop }) => {
     if (isRunning) return;
@@ -2537,8 +2504,6 @@ const syncToggleIcon = () => {
   });
 })();
 
-
-
     // =========================
 // Verification counters (animate when visible)
 // Uses IntersectionObserver + requestAnimationFrame
@@ -2592,7 +2557,6 @@ const syncToggleIcon = () => {
   counters.forEach((el) => io.observe(el));
 })();
 
-    
   </script>
 </body>
 </html>
