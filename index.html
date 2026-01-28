@@ -2371,29 +2371,6 @@ const syncToggleIcon = () => {
       btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     })();
 
-        // Active nav link highlight on scroll
-    (function(){
-      const links = document.querySelectorAll('.nav-links a');
-      const sections = Array.from(links)
-        .map(a => document.querySelector(a.getAttribute('href')))
-        .filter(Boolean);
-    
-      const setActive = () => {
-        const y = window.scrollY + (parseInt(getComputedStyle(document.documentElement).scrollPaddingTop) || 90);
-        let current = sections[0];
-        for (const s of sections) {
-          if (s.offsetTop <= y) current = s;
-        }
-        links.forEach(a => a.classList.remove('active'));
-        const active = document.querySelector(`.nav-links a[href="#${current.id}"]`);
-        if (active) active.classList.add('active');
-      };
-    
-      window.addEventListener('scroll', setActive, { passive: true });
-      window.addEventListener('load', setActive);
-      setActive();
-    })();
-
     // Live Clock aligned to second boundaries (less drift)
     (function(){
       const el = document.getElementById("liveTime");
@@ -2591,16 +2568,14 @@ const syncToggleIcon = () => {
   counters.forEach((el) => io.observe(el));
 })();
 
-    // =========================
-// Scroll-spy: highlight the correct nav link while scrolling
-// Fixes: "Projects still shows Home" + "Contact shows Certificates"
+// =========================
+// Scroll-spy (single source of truth) + click lock
 // =========================
 (function () {
-  const nav = document.querySelector(".nav-inner");
+  const navInner = document.querySelector(".nav-inner");
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   if (!links.length) return;
 
-  // Map link -> section element
   const items = links
     .map(a => {
       const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
@@ -2609,7 +2584,6 @@ const syncToggleIcon = () => {
     })
     .filter(Boolean);
 
-  // helper to set active class
   const setActive = (id) => {
     items.forEach(({ a, id: sid }) => {
       const on = sid === id;
@@ -2619,26 +2593,25 @@ const syncToggleIcon = () => {
     });
   };
 
-  // measure navbar height (sticky)
-  const getOffset = () => (nav ? nav.getBoundingClientRect().height : 56) + 22;
+  const getOffset = () => (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
 
   let ticking = false;
+  let clickLockUntil = 0;
 
   const update = () => {
     ticking = false;
 
-    // "scan line" just below the navbar
+    // ✅ If we recently clicked a nav item, don't override highlight while smooth scroll is moving
+    if (performance.now() < clickLockUntil) return;
+
     const y = window.scrollY + getOffset();
 
-    // pick the last section whose top is above that scan line
     let current = items[0]?.id || "top";
     for (const { id, el } of items) {
       if (el.offsetTop <= y) current = id;
     }
 
-    // Special case: if you're basically at the very top, force Home
     if (window.scrollY < 10) current = "top";
-
     setActive(current);
   };
 
@@ -2651,17 +2624,18 @@ const syncToggleIcon = () => {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
 
-  // When you click a link, set active immediately (feels instant)
+  // ✅ Click: set active immediately and lock scroll-spy briefly
   links.forEach(a => {
     a.addEventListener("click", () => {
       const id = decodeURIComponent(a.getAttribute("href")).slice(1);
       setActive(id);
+      clickLockUntil = performance.now() + 700; // lock for smooth-scroll duration
     });
   });
 
-  // Initial run (supports direct hash loads like #contact)
   requestAnimationFrame(update);
 })();
+
 
   </script>
 </body>
