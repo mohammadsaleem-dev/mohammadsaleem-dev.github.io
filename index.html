@@ -1251,30 +1251,6 @@ button.brand{
   overflow: visible;
 }
 
-.hex{
-  fill: none;
-  stroke: rgba(255,255,255,0.92);
-  stroke-width: 4.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: var(--len, 1000);
-  stroke-dashoffset: var(--len, 1000);
-}
-
-.hex-inner{
-  stroke-width: 3.2;
-  opacity: 0.9;
-}
-
-.mark-initials{
-  font-family: var(--font);
-  font-weight: 900;
-  font-size: 64px;
-  fill: rgba(255,255,255,0.92);
-  opacity: 0;
-  transform-origin: 50% 50%;
-}
-
 /* Signature */
 .intro-sign{
   width: min(860px, 92vw);
@@ -1296,60 +1272,41 @@ button.brand{
   stroke-dashoffset: var(--siglen, 2000);
 }
 
+/* ===== MS (NO HEX) — draw then fill ===== */
+.ms-svg{
+  width: 160px;
+  height: 160px;
+  display: block;
+}
 
-  /* =========================
-   NEW MS LOGO (stroke draw + fill)
-========================= */
-.mark-svg.ms-mark .hex,
-.mark-svg.ms-mark .mono{
+.ms-stroke{
   fill: none;
-  stroke: url(#msGrad);
+  stroke: var(--accent);
+  stroke-width: 6.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 8;
 
+  /* JS sets the real length */
   stroke-dasharray: var(--mslen, 1200);
   stroke-dashoffset: var(--mslen, 1200);
 }
 
-.mark-svg.ms-mark .hex-inner{
-  opacity: 0.55;
-  stroke-width: 6;
-}
+.ms-fill{ opacity: 0; }
+.ms-fill path{ fill: var(--accent); }
 
-.mark-svg.ms-mark .mono{
-  stroke-width: 10;
+/* play sequence */
+#introOverlay.play .ms-stroke{
+  animation: msDraw 900ms var(--theme-ease) forwards;
 }
-
-/* The “fill appears after drawing” */
-.mark-svg.ms-mark .ms-fill{
-  fill: url(#msGrad);
-  opacity: 0;
-  transform-origin: 50% 50%;
-}
-
-/* Play sequence */
-#introOverlay.play .ms-path{
-  animation: drawStroke 900ms var(--theme-ease) forwards;
-}
-
-/* Delay the monogram draw a bit (feels premium) */
-#introOverlay.play .mono.ms-path{
-  animation-delay: 220ms;
-}
-
-/* Fill pop-in after stroke finishes */
 #introOverlay.play .ms-fill{
-  animation: msFillIn 360ms var(--theme-ease) forwards;
-  animation-delay: 980ms;
+  animation: msFillIn 260ms var(--theme-ease) forwards;
+  animation-delay: 860ms;
 }
 
-@keyframes msFillIn{
-  from{ opacity: 0; transform: scale(0.985); }
-  to  { opacity: 0.92; transform: scale(1); }
-}
+@keyframes msDraw{ to{ stroke-dashoffset: 0; } }
+@keyframes msFillIn{ to{ opacity: 1; } }
 
-
+    
 /* ===== Ink Write + Neon Pulse (signature line) ===== */
 
 /* Base ink stroke */
@@ -1715,78 +1672,18 @@ button.brand{
   <div class="intro-stage">
     <!-- Logo -->
     <div class="intro-mark" aria-hidden="true">
-<svg class="mark-svg ms-mark" viewBox="0 0 220 220" role="img" aria-label="MS Logo">
-  <defs>
-    <!-- Blue gradient like your awesome logo -->
-        <linearGradient id="msGrad" x1="40" y1="40" x2="180" y2="180" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#4fd1ff"></stop>
-          <stop offset="1" stop-color="#1f6feb"></stop>
-        </linearGradient>
-      </defs>
-    
-      <!-- Outer hex -->
-      <path class="hex ms-path"
-        d="M110 18
-           L186 60
-           L186 160
-           L110 202
-           L34 160
-           L34 60
-           Z" />
-    
-      <!-- Inner hex -->
-      <path class="hex hex-inner ms-path"
-        d="M110 32
-           L174 68
-           L174 152
-           L110 188
-           L46 152
-           L46 68
-           Z" />
-    
-      <!-- Monogram (stroke-drawn) -->
-      <!-- M (geometric, clean, matches the style) -->
-      <path class="mono ms-path"
-        d="M70 150
-           L70 85
-           L92 85
-           L110 110
-           L128 85
-           L150 85
-           L150 150
-           L130 150
-           L130 118
-           L110 145
-           L90 118
-           L90 150
-           Z" />
-    
-      <!-- S (smooth curve) -->
-      <path class="mono ms-path"
-        d="M150 100
-           C150 86, 138 78, 122 78
-           C106 78, 95 86, 95 99
-           C95 110, 104 116, 120 120
-           C138 124, 150 130, 150 146
-           C150 162, 136 172, 118 172
-           C100 172, 86 163, 84 148" />
-    
-      <!-- Filled “after draw” layer (subtle) -->
-      <path class="mono-fill ms-fill"
-        d="M70 150
-           L70 85
-           L92 85
-           L110 110
-           L128 85
-           L150 85
-           L150 150
-           L130 150
-           L130 118
-           L110 145
-           L90 118
-           L90 150
-           Z" />
-    </svg>
+<svg class="mark-svg ms-svg" viewBox="0 0 220 220" role="img" aria-label="MS Logo">
+  <!-- DRAW (stroke) -->
+  <path class="ms-stroke" d="M 125.00 97.50 L 111.50 97.00 L 111.00 69.50 L 102.00 97.50 L 90.50 97.00 L 83.00 71.50 L 82.50 97.00 L 68.00 97.50 L 67.50 50.00 L 89.00 49.50 L 97.00 77.50 L 103.50 50.00 L 125.00 49.50 L 125.00 97.50 Z"/>
+  <path class="ms-stroke" d="M 156.00 98.50 L 141.00 97.50 L 135.00 94.50 L 129.50 86.00 L 130.00 80.50 L 142.00 80.50 L 149.00 87.50 L 155.50 85.00 L 154.00 80.50 L 135.00 74.50 L 130.50 68.00 L 133.50 55.00 L 143.00 49.50 L 158.00 49.50 L 169.50 60.00 L 169.00 65.50 L 157.00 65.50 L 154.00 60.50 L 145.50 62.00 L 147.00 66.50 L 164.00 71.50 L 170.50 81.00 L 168.50 91.00 L 156.00 98.50 Z"/>
+
+  <!-- FILL (appears after draw) -->
+  <g class="ms-fill" aria-hidden="true">
+    <path d="M 125.00 97.50 L 111.50 97.00 L 111.00 69.50 L 102.00 97.50 L 90.50 97.00 L 83.00 71.50 L 82.50 97.00 L 68.00 97.50 L 67.50 50.00 L 89.00 49.50 L 97.00 77.50 L 103.50 50.00 L 125.00 49.50 L 125.00 97.50 Z"/>
+    <path d="M 156.00 98.50 L 141.00 97.50 L 135.00 94.50 L 129.50 86.00 L 130.00 80.50 L 142.00 80.50 L 149.00 87.50 L 155.50 85.00 L 154.00 80.50 L 135.00 74.50 L 130.50 68.00 L 133.50 55.00 L 143.00 49.50 L 158.00 49.50 L 169.50 60.00 L 169.00 65.50 L 157.00 65.50 L 154.00 60.50 L 145.50 62.00 L 147.00 66.50 L 164.00 71.50 L 170.50 81.00 L 168.50 91.00 L 156.00 98.50 Z"/>
+  </g>
+</svg>
+
     </div>
 
         <!-- Welcome text -->
@@ -2590,7 +2487,7 @@ const syncToggleIcon = () => {
 
   if (!overlay || !skipBtn) return;
 
-  const msPaths = overlay.querySelectorAll(".ms-path");
+  const msPaths = overlay.querySelectorAll(".ms-stroke");
   const sigPath = overlay.querySelector(".sig-path");
 
   let isRunning = false;
@@ -2601,19 +2498,11 @@ const syncToggleIcon = () => {
     hideTimer = 0;
   };
 
-const showOverlay = () => {
-  overlay.style.display = "flex";
-  overlay.classList.remove("intro-hide");
-  overlay.setAttribute("aria-hidden", "false");
-
-  // ✅ restart SVG animations every time
-  if (stage) {
-    stage.classList.remove("play");
-    void stage.offsetWidth; // force reflow
-    stage.classList.add("play");
-  }
-};
-
+  const showOverlay = () => {
+    overlay.style.display = "flex";
+    overlay.classList.remove("intro-hide");
+    overlay.setAttribute("aria-hidden", "false");
+  };
 
   const hideOverlay = () => {
     overlay.classList.add("intro-hide");
@@ -2634,10 +2523,10 @@ const showOverlay = () => {
   const resetAnimations = () => {
     overlay.classList.remove("play");
   
-    // ✅ reset ALL logo strokes (hex + monogram)
+    // ✅ MS draw lengths
     msPaths.forEach(p => setStrokeLen(p, "--mslen"));
   
-    // signature line reset (your existing)
+    // ✅ signature line reset
     if (sigPath && sigPath.getTotalLength) {
       const sl = Math.ceil(sigPath.getTotalLength());
       sigPath.style.setProperty("--siglen", sl);
