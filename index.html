@@ -1272,40 +1272,57 @@ button.brand{
   stroke-dashoffset: var(--siglen, 2000);
 }
 
-/* ===== MS (NO HEX) — draw then fill ===== */
+/* ===== Premium MS draw (gradient + glow) ===== */
 .ms-svg{
-  width: 160px;
-  height: 160px;
-  display: block;
+  width: 170px;
+  height: 170px;
+  display:block;
 }
 
 .ms-stroke{
   fill: none;
-  stroke: var(--accent);
-  stroke-width: 6.5;
+  stroke: url(#msGrad);
+  stroke-width: 7.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-
-  /* JS sets the real length */
   stroke-dasharray: var(--mslen, 1200);
   stroke-dashoffset: var(--mslen, 1200);
 }
 
-.ms-fill{ opacity: 0; }
-.ms-fill path{ fill: var(--accent); }
+.ms-stroke.ms-glow{
+  stroke: url(#msGrad);
+  stroke-width: 12;
+  opacity: 0.22;
+  filter: url(#msGlow);
+}
 
-/* play sequence */
+.ms-fill{ opacity: 0; }
+.ms-fill path{ fill: url(#msGrad); opacity: 0.95; }
+
 #introOverlay.play .ms-stroke{
-  animation: msDraw 900ms var(--theme-ease) forwards;
+  animation: msDraw 950ms var(--theme-ease) forwards;
 }
 #introOverlay.play .ms-fill{
   animation: msFillIn 260ms var(--theme-ease) forwards;
-  animation-delay: 860ms;
+  animation-delay: 900ms;
 }
 
 @keyframes msDraw{ to{ stroke-dashoffset: 0; } }
 @keyframes msFillIn{ to{ opacity: 1; } }
 
+#introOverlay.play .sig-text{
+  animation: sigIn 420ms var(--theme-ease) forwards;
+  animation-delay: 860ms;
+}
+
+#introOverlay.play .sig-path{
+  animation: sigDraw 1200ms var(--theme-ease) forwards;
+  animation-delay: 520ms;
+}
+
+@keyframes sigDraw{ to{ stroke-dashoffset: 0; } }
+@keyframes sigIn{ to{ opacity: 1; } }
+   
     
 /* ===== Ink Write + Neon Pulse (signature line) ===== */
 
@@ -1340,7 +1357,7 @@ button.brand{
 .sig-text{
   font-family: "Pacifico", cursive;
   font-size: 72px;
-  fill: rgba(255,255,255,0.92);
+  fill: var(--text);     /* ✅ works in dark + light */
   opacity: 0;
 }
 
@@ -1366,141 +1383,6 @@ button.brand{
   #introOverlay.play .mark-initials,
   #introOverlay.play .sig-path,
   #introOverlay.play .sig-text{ animation: none !important; }
-}
-
-    /* =========================
-   INTRO STAGE (logo + welcome + signature)
-========================= */
-.intro-stage{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap: 18px;
-  width: min(900px, calc(100% - 40px));
-}
-
-/* Logo sizing */
-.intro-mark{ margin-top: 4px; }
-.mark-svg{
-  width: 160px;
-  height: 160px;
-  display:block;
-}
-
-/* ✅ BLUE logo (works in dark + light) */
-.mark-svg .hex{
-  fill: transparent;
-  stroke: var(--accent);          /* BLUE */
-  stroke-width: 4.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-
-  /* draw animation */
-  stroke-dasharray: 900;
-  stroke-dashoffset: 900;
-}
-
-/* Inner hex slightly lighter */
-.mark-svg .hex-inner{
-  opacity: 0.6;
-  stroke-width: 3.6;
-}
-
-.mark-initials{
-  font-family: var(--font);
-  font-weight: 950;
-  font-size: 72px;
-  fill: var(--accent);            /* BLUE initials */
-  opacity: 0;                     /* will fade in */
-}
-
-/* Welcome text between logo and signature */
-.intro-welcome{
-  font-weight: 900;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* Signature container */
-.intro-sign{ width: min(900px, 92vw); }
-.sig-svg{
-  width: 100%;
-  height: auto;
-  display:block;
-}
-
-/* ✅ Put the line UNDER the name (no covering) */
-.sig-path{
-  fill: none;
-  stroke: var(--accent);          /* BLUE line (you can change to var(--text) if you want) */
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.95;
-
-  /* move the path DOWN so it sits under the name */
-  transform: translateY(34px);
-
-  /* draw animation */
-  stroke-dasharray: 1400;
-  stroke-dashoffset: 1400;
-}
-
-.sig-text{
-  font-family: "Pacifico", cursive; /* handwriting */
-  font-size: 86px;
-  fill: var(--text);                /* visible in dark + light */
-  opacity: 0;                       /* fade in */
-}
-
-/* PLAY animations only when overlay is shown */
-.intro-stage.play .hex{
-  animation: hexDraw 900ms var(--theme-ease) forwards;
-}
-.intro-stage.play .mark-initials{
-  animation: markIn 380ms var(--theme-ease) forwards;
-  animation-delay: 720ms;
-}
-.intro-stage.play .sig-path{
-  animation: sigDraw 1200ms var(--theme-ease) forwards;
-  animation-delay: 980ms;
-}
-
-/* after draw: glow breath + pulse travel */
-.intro-stage.play .sig-glow{
-  animation:
-    sigDraw 1200ms var(--theme-ease) 980ms forwards,
-    glowBreathe 900ms ease-in-out 2200ms infinite;
-}
-
-/* pulse dot appears after line finishes */
-.intro-stage.play .sig-pulse{
-  opacity: 1;
-  animation: pulseTravel 900ms var(--theme-ease) 2200ms forwards;
-}
-
-.intro-stage.play .sig-text{
-  animation: sigIn 500ms var(--theme-ease) forwards !important;
-  animation-delay: 0ms !important;
-}
-
-@keyframes hexDraw{ to{ stroke-dashoffset: 0; } }
-@keyframes sigDraw{ to{ stroke-dashoffset: 0; } }
-@keyframes markIn{ to{ opacity: 1; } }
-@keyframes sigIn{ to{ opacity: 1; } }
-@keyframes glowBreathe{
-  0%, 100%{ opacity: 0.14; filter: blur(1px); }
-  50%{ opacity: 0.28; filter: blur(2px); }
-}
-
-/* moves dot from left->right under your curve */
-@keyframes pulseTravel{
-  0%   { transform: translateX(0); opacity: 0; }
-  10%  { opacity: 1; }
-  100% { transform: translateX(780px); opacity: 0; }
 }
 
 /* -------------------------
@@ -1673,16 +1555,37 @@ button.brand{
     <!-- Logo -->
     <div class="intro-mark" aria-hidden="true">
 <svg class="mark-svg ms-svg" viewBox="0 0 220 220" role="img" aria-label="MS Logo">
-  <!-- DRAW (stroke) -->
+  <defs>
+    <linearGradient id="msGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#43e5ff"/>
+      <stop offset="55%" stop-color="#2f81f7"/>
+      <stop offset="100%" stop-color="#1b4cff"/>
+    </linearGradient>
+
+    <filter id="msGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- glow stroke (behind) -->
+  <path class="ms-stroke ms-glow" d="M 125.00 97.50 L 111.50 97.00 L 111.00 69.50 L 102.00 97.50 L 90.50 97.00 L 83.00 71.50 L 82.50 97.00 L 68.00 97.50 L 67.50 50.00 L 89.00 49.50 L 97.00 77.50 L 103.50 50.00 L 125.00 49.50 L 125.00 97.50 Z"/>
+  <path class="ms-stroke ms-glow" d="M 156.00 98.50 L 141.00 97.50 L 135.00 94.50 L 129.50 86.00 L 130.00 80.50 L 142.00 80.50 L 149.00 87.50 L 155.50 85.00 L 154.00 80.50 L 135.00 74.50 L 130.50 68.00 L 133.50 55.00 L 143.00 49.50 L 158.00 49.50 L 169.50 60.00 L 169.00 65.50 L 157.00 65.50 L 154.00 60.50 L 145.50 62.00 L 147.00 66.50 L 164.00 71.50 L 170.50 81.00 L 168.50 91.00 L 156.00 98.50 Z"/>
+
+  <!-- main stroke -->
   <path class="ms-stroke" d="M 125.00 97.50 L 111.50 97.00 L 111.00 69.50 L 102.00 97.50 L 90.50 97.00 L 83.00 71.50 L 82.50 97.00 L 68.00 97.50 L 67.50 50.00 L 89.00 49.50 L 97.00 77.50 L 103.50 50.00 L 125.00 49.50 L 125.00 97.50 Z"/>
   <path class="ms-stroke" d="M 156.00 98.50 L 141.00 97.50 L 135.00 94.50 L 129.50 86.00 L 130.00 80.50 L 142.00 80.50 L 149.00 87.50 L 155.50 85.00 L 154.00 80.50 L 135.00 74.50 L 130.50 68.00 L 133.50 55.00 L 143.00 49.50 L 158.00 49.50 L 169.50 60.00 L 169.00 65.50 L 157.00 65.50 L 154.00 60.50 L 145.50 62.00 L 147.00 66.50 L 164.00 71.50 L 170.50 81.00 L 168.50 91.00 L 156.00 98.50 Z"/>
 
-  <!-- FILL (appears after draw) -->
+  <!-- FILL -->
   <g class="ms-fill" aria-hidden="true">
     <path d="M 125.00 97.50 L 111.50 97.00 L 111.00 69.50 L 102.00 97.50 L 90.50 97.00 L 83.00 71.50 L 82.50 97.00 L 68.00 97.50 L 67.50 50.00 L 89.00 49.50 L 97.00 77.50 L 103.50 50.00 L 125.00 49.50 L 125.00 97.50 Z"/>
     <path d="M 156.00 98.50 L 141.00 97.50 L 135.00 94.50 L 129.50 86.00 L 130.00 80.50 L 142.00 80.50 L 149.00 87.50 L 155.50 85.00 L 154.00 80.50 L 135.00 74.50 L 130.50 68.00 L 133.50 55.00 L 143.00 49.50 L 158.00 49.50 L 169.50 60.00 L 169.00 65.50 L 157.00 65.50 L 154.00 60.50 L 145.50 62.00 L 147.00 66.50 L 164.00 71.50 L 170.50 81.00 L 168.50 91.00 L 156.00 98.50 Z"/>
   </g>
 </svg>
+
 
     </div>
 
@@ -2488,7 +2391,7 @@ const syncToggleIcon = () => {
   if (!overlay || !skipBtn) return;
 
   const msPaths = overlay.querySelectorAll(".ms-stroke");
-  const sigPath = overlay.querySelector(".sig-path");
+  const sigPaths = overlay.querySelectorAll(".sig-path");
 
   let isRunning = false;
   let hideTimer = 0;
@@ -2526,13 +2429,15 @@ const syncToggleIcon = () => {
     // ✅ MS draw lengths
     msPaths.forEach(p => setStrokeLen(p, "--mslen"));
   
-    // ✅ signature line reset
-    if (sigPath && sigPath.getTotalLength) {
-      const sl = Math.ceil(sigPath.getTotalLength());
-      sigPath.style.setProperty("--siglen", sl);
-      sigPath.style.strokeDasharray = sl;
-      sigPath.style.strokeDashoffset = sl;
-    }
+    // ✅ signature lines reset (ink + glow)
+    sigPaths.forEach(p => {
+      if (!p.getTotalLength) return;
+      const sl = Math.ceil(p.getTotalLength());
+      p.style.setProperty("--siglen", sl);
+      p.style.strokeDasharray = sl;
+      p.style.strokeDashoffset = sl;
+    });
+
   
     // force reflow so animation restarts
     void overlay.offsetWidth;
