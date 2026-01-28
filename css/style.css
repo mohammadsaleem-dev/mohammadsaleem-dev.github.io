@@ -1152,6 +1152,7 @@ button.brand{
   align-items: center;
   justify-content: center;
   background: var(--bg) !important;
+  -webkit-transform: translateZ(0);
   overflow: hidden;
   opacity: 1;
   visibility: visible;
