@@ -215,25 +215,35 @@ const resetAnimations = () => {
   void overlay.offsetHeight;
 };
 
-  const runIntro = ({ goTop }) => {
-    if (isRunning) return;
-    isRunning = true;
-    clearAll();
+const runIntro = ({ goTop }) => {
+  if (isRunning) return;
+  isRunning = true;
+  clearAll();
 
-    if (goTop) {
-      try { window.scrollTo({ top: 0, behavior: "auto" }); }
-      catch { window.scrollTo(0, 0); }
-    }
+  if (goTop) {
+    try { window.scrollTo({ top: 0, behavior: "auto" }); }
+    catch { window.scrollTo(0, 0); }
+  }
 
-    showOverlay();
-    resetAnimations();
+  showOverlay();
+
+  // ✅ iOS Safari: restart animation reliably
+  overlay.classList.remove("play");
+  resetAnimations();
+
+  // double flush (Safari is picky)
+  void overlay.offsetWidth;
+  overlay.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
     overlay.classList.add("play");
 
     hideTimer = setTimeout(() => {
       hideOverlay();
       isRunning = false;
     }, 2400);
-  };
+  });
+};
 
   skipBtn.addEventListener("click", () => {
     clearAll();
