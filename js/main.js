@@ -183,20 +183,37 @@ const syncToggleIcon = () => {
     el.style.strokeDashoffset = len;
   };
 
-  const resetAnimations = () => {
-    overlay.classList.remove("play");
-  
-    // ✅ MS draw lengths
-    msPaths.forEach(p => setStrokeLen(p, "--mslen"));
-  
-    // ✅ signature lines reset (ink + glow)
-    sigPaths.forEach(p => {
-      if (!p.getTotalLength) return;
-      const sl = Math.ceil(p.getTotalLength());
-      p.style.setProperty("--siglen", sl);
-      p.style.strokeDasharray = sl;
-      p.style.strokeDashoffset = sl;
-    });
+const resetAnimations = () => {
+  overlay.classList.remove("play");
+
+  // Safari fix: force full style reset before recalculating
+  msPaths.forEach(p => {
+    if (!p.getTotalLength) return;
+
+    const len = Math.ceil(p.getTotalLength());
+
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+
+    // IMPORTANT: remove CSS variable dependency (Safari bug)
+    p.style.removeProperty("--mslen");
+  });
+
+  sigPaths.forEach(p => {
+    if (!p.getTotalLength) return;
+
+    const sl = Math.ceil(p.getTotalLength());
+
+    p.style.strokeDasharray = sl;
+    p.style.strokeDashoffset = sl;
+
+    p.style.removeProperty("--siglen");
+  });
+
+  // HARD REFLOW (Safari requires double flush)
+  overlay.getBoundingClientRect();
+  void overlay.offsetHeight;
+};
   
     // force reflow so animation restarts
     void overlay.offsetWidth;
