@@ -1507,12 +1507,12 @@ button.brand{
   border-radius: inherit;
 
   /* “moving blue line” look (segments) */
-  background: repeating-conic-gradient(
-    from 0deg,
-    rgba(88,166,255,0) 0 18deg,
-    rgba(88,166,255,1) 18deg 32deg,
-    rgba(88,166,255,0) 32deg 60deg
-  );
+   background: conic-gradient(
+     rgba(88,166,255,0.25) 0deg,
+     rgba(88,166,255,0.25) 300deg,
+     rgba(88,166,255,1)   330deg,
+     rgba(88,166,255,0.25) 360deg
+   );
 
   /* cut the center out (make it a ring) */
   -webkit-mask: radial-gradient(
