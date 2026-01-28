@@ -393,6 +393,12 @@ button.brand{
   background: transparent;      /* remove gray box */
   transform: translateY(-1px);  /* subtle premium motion */
 }
+  /* Active nav link (scroll-spy) */
+.nav-links a.active{
+  color: var(--accent);
+  font-weight: 900;
+}
+
 
 .nav-actions{
   display: flex;
@@ -1540,6 +1546,7 @@ button.brand{
 </style>
 </head>
 <body>
+<div id="top"></div>
 <div id="themeFade" aria-hidden="true"></div>
 
 <!-- INTRO OVERLAY (LOGO DRAW + SIGNATURE DRAW) -->
@@ -1684,7 +1691,6 @@ button.brand{
   </div>
 
   <div class="container">
-    <div id="top" class="anchor"></div>
 
     <div class="meta-wrap">
       <div class="time-card" title="Local time">
@@ -2583,6 +2589,78 @@ const syncToggleIcon = () => {
   }, { threshold: 0.35 });
 
   counters.forEach((el) => io.observe(el));
+})();
+
+    // =========================
+// Scroll-spy: highlight the correct nav link while scrolling
+// Fixes: "Projects still shows Home" + "Contact shows Certificates"
+// =========================
+(function () {
+  const nav = document.querySelector(".nav-inner");
+  const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
+  if (!links.length) return;
+
+  // Map link -> section element
+  const items = links
+    .map(a => {
+      const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
+      const el = document.getElementById(id);
+      return el ? { a, el, id } : null;
+    })
+    .filter(Boolean);
+
+  // helper to set active class
+  const setActive = (id) => {
+    items.forEach(({ a, id: sid }) => {
+      const on = sid === id;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  };
+
+  // measure navbar height (sticky)
+  const getOffset = () => (nav ? nav.getBoundingClientRect().height : 56) + 22;
+
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+
+    // "scan line" just below the navbar
+    const y = window.scrollY + getOffset();
+
+    // pick the last section whose top is above that scan line
+    let current = items[0]?.id || "top";
+    for (const { id, el } of items) {
+      if (el.offsetTop <= y) current = id;
+    }
+
+    // Special case: if you're basically at the very top, force Home
+    if (window.scrollY < 10) current = "top";
+
+    setActive(current);
+  };
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
+  // When you click a link, set active immediately (feels instant)
+  links.forEach(a => {
+    a.addEventListener("click", () => {
+      const id = decodeURIComponent(a.getAttribute("href")).slice(1);
+      setActive(id);
+    });
+  });
+
+  // Initial run (supports direct hash loads like #contact)
+  requestAnimationFrame(update);
 })();
 
   </script>
