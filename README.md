@@ -1,137 +1,83 @@
-Mohammad Saleem — Portfolio Website
+# Mohammad Saleem — Portfolio Website ![Website](https://img.shields.io/badge/Live%20Website-Online-success) ![HTML](https://img.shields.io/badge/HTML-5-orange) ![CSS](https://img.shields.io/badge/CSS-3-blue) ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow) ![Lighthouse Performance](https://img.shields.io/badge/Lighthouse-Performance%2095%25-brightgreen)
 
-
-
-
-
-
-
-
-
-
-
-
-🌐 Live Website
+🌐 **Live Website:**  
 https://mohammadsaleem-dev.github.io
 
-📌 About This Project
+---
 
-This repository hosts my personal professional portfolio website, designed to showcase my academic background, technical projects, and engineering experience in a modern, high-performance web interface.
+## 📌 About This Project
 
-The portfolio highlights my work in:
+This repository contains my **personal portfolio website** showcasing my work and experience in:
 
-Blockchain Engineering
+- Blockchain Engineering  
+- Cybersecurity & Secure Systems  
+- Software Development  
+- Embedded & Automation Projects  
+- ROS & Systems Simulation  
 
-Cybersecurity & Secure Systems
+The site is optimized for performance, accessibility, responsive design, SEO visibility, and professional presentation.
 
-Software Development
+---
 
-Embedded & Automation Systems
+## 🚀 Features
 
-ROS & Systems Simulation
+- Responsive modern UI (Desktop & Mobile)  
+- Dark / Light theme toggle  
+- Animated intro screen with custom MS logo  
+- Project showcase cards  
+- Live Jordan time widget  
+- Scroll animations & scroll-spy navigation  
+- GitHub Pages hosting  
+- SEO optimized meta tags & sitemap  
+- Structured data (Schema.org)  
 
-The website is optimized for speed, responsiveness, accessibility, SEO visibility, and user experience.
+---
 
-🚀 Key Features
+## 🛠️ Tech Stack
 
-Fully responsive modern UI (Desktop, Tablet, Mobile)
+- HTML5  
+- CSS3 (Custom Animations + Responsive Grid)  
+- JavaScript (Vanilla ES6)  
+- Font Awesome Icons  
+- Google Fonts (Inter)  
+- GitHub Pages Hosting  
 
-Dark / Light theme toggle with smooth transitions
+---
 
-Animated intro screen with custom MS logo animation
+## 📂 Project Structure
 
-Scroll-based navigation highlighting (Scroll Spy)
-
-Smooth section anchor navigation
-
-Project showcase cards with technology tags
-
-Live Jordan time widget
-
-Back-to-top floating button
-
-SEO structured data (Schema.org Person profile)
-
-OpenGraph & social preview metadata
-
-Optimized performance and lazy rendering animations
-
-GitHub Pages deployment
-
-⚡ Performance Optimizations
-
-Lightweight Vanilla JavaScript (no frameworks)
-
-Optimized CSS animations and transitions
-
-Intersection Observer reveal animations
-
-Reduced layout shifts
-
-Content Security Policy (CSP) configured
-
-Lighthouse performance optimized
-
-🛠️ Tech Stack
-
-Frontend
-
-HTML5
-
-CSS3 (Custom Animations + Responsive Layouts)
-
-JavaScript (Vanilla ES6)
-
-Libraries & Assets
-
-Font Awesome Icons
-
-Google Fonts (Inter, Pacifico)
-
-Deployment
-
-GitHub Pages Hosting
-
-📂 Project Structure
 /
 ├── index.html
 ├── css/
-│   └── style.css
+│ └── style.css
 ├── js/
-│   └── main.js
+│ └── main.js
 ├── assets/
-│   ├── images/
-│   ├── icons/
-│   ├── preview.png
-│   └── resume.pdf
+│ ├── images
+│ ├── icons
+│ └── resume.pdf
+├── googlebab819ee707d282e.html
+├── sitemap.xml
+├── LICENSE
 └── README.md
 
-🔍 SEO & Discoverability
+yaml
+Copy code
 
-This portfolio includes:
+---
 
-Meta description and OpenGraph tags
+## 📜 License
 
-Google structured data (Person schema)
+This project is licensed under the MIT License — see the LICENSE file for details.
 
-Social sharing previews
+---
 
-Search engine friendly HTML structure
+## 📬 Contact
 
-This helps improve visibility on Google, LinkedIn previews, and social platforms.
+- Email: mohammadssaleem2001@gmail.com  
+- LinkedIn: https://www.linkedin.com/in/mohammad-saleem-7b977621a/  
+- GitHub: https://github.com/mohammadsaleem-dev  
 
-📜 License
+---
 
-This project is licensed under the MIT License — you are free to use, modify, and distribute it with attribution.
-
-See the LICENSE file for details.
-
-📬 Contact & Profiles
-
-📧 Email: mohammadssaleem2001@gmail.com
-
-💼 LinkedIn: https://www.linkedin.com/in/mohammad-saleem-7b977621a/
-
-💻 GitHub: https://github.com/mohammadsaleem-dev
-
-⭐ If you find this portfolio helpful or inspiring, feel free to star the repository and share it.
+⭐ If you like this portfolio, feel free to star the repository.
