@@ -2638,7 +2638,7 @@ const update = () => {
     a.addEventListener("click", () => {
       const id = decodeURIComponent(a.getAttribute("href")).slice(1);
       setActive(id);
-      clickLockUntil = performance.now() + 700; // lock for smooth-scroll duration
+      clickLockUntil = performance.now() + 1100; // lock for smooth-scroll duration
     });
   });
 
