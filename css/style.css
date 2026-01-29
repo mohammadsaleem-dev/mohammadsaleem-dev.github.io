@@ -565,7 +565,9 @@ button.brand{
   line-height: 1;
   margin-bottom: 10px;
 }
+/* ===== PC icon: remove gray square + add hover animation ===== */
 .mini-pc{
+  position: relative;
   width: 28px;
   height: 28px;
   border-radius: 10px;
@@ -573,11 +575,62 @@ button.brand{
   align-items: center;
   justify-content: center;
   flex: 0 0 28px;
-  background: rgba(127,127,127,0.10);
+
+  background: transparent;     /* ✅ no gray square */
   border: 1px solid transparent;
-  box-shadow: var(--shadow);
+  box-shadow: none;            /* ✅ remove shadow */
+
+  transition: transform var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease);
 }
-.mini-pc i{ font-size: 14px; color: var(--accent); }
+
+.mini-pc i{
+  font-size: 14px;
+  color: var(--accent);
+  transition: transform var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease);
+}
+
+.mini-pc:hover{
+  transform: translateY(-1px) scale(1.06);
+  filter: brightness(1.06);
+}
+
+.mini-pc:hover i{
+  transform: rotate(-8deg) scale(1.08);
+  filter: drop-shadow(0 0 10px rgba(88,166,255,0.35));
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .mini-pc, .mini-pc i{ transition: none !important; }
+}
+
+/* ===== Location icon hover animation ===== */
+.locline i{
+  transition: transform var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease);
+  transform-origin: 50% 80%;
+}
+
+.locline:hover i{
+  transform: translateY(-1px) scale(1.08);
+  filter: drop-shadow(0 0 12px rgba(88,166,255,0.35));
+  animation: pinWiggle 700ms var(--hover-ease) 1;
+}
+
+@keyframes pinWiggle{
+  0%   { transform: translateY(-1px) scale(1.08) rotate(0deg); }
+  35%  { transform: translateY(-2px) scale(1.10) rotate(-10deg); }
+  70%  { transform: translateY(-2px) scale(1.10) rotate(8deg); }
+  100% { transform: translateY(-1px) scale(1.08) rotate(0deg); }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .locline:hover i{ animation: none !important; }
+}
+
 
 .subtitle{
   color: var(--muted);
@@ -1354,8 +1407,9 @@ button.brand{
   min-width: 0;
 }
 
-/* Badge button */
+/* ===== Verification badge: remove gray outer circle, keep hover animation ===== */
 .v-badge{
+  position: relative;              /* needed for ::after shine */
   width: 30px;
   height: 30px;
   border-radius: 999px;
@@ -1363,18 +1417,24 @@ button.brand{
   place-items: center;
   flex: 0 0 auto;
 
-  border: 1px solid transparent;
-  background: rgba(127,127,127,0.10);
-  box-shadow: var(--shadow);
+  background: transparent;         /* ✅ no gray circle */
+  border: 1px solid transparent;   /* keep clean hit area */
+  box-shadow: none;                /* ✅ remove gray shadow */
 
   transform: translateY(2px);
   transition:
     transform var(--hover-dur) var(--hover-ease),
     box-shadow var(--hover-dur) var(--hover-ease),
-    filter var(--hover-dur) var(--hover-ease),
-    background-color var(--theme-dur) var(--theme-ease),
-    border-color var(--theme-dur) var(--theme-ease);
+    filter var(--hover-dur) var(--hover-ease);
 }
+
+/* keep your hover animation (but without gray background) */
+.v-badge:hover{
+  box-shadow: 0 0 0 6px rgba(88,166,255,0.12), var(--glow);
+  transform: translateY(0) scale(1.06) rotate(-6deg);
+  filter: brightness(1.05);
+}
+
 
 /* Icon inside */
 .v-icon{
@@ -1389,14 +1449,6 @@ button.brand{
 }
 
 .v-icon .v-check{ fill: #fff; }
-
-/* Hover animation */
-.v-badge:hover{
-  border-color: var(--border);
-  box-shadow: var(--glow), 0 0 0 6px rgba(88,166,255,0.12);
-  transform: translateY(0) scale(1.06) rotate(-6deg);
-  filter: brightness(1.05);
-}
 
 /* Fancy “shine” */
 .v-badge::after{
