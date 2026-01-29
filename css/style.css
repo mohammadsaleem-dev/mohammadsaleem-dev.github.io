@@ -1561,7 +1561,44 @@ button.brand{
   top: 1px;              /* increase to 2px if needed */
 }
 
-/* If you prefer moving the ICON up instead, use this instead of span top:
-.locline i{ position: relative; top: -1px; }
+/* ===== Navbar MS Logo Hover Effect ===== */
+
+.brand{
+  transition: transform 220ms var(--hover-ease),
+              filter 220ms var(--hover-ease);
+}
+
+/* Text (MS letters) */
+.brand-initials{
+  position: relative;
+  transition: transform 220ms var(--hover-ease),
+              text-shadow 220ms var(--hover-ease),
+              filter 220ms var(--hover-ease);
+}
+
+/* Hover animation */
+.brand:hover{
+  transform: translateY(-1px);
+}
+
+.brand:hover .brand-initials{
+  transform: scale(1.08) rotate(-2deg);
+  filter: brightness(1.1);
+  text-shadow:
+    0 0 8px rgba(88,166,255,0.35),
+    0 0 16px rgba(88,166,255,0.18);
+}
+
+/* Click feedback */
+.brand:active{
+  transform: scale(0.96);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce){
+  .brand,
+  .brand-initials{
+    transiti
+
 */
 
