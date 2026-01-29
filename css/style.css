@@ -1598,7 +1598,31 @@ button.brand{
 @media (prefers-reduced-motion: reduce){
   .brand,
   .brand-initials{
-    transiti
+    transition: none !important;
+    transform: none !important;
+  }
+}
 
-*/
+/* ===== Google Maps clickable location ===== */
 
+.map-link{
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Hover visual feedback */
+.map-link:hover span{
+  color: var(--accent);
+}
+
+/* Click feedback */
+.map-link:active{
+  transform: scale(0.98);
+}
+
+/* Keyboard accessibility */
+.map-link:focus-visible{
+  outline: 2px solid rgba(88,166,255,0.5);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
