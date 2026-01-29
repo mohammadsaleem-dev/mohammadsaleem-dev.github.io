@@ -1532,3 +1532,36 @@ button.brand{
   color: var(--accent);
   font-weight: 900;
 }
+
+/* ===== Fix vertical alignment: subtitle + location rows ===== */
+
+/* 1) Subtitle row (PC icon + text) */
+.subtitle-row{
+  align-items: center;   /* keep them centered */
+}
+
+/* Option A (recommended): move the TEXT slightly down */
+.subtitle{
+  position: relative;
+  top: 2px;              /* increase to 3px if you want more */
+}
+
+/* If you prefer moving the ICON up instead, use this instead of .subtitle top:
+.mini-pc i{ position: relative; top: -1px; }
+*/
+
+/* 2) Location row (pin icon + text) */
+.locline{
+  align-items: center;
+}
+
+/* Option A (recommended): move the location TEXT slightly down */
+.locline span{
+  position: relative;
+  top: 1px;              /* increase to 2px if needed */
+}
+
+/* If you prefer moving the ICON up instead, use this instead of span top:
+.locline i{ position: relative; top: -1px; }
+*/
+
