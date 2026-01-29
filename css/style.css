@@ -1174,13 +1174,6 @@ button.brand{
   }
 }
 
-
-.section-divider{
-  height:1px;
-  background: rgba(127,127,127,0.22);
-  margin: 48px 0;
-}
-
   /* -------------------------
    THEME FADE OVERLAY (prevents white flash + sync feel)
 ------------------------- */
@@ -1637,7 +1630,9 @@ button.brand{
   border-radius: 10px;
 }
 
-/* Remove divider between Projects and Skills/Education */
 .section-divider{
-  display: none !important;
+  height: 0;
+  margin: 48px 0;   /* adjust spacing here */
+  background: none;
+  border: none;
 }
