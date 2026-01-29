@@ -1636,3 +1636,8 @@ button.brand{
   outline-offset: 4px;
   border-radius: 10px;
 }
+
+/* Remove divider between Projects and Skills/Education */
+.section-divider{
+  display: none !important;
+}
