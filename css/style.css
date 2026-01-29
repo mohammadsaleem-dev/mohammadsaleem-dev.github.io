@@ -1603,10 +1603,20 @@ button.brand{
   }
 }
 
-/* ===== Google Maps clickable location ===== */
+/* ===== Google Maps clickable location (icon + text) ===== */
 
 .map-link{
+  display: inline-flex;      /* icon + text aligned */
+  align-items: center;
+  gap: 12px;
+
   text-decoration: none;
+  cursor: pointer;
+}
+
+/* Make icon clickable */
+.map-link i{
+  pointer-events: auto;
   cursor: pointer;
 }
 
