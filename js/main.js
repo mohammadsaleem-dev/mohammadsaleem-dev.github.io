@@ -411,3 +411,20 @@ const update = () => {
 
   requestAnimationFrame(update);
 })();
+
+// =========================
+// PWA Service Worker Register
+// =========================
+(function () {
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => {
+        // registered ✅
+      })
+      .catch((err) => {
+        console.warn("SW register failed:", err);
+      });
+  });
+})();
