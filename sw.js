@@ -89,6 +89,25 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
 
+    // ✅ Cache Google Fonts & CDN assets (FontAwesome, Google Fonts)
+  if (
+    req.url.includes("fonts.googleapis.com") ||
+    req.url.includes("fonts.gstatic.com") ||
+    req.url.includes("cdnjs.cloudflare.com")
+  ) {
+    event.respondWith(
+      caches.open(RUNTIME).then(cache =>
+        fetch(req)
+          .then(res => {
+            cache.put(req, res.clone());
+            return res;
+          })
+          .catch(() => caches.match(req))
+      )
+    );
+    return;
+  }
+
   // ✅ 1) Handle navigations (clicking links / refresh / direct URL)
   if (req.mode === "navigate") {
     event.respondWith(networkFirst(req));
