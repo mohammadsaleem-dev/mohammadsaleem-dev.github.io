@@ -337,11 +337,15 @@ const runIntro = ({ goTop }) => {
 
 // =========================
 // Scroll-spy (single source of truth) + click lock
+// (Old logic + FIX: Projects won't highlight while still in Home)
 // =========================
 (function () {
   const navInner = document.querySelector(".nav-inner");
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   if (!links.length) return;
+
+  const HOME_ID = "home";
+  const PROJECTS_ID = "projects";
 
   const items = links
     .map(a => {
@@ -360,36 +364,57 @@ const runIntro = ({ goTop }) => {
     });
   };
 
-  const getOffset = () => (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
+  const getOffset = () =>
+    (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
 
   let ticking = false;
   let clickLockUntil = 0;
 
-const update = () => {
-  ticking = false;
+  const homeEl = document.getElementById(HOME_ID);
+  const projectsEl = document.getElementById(PROJECTS_ID);
 
-  // ✅ If we recently clicked a nav item, don't override highlight while smooth scroll is moving
-  if (performance.now() < clickLockUntil) return;
+  const update = () => {
+    ticking = false;
 
-  const y = window.scrollY + getOffset();
+    // ✅ Don't override highlight during smooth scroll after click
+    if (performance.now() < clickLockUntil) return;
 
-  // ✅ Bottom-of-page fix: always highlight the last section (Contact)
-  const doc = document.documentElement;
-  const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
-  if (atBottom) {
-    const last = items[items.length - 1];
-    if (last) setActive(last.id);
-    return;
-  }
+    const y = window.scrollY + getOffset();
 
-  let current = items[0]?.id || "top";
-  for (const { id, el } of items) {
-    if (el.offsetTop <= y) current = id;
-  }
+    // ✅ Bottom-of-page fix: always highlight last section
+    const doc = document.documentElement;
+    const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
+    if (atBottom) {
+      const last = items[items.length - 1];
+      if (last) setActive(last.id);
+      return;
+    }
 
-  if (window.scrollY < 10) current = "top";
-  setActive(current);
-};
+    // ✅ TRUE TOP fix
+    if (window.scrollY < 10) {
+      setActive(HOME_ID); // keep Home active at top
+      return;
+    }
+
+    // ✅ HARD FIX for your bug:
+    // If Projects top is still BELOW the "active line", then we are still in Home zone.
+    // Keep Home active so Projects never highlights early.
+    if (projectsEl) {
+      const projectsTop = projectsEl.offsetTop;
+      if (y < projectsTop) {
+        setActive(HOME_ID);
+        return;
+      }
+    }
+
+    // ✅ Old logic: last section whose offsetTop <= y
+    let current = HOME_ID;
+    for (const { id, el } of items) {
+      if (el.offsetTop <= y) current = id;
+    }
+
+    setActive(current);
+  };
 
   const onScroll = () => {
     if (ticking) return;
@@ -400,18 +425,33 @@ const update = () => {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
 
-  // ✅ Click: set active immediately and lock scroll-spy briefly
+  // ✅ Click: set active immediately and lock briefly
   links.forEach(a => {
-    a.addEventListener("click", () => {
-      const id = decodeURIComponent(a.getAttribute("href")).slice(1);
+    a.addEventListener("click", (e) => {
+      const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
+
+      // Optional: make Home always scroll to true top
+      if (id === HOME_ID) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setActive(HOME_ID);
+        clickLockUntil = performance.now() + 900;
+        return;
+      }
+
       setActive(id);
-      clickLockUntil = performance.now() + 1100; // lock for smooth-scroll duration
+      clickLockUntil = performance.now() + 1100;
     });
   });
 
+  // Run once now + after layout settles (fonts/images)
   requestAnimationFrame(update);
+  window.addEventListener("load", () => {
+    requestAnimationFrame(update);
+    setTimeout(update, 120);
+    setTimeout(update, 400);
+  });
 })();
-
 
 
 // =========================
