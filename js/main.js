@@ -473,3 +473,37 @@ links.forEach(a => {
       });
   });
 })();
+
+(function () {
+  const nav = document.querySelector(".site-nav") || document.querySelector("nav") || document.querySelector(".nav");
+  const homeLink = document.querySelector('.nav-links a[href="#home"]');
+
+  // keep CSS var --navh accurate (responsive)
+  const setNavH = () => {
+    const h = nav ? Math.round(nav.getBoundingClientRect().height) : 84;
+    document.documentElement.style.setProperty("--navh", h + "px");
+  };
+  setNavH();
+  window.addEventListener("resize", setNavH);
+
+  // Hard-fix Home click so it ALWAYS lands perfectly (no cutting)
+  if (homeLink) {
+    homeLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      setNavH();
+
+      const target = document.getElementById("home") || document.body;
+      const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--navh")) || 84;
+
+      const y = Math.max(0, target.getBoundingClientRect().top + window.pageYOffset - navH - 14);
+      window.scrollTo({ top: y, behavior: "smooth" });
+
+      // make Home blue highlighted immediately
+      document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
+      homeLink.classList.add("active");
+
+      // keep URL as #home (optional)
+      history.replaceState(null, "", "#home");
+    });
+  }
+})();
