@@ -74,7 +74,8 @@ body.light{
    GLOBAL
 ------------------------- */
 #top{
-  height: 1px;
+  height: 2px;
+  display: block;
 }
 
 *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
