@@ -337,6 +337,7 @@ const runIntro = ({ goTop }) => {
 
 // =========================
 // Scroll-spy (NO forced reflow) + click lock
+// Fix: Home stays active when you scroll back to top
 // =========================
 (function () {
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
@@ -349,6 +350,8 @@ const runIntro = ({ goTop }) => {
       return el ? { a, el, id } : null;
     })
     .filter(Boolean);
+
+  const homeEl = document.getElementById("home");
 
   const setActive = (id) => {
     items.forEach(({ a, id: sid }) => {
@@ -370,30 +373,36 @@ const runIntro = ({ goTop }) => {
     });
   });
 
-const updateBottomState = () => {
-  if (performance.now() < clickLockUntil) return;
+  // ✅ Real TOP check: based on Home section position (not window.scrollY)
+  // If Home's top is near the viewport top, force Home active.
+  const isAtTopHome = () => {
+    if (!homeEl) return false;
+    return homeEl.getBoundingClientRect().top >= -120; // tweak -120 to -80/-150 if needed
+  };
 
-  // ✅ TOP FIX: when you are near the top, force Home active
-  if (window.scrollY <= 80) {
-    setActive("home");
-    return;
-  }
+  const updateBottomState = () => {
+    if (performance.now() < clickLockUntil) return;
 
-  // ✅ Bottom-of-page fix (Contact stays active)
-  const doc = document.documentElement;
-  const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
-  if (atBottom) {
-    const last = items[items.length - 1];
-    if (last) setActive(last.id);
-  }
-};
+    // ✅ TOP FIX (reliable): if we are at the top area, highlight Home
+    if (isAtTopHome()) {
+      setActive("home");
+      return;
+    }
+
+    // ✅ Bottom-of-page fix (Contact stays active)
+    const doc = document.documentElement;
+    const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
+    if (atBottom) {
+      const last = items[items.length - 1];
+      if (last) setActive(last.id);
+    }
+  };
 
   window.addEventListener("scroll", updateBottomState, { passive: true });
   window.addEventListener("resize", updateBottomState, { passive: true });
 
   // ✅ Best solution: IntersectionObserver (no layout thrash)
   if (!("IntersectionObserver" in window)) {
-    // Fallback: just keep bottom fix + click behavior
     requestAnimationFrame(updateBottomState);
     return;
   }
@@ -401,6 +410,12 @@ const updateBottomState = () => {
   // rootMargin controls when a section becomes "active"
   const io = new IntersectionObserver((entries) => {
     if (performance.now() < clickLockUntil) return;
+
+    // ✅ TOP FIX must also apply here, otherwise Projects can "steal" active
+    if (isAtTopHome()) {
+      setActive("home");
+      return;
+    }
 
     // Pick the top-most visible section
     const visible = entries
@@ -410,7 +425,6 @@ const updateBottomState = () => {
     if (visible.length) {
       setActive(visible[0].target.id);
     } else {
-      // if nothing is visible (rare), keep bottom behavior
       updateBottomState();
     }
   }, {
@@ -421,8 +435,8 @@ const updateBottomState = () => {
 
   items.forEach(({ el }) => io.observe(el));
 
-  // initial state
-  setActive("top");
+  // ✅ initial state
+  setActive("home");
   requestAnimationFrame(updateBottomState);
 })();
 
