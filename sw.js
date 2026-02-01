@@ -1,39 +1,48 @@
 /* sw.js */
-const CACHE_VERSION = "v1.0.1";
+const CACHE_VERSION = "v1.0.2";
 const PRECACHE = `precache-${CACHE_VERSION}`;
 const RUNTIME = `runtime-${CACHE_VERSION}`;
 
-// ✅ Add the files you want available offline
 const PRECACHE_URLS = [
-  "/",                 // GitHub Pages often serves index.html here
-  "/index.html",
-  "/css/style.css",
-  "/js/main.js",
-  "/manifest.webmanifest",
+  "/",                 // ok for navigation fallback
+  "index.html",
+  "css/style.css",
+  "js/main.js",
+  "manifest.webmanifest",
 
-  // Assets you referenced directly
-  "/assets/favicon.png",
-  "/assets/profile.png",
-  "/assets/preview.png",
-  "/assets/resume.pdf",
+  "assets/favicon.png",
+  "assets/profile.png",
+  "assets/preview.png",
+  "assets/resume.pdf",
 
-  // Logos used in your page (add/remove as needed)
-  "/assets/uoj.png",
-  "/assets/aljazeera.png",
-  "/assets/al-jazeera.png",
-  "/assets/edco.png",
-  "/assets/cisco.png",
-  "/assets/aws.png",
-  "/assets/sololearn.png",
-  "/assets/coursera.png"
+  "assets/uoj.png",
+  "assets/aljazeera.png",
+  "assets/al-jazeera.png",
+  "assets/edco.png",
+  "assets/cisco.png",
+  "assets/aws.png",
+  "assets/sololearn.png",
+  "assets/coursera.png"
 ];
 
-// Install: precache core
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(PRECACHE).then((cache) => cache.addAll(PRECACHE_URLS))
-  );
-  self.skipWaiting();
+  event.waitUntil((async () => {
+    const cache = await caches.open(PRECACHE);
+
+    // Cache each item individually so one 404 doesn’t kill the whole install
+    const results = await Promise.allSettled(
+      PRECACHE_URLS.map((url) => cache.add(new Request(url, { cache: "reload" })))
+    );
+
+    // Optional: log failed ones
+    results.forEach((r, i) => {
+      if (r.status === "rejected") {
+        console.warn("Precache failed:", PRECACHE_URLS[i], r.reason);
+      }
+    });
+
+    await self.skipWaiting();
+  })());
 });
 
 // Activate: cleanup old caches
