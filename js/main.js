@@ -337,14 +337,11 @@ const runIntro = ({ goTop }) => {
 
 // =========================
 // Scroll-spy (single source of truth) + click lock
-// Fix: "Projects" active while still in Home
 // =========================
 (function () {
+  const navInner = document.querySelector(".nav-inner");
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   if (!links.length) return;
-
-  const HOME_ID = "home";
-  const NAV_H = () => document.querySelector(".nav-inner")?.offsetHeight || 56;
 
   const items = links
     .map(a => {
@@ -355,71 +352,66 @@ const runIntro = ({ goTop }) => {
     .filter(Boolean);
 
   const setActive = (id) => {
-    items.forEach(({ a, id: sid }) => a.classList.toggle("active", sid === id));
+    items.forEach(({ a, id: sid }) => {
+      const on = sid === id;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
   };
 
-  // Click lock (keep your behavior)
-  let clickLockUntil = 0;
-  items.forEach(({ a, id }) => {
-    a.addEventListener("click", (e) => {
-      // Home click must go to true top
-      if (id === HOME_ID) {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        setActive(HOME_ID);
-        clickLockUntil = performance.now() + 900;
-        return;
-      }
+  const getOffset = () => (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
 
-      // Normal
+  let ticking = false;
+  let clickLockUntil = 0;
+
+const update = () => {
+  ticking = false;
+
+  // ✅ If we recently clicked a nav item, don't override highlight while smooth scroll is moving
+  if (performance.now() < clickLockUntil) return;
+
+  const y = window.scrollY + getOffset();
+
+  // ✅ Bottom-of-page fix: always highlight the last section (Contact)
+  const doc = document.documentElement;
+  const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
+  if (atBottom) {
+    const last = items[items.length - 1];
+    if (last) setActive(last.id);
+    return;
+  }
+
+  let current = items[0]?.id || "top";
+  for (const { id, el } of items) {
+    if (el.offsetTop <= y) current = id;
+  }
+
+  if (window.scrollY < 10) current = "top";
+  setActive(current);
+};
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
+  // ✅ Click: set active immediately and lock scroll-spy briefly
+  links.forEach(a => {
+    a.addEventListener("click", () => {
+      const id = decodeURIComponent(a.getAttribute("href")).slice(1);
       setActive(id);
-      clickLockUntil = performance.now() + 1100;
+      clickLockUntil = performance.now() + 1100; // lock for smooth-scroll duration
     });
   });
 
-  const homeEl = document.getElementById(HOME_ID);
-  const projectsEl = document.getElementById("projects");
-
-  function onScroll() {
-    // Respect click lock
-    if (performance.now() < clickLockUntil) return;
-
-    const offset = NAV_H() + 18; // matches your scroll-padding / anchor margin
-
-    // ✅ HARD RULE:
-    // If we haven't reached Projects yet, keep Home active.
-    // This removes the "Projects active while in Home card" bug.
-    if (projectsEl) {
-      const projectsTop = projectsEl.getBoundingClientRect().top;
-      if (projectsTop - offset > 0) {
-        setActive(HOME_ID);
-        return;
-      }
-    }
-
-    // Otherwise choose the last section whose top is above the offset
-    let current = HOME_ID;
-    for (const { id, el } of items) {
-      const top = el.getBoundingClientRect().top;
-      if (top - offset <= 0) current = id;
-      else break;
-    }
-
-    setActive(current);
-  }
-
-  // Run once on load + after layout settles (fonts/images)
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  window.addEventListener("load", () => {
-    onScroll();
-    setTimeout(onScroll, 120);  // helps after fonts render
-    setTimeout(onScroll, 400);  // helps after images render
-  });
-
-  // Initial
-  onScroll();
+  requestAnimationFrame(update);
 })();
+
 
 
 // =========================
