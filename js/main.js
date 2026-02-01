@@ -370,17 +370,23 @@ const runIntro = ({ goTop }) => {
     });
   });
 
-  // ✅ Bottom-of-page fix (Contact stays active)
-  const updateBottomState = () => {
-    if (performance.now() < clickLockUntil) return;
+const updateBottomState = () => {
+  if (performance.now() < clickLockUntil) return;
 
-    const doc = document.documentElement;
-    const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
-    if (atBottom) {
-      const last = items[items.length - 1];
-      if (last) setActive(last.id);
-    }
-  };
+  // ✅ TOP FIX: when you are near the top, force Home active
+  if (window.scrollY <= 80) {
+    setActive("home");
+    return;
+  }
+
+  // ✅ Bottom-of-page fix (Contact stays active)
+  const doc = document.documentElement;
+  const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
+  if (atBottom) {
+    const last = items[items.length - 1];
+    if (last) setActive(last.id);
+  }
+};
 
   window.addEventListener("scroll", updateBottomState, { passive: true });
   window.addEventListener("resize", updateBottomState, { passive: true });
@@ -416,7 +422,7 @@ const runIntro = ({ goTop }) => {
   items.forEach(({ el }) => io.observe(el));
 
   // initial state
-  setActive("top");
+  setActive("home");
   requestAnimationFrame(updateBottomState);
 })();
 
