@@ -336,10 +336,9 @@ const runIntro = ({ goTop }) => {
 })();
 
 // =========================
-// Scroll-spy (single source of truth) + click lock
+// Scroll-spy (NO forced reflow) + click lock
 // =========================
 (function () {
-  const navInner = document.querySelector(".nav-inner");
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   if (!links.length) return;
 
@@ -360,56 +359,65 @@ const runIntro = ({ goTop }) => {
     });
   };
 
-  const getOffset = () => (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
-
-  let ticking = false;
   let clickLockUntil = 0;
 
-const update = () => {
-  ticking = false;
-
-  // ✅ If we recently clicked a nav item, don't override highlight while smooth scroll is moving
-  if (performance.now() < clickLockUntil) return;
-
-  const y = window.scrollY + getOffset();
-
-  // ✅ Bottom-of-page fix: always highlight the last section (Contact)
-  const doc = document.documentElement;
-  const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
-  if (atBottom) {
-    const last = items[items.length - 1];
-    if (last) setActive(last.id);
-    return;
-  }
-
-  let current = items[0]?.id || "top";
-  for (const { id, el } of items) {
-    if (el.offsetTop <= y) current = id;
-  }
-
-  if (window.scrollY < 10) current = "top";
-  setActive(current);
-};
-
-  const onScroll = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
-  };
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
-
-  // ✅ Click: set active immediately and lock scroll-spy briefly
+  // ✅ Click: set active immediately and lock updates briefly
   links.forEach(a => {
     a.addEventListener("click", () => {
-      const id = decodeURIComponent(a.getAttribute("href")).slice(1);
+      const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
       setActive(id);
-      clickLockUntil = performance.now() + 1100; // lock for smooth-scroll duration
+      clickLockUntil = performance.now() + 1100; // smooth-scroll time
     });
   });
 
-  requestAnimationFrame(update);
+  // ✅ Bottom-of-page fix (Contact stays active)
+  const updateBottomState = () => {
+    if (performance.now() < clickLockUntil) return;
+
+    const doc = document.documentElement;
+    const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
+    if (atBottom) {
+      const last = items[items.length - 1];
+      if (last) setActive(last.id);
+    }
+  };
+
+  window.addEventListener("scroll", updateBottomState, { passive: true });
+  window.addEventListener("resize", updateBottomState, { passive: true });
+
+  // ✅ Best solution: IntersectionObserver (no layout thrash)
+  if (!("IntersectionObserver" in window)) {
+    // Fallback: just keep bottom fix + click behavior
+    requestAnimationFrame(updateBottomState);
+    return;
+  }
+
+  // rootMargin controls when a section becomes "active"
+  const io = new IntersectionObserver((entries) => {
+    if (performance.now() < clickLockUntil) return;
+
+    // Pick the top-most visible section
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+    if (visible.length) {
+      setActive(visible[0].target.id);
+    } else {
+      // if nothing is visible (rare), keep bottom behavior
+      updateBottomState();
+    }
+  }, {
+    root: null,
+    rootMargin: "-35% 0px -60% 0px",
+    threshold: 0.01
+  });
+
+  items.forEach(({ el }) => io.observe(el));
+
+  // initial state
+  setActive("top");
+  requestAnimationFrame(updateBottomState);
 })();
 
 // =========================
