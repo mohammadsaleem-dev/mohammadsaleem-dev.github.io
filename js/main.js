@@ -422,7 +422,7 @@ const updateBottomState = () => {
   items.forEach(({ el }) => io.observe(el));
 
   // initial state
-  setActive("home");
+  setActive("top");
   requestAnimationFrame(updateBottomState);
 })();
 
