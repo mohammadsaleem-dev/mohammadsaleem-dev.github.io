@@ -1037,7 +1037,16 @@ button.brand{
 /* -------------------------
    TIME WIDGET
 ------------------------- */
-.meta-wrap{ display: flex; justify-content: center; margin: 14px 0 6px; width: 100%; }
+.meta-wrap{
+  display: flex;
+  justify-content: center;
+
+  /* ✅ Push Jordan Time below the sticky navbar */
+  margin: calc(var(--navh) + 14px) 0 6px;
+
+  width: 100%;
+}
+
 .time-card{
   display:flex;
   flex-direction:column;
