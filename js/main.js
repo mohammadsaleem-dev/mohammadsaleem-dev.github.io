@@ -337,7 +337,7 @@ const runIntro = ({ goTop }) => {
 
 // =========================
 // Scroll-spy (NO forced reflow) + click lock
-// Fix: Home stays active when you scroll back to top
+// Fix: Home stays active and is selectable even if id != "home"
 // =========================
 (function () {
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
@@ -351,7 +351,11 @@ const runIntro = ({ goTop }) => {
     })
     .filter(Boolean);
 
-  const homeEl = document.getElementById("home");
+  if (!items.length) return;
+
+  // ✅ Home = first nav item (whatever its id is: home/top/hero...)
+  const HOME_ID = items[0].id;
+  const HOME_EL = items[0].el;
 
   const setActive = (id) => {
     items.forEach(({ a, id: sid }) => {
@@ -369,27 +373,26 @@ const runIntro = ({ goTop }) => {
     a.addEventListener("click", () => {
       const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
       setActive(id);
-      clickLockUntil = performance.now() + 1100; // smooth-scroll time
+      clickLockUntil = performance.now() + 1100;
     });
   });
 
-  // ✅ Real TOP check: based on Home section position (not window.scrollY)
-  // If Home's top is near the viewport top, force Home active.
+  // ✅ Reliable top check based on FIRST section's position (Home section)
   const isAtTopHome = () => {
-    if (!homeEl) return false;
-    return homeEl.getBoundingClientRect().top >= -120; // tweak -120 to -80/-150 if needed
+    if (!HOME_EL) return window.scrollY <= 5;
+    return HOME_EL.getBoundingClientRect().top >= -120; // tweak -120 if needed
   };
 
   const updateBottomState = () => {
     if (performance.now() < clickLockUntil) return;
 
-    // ✅ TOP FIX (reliable): if we are at the top area, highlight Home
+    // ✅ Top: force Home (first item)
     if (isAtTopHome()) {
-      setActive("home");
+      setActive(HOME_ID);
       return;
     }
 
-    // ✅ Bottom-of-page fix (Contact stays active)
+    // ✅ Bottom: force last section active
     const doc = document.documentElement;
     const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
     if (atBottom) {
@@ -401,23 +404,20 @@ const runIntro = ({ goTop }) => {
   window.addEventListener("scroll", updateBottomState, { passive: true });
   window.addEventListener("resize", updateBottomState, { passive: true });
 
-  // ✅ Best solution: IntersectionObserver (no layout thrash)
   if (!("IntersectionObserver" in window)) {
     requestAnimationFrame(updateBottomState);
     return;
   }
 
-  // rootMargin controls when a section becomes "active"
   const io = new IntersectionObserver((entries) => {
     if (performance.now() < clickLockUntil) return;
 
-    // ✅ TOP FIX must also apply here, otherwise Projects can "steal" active
+    // ✅ Top guard here too
     if (isAtTopHome()) {
-      setActive("home");
+      setActive(HOME_ID);
       return;
     }
 
-    // Pick the top-most visible section
     const visible = entries
       .filter(e => e.isIntersecting)
       .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -436,7 +436,7 @@ const runIntro = ({ goTop }) => {
   items.forEach(({ el }) => io.observe(el));
 
   // ✅ initial state
-  setActive("home");
+  setActive(HOME_ID);
   requestAnimationFrame(updateBottomState);
 })();
 
