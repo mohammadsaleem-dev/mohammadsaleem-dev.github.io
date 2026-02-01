@@ -336,152 +336,91 @@ const runIntro = ({ goTop }) => {
 })();
 
 // =========================
-// Scroll-spy (single source of truth) + click lock (FIXED)
+// Scroll-spy (single source of truth) + click lock
+// Fix: "Projects" active while still in Home
 // =========================
 (function () {
-  const nav = document.querySelector(".nav");
-  const navLinksWrap = document.getElementById("navLinks");
-  const menuBtn = document.getElementById("menuBtn");
-
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   if (!links.length) return;
 
   const HOME_ID = "home";
-  const LOCK_MS = 900;
+  const NAV_H = () => document.querySelector(".nav-inner")?.offsetHeight || 56;
 
-  let clickLockUntil = 0;
-  let observer = null;
-
-  // Map anchors -> sections
   const items = links
-    .map((a) => {
+    .map(a => {
       const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
       const el = document.getElementById(id);
       return el ? { a, el, id } : null;
     })
     .filter(Boolean);
 
-  function setActive(id) {
-    items.forEach(({ a, id: sid }) => {
-      a.classList.toggle("active", sid === id);
-      a.setAttribute("aria-current", sid === id ? "page" : "false");
-    });
-  }
+  const setActive = (id) => {
+    items.forEach(({ a, id: sid }) => a.classList.toggle("active", sid === id));
+  };
 
-  function closeMobileMenuIfOpen() {
-    if (!navLinksWrap) return;
-    if (navLinksWrap.classList.contains("is-open")) {
-      navLinksWrap.classList.remove("is-open");
-      if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
-    }
-  }
-
-  // 1) Click handling (ONLY ONCE)
+  // Click lock (keep your behavior)
+  let clickLockUntil = 0;
   items.forEach(({ a, id }) => {
     a.addEventListener("click", (e) => {
-      // Always lock to prevent observer fighting the click
-      clickLockUntil = performance.now() + LOCK_MS;
-
-      // Home = true top
+      // Home click must go to true top
       if (id === HOME_ID) {
         e.preventDefault();
-        closeMobileMenuIfOpen();
-        setActive(HOME_ID);
-
         window.scrollTo({ top: 0, behavior: "smooth" });
+        setActive(HOME_ID);
+        clickLockUntil = performance.now() + 900;
         return;
       }
 
-      // Normal anchors
-      closeMobileMenuIfOpen();
+      // Normal
       setActive(id);
-      // Let browser handle the anchor jump (or smooth scroll via CSS)
+      clickLockUntil = performance.now() + 1100;
     });
   });
 
-  // 2) IntersectionObserver scroll-spy (stable)
-  function setupObserver() {
-    if (observer) observer.disconnect();
+  const homeEl = document.getElementById(HOME_ID);
+  const projectsEl = document.getElementById("projects");
 
-    // Height of sticky nav (so we detect "under nav" correctly)
-    const navH = nav?.getBoundingClientRect().height || 56;
-
-    // When a section is near the top (below navbar), mark it active.
-    // The negative top margin shifts the "active line" downward.
-    observer = new IntersectionObserver(
-      (entries) => {
-        // Don’t update active while a click scroll is in progress
-        if (performance.now() < clickLockUntil) return;
-
-        // Pick the entry closest to top that is intersecting
-        const visible = entries
-          .filter((en) => en.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-        if (visible.length) {
-          const id = visible[0].target.id;
-          setActive(id);
-          return;
-        }
-
-        // Fallback: if you're at the very top, force Home
-        if (window.scrollY <= 2) setActive(HOME_ID);
-      },
-      {
-        root: null,
-        rootMargin: `-${Math.ceil(navH + 10)}px 0px -60% 0px`,
-        threshold: [0.01, 0.1, 0.2],
-      }
-    );
-
-    items.forEach(({ el }) => observer.observe(el));
-  }
-
-  // 3) Initial state on load (fix Ctrl+F5 / refresh)
-  function initActive() {
-    // If URL has hash, use it
-    const hash = decodeURIComponent(location.hash || "").replace("#", "");
-    if (hash && document.getElementById(hash)) {
-      setActive(hash);
-      return;
-    }
-
-    // If at top, Home
-    if (window.scrollY <= 2) {
-      setActive(HOME_ID);
-      return;
-    }
-
-    // Otherwise: pick the section closest under navbar
-    const navH = nav?.getBoundingClientRect().height || 56;
-    const y = window.scrollY + navH + 12;
-
-    let best = { id: HOME_ID, dist: Infinity };
-    items.forEach(({ id, el }) => {
-      const top = el.getBoundingClientRect().top + window.scrollY;
-      const dist = Math.abs(top - y);
-      if (dist < best.dist) best = { id, dist };
-    });
-    setActive(best.id);
-  }
-
-  // Run
-  setupObserver();
-  initActive();
-
-  // Rebuild observer when layout changes (fonts load / resize)
-  window.addEventListener("resize", () => {
-    setupObserver();
-    initActive();
-  });
-
-  // If user scrolls to very top, force Home immediately
-  window.addEventListener("scroll", () => {
+  function onScroll() {
+    // Respect click lock
     if (performance.now() < clickLockUntil) return;
-    if (window.scrollY <= 2) setActive(HOME_ID);
-  }, { passive: true });
 
+    const offset = NAV_H() + 18; // matches your scroll-padding / anchor margin
+
+    // ✅ HARD RULE:
+    // If we haven't reached Projects yet, keep Home active.
+    // This removes the "Projects active while in Home card" bug.
+    if (projectsEl) {
+      const projectsTop = projectsEl.getBoundingClientRect().top;
+      if (projectsTop - offset > 0) {
+        setActive(HOME_ID);
+        return;
+      }
+    }
+
+    // Otherwise choose the last section whose top is above the offset
+    let current = HOME_ID;
+    for (const { id, el } of items) {
+      const top = el.getBoundingClientRect().top;
+      if (top - offset <= 0) current = id;
+      else break;
+    }
+
+    setActive(current);
+  }
+
+  // Run once on load + after layout settles (fonts/images)
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  window.addEventListener("load", () => {
+    onScroll();
+    setTimeout(onScroll, 120);  // helps after fonts render
+    setTimeout(onScroll, 400);  // helps after images render
+  });
+
+  // Initial
+  onScroll();
 })();
+
 
 // =========================
 // PWA Service Worker Register
