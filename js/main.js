@@ -344,7 +344,7 @@ const runIntro = ({ goTop }) => {
   const links = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   if (!links.length) return;
 
-  const HOME_ID = "home";
+  const HOME_ID = "top";
   const PROJECTS_ID = "projects";
 
   const items = links
