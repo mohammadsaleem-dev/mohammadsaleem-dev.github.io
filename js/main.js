@@ -375,7 +375,7 @@ const updateBottomState = () => {
 
   // ✅ TOP FIX: when you are near the top, force Home active
   if (window.scrollY <= 80) {
-    setActive("home");
+    setActive("top");
     return;
   }
 
