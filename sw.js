@@ -17,7 +17,6 @@ const PRECACHE_URLS = [
 
   "assets/uoj.png",
   "assets/aljazeera.png",
-  "assets/al-jazeera.png",
   "assets/edco.png",
   "assets/cisco.png",
   "assets/aws.png",
