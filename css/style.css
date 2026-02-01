@@ -1040,10 +1040,7 @@ button.brand{
 .meta-wrap{
   display: flex;
   justify-content: center;
-
-  /* exact navbar offset without extra gap */
-  margin-top: var(--navh);
-
+  margin-top: 10px;      /* ✅ small clean gap under navbar */
   margin-bottom: 6px;
   width: 100%;
 }
