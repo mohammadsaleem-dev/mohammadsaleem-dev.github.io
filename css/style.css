@@ -1651,12 +1651,3 @@ button.brand{
   background: none;
   border: none;
 }
-
-html{
-  scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--navh, 84px) + 14px);
-}
-
-section[id], .anchor[id]{
-  scroll-margin-top: calc(var(--navh, 84px) + 14px);
-}
