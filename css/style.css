@@ -1041,9 +1041,10 @@ button.brand{
   display: flex;
   justify-content: center;
 
-  /* ✅ Push Jordan Time below the sticky navbar */
-  margin: calc(var(--navh) + 14px) 0 6px;
+  /* exact navbar offset without extra gap */
+  margin-top: var(--navh);
 
+  margin-bottom: 6px;
   width: 100%;
 }
 
