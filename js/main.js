@@ -186,22 +186,33 @@ const syncToggleIcon = () => {
 const resetAnimations = () => {
   overlay.classList.remove("play");
 
-  // Reset dash values (no layout reads)
+  // Safari fix: force full style reset before recalculating
   msPaths.forEach(p => {
     if (!p.getTotalLength) return;
+
     const len = Math.ceil(p.getTotalLength());
+
     p.style.strokeDasharray = len;
     p.style.strokeDashoffset = len;
+
+    // IMPORTANT: remove CSS variable dependency (Safari bug)
     p.style.removeProperty("--mslen");
   });
 
   sigPaths.forEach(p => {
     if (!p.getTotalLength) return;
+
     const sl = Math.ceil(p.getTotalLength());
+
     p.style.strokeDasharray = sl;
     p.style.strokeDashoffset = sl;
+
     p.style.removeProperty("--siglen");
   });
+
+  // HARD REFLOW (Safari requires double flush)
+  overlay.getBoundingClientRect();
+  void overlay.offsetHeight;
 };
 
 const runIntro = ({ goTop }) => {
@@ -216,13 +227,14 @@ const runIntro = ({ goTop }) => {
 
   showOverlay();
 
-overlay.classList.remove("play");
-resetAnimations();
+  // ✅ iOS Safari: restart animation reliably
+  overlay.classList.remove("play");
+  resetAnimations();
 
-// Restart animation without forced reflow:
-// (1) wait 1 frame to apply removal
-requestAnimationFrame(() => {
-  // (2) wait second frame then add class back
+  // double flush (Safari is picky)
+  void overlay.offsetWidth;
+  overlay.getBoundingClientRect();
+
   requestAnimationFrame(() => {
     overlay.classList.add("play");
 
@@ -231,7 +243,7 @@ requestAnimationFrame(() => {
       isRunning = false;
     }, 2400);
   });
-});
+};
 
   skipBtn.addEventListener("click", () => {
     clearAll();
