@@ -1,21 +1,28 @@
 # Mohammad Saleem — Portfolio Website  
 
-![Website Status](https://img.shields.io/website?url=https%3A%2F%2Fmohammadsaleem-dev.github.io&label=Website&up_message=Online&down_message=Offline)
-![HTTPS](https://img.shields.io/badge/HTTPS-Secure-brightgreen)
-![HTML](https://img.shields.io/badge/HTML-5-orange)
-![CSS](https://img.shields.io/badge/CSS-3-blue)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
-![Responsive](https://img.shields.io/badge/Responsive-Mobile%20Friendly-success)
-![PWA Ready](https://img.shields.io/badge/PWA-Ready-blueviolet)
-![Lighthouse Performance](https://img.shields.io/badge/Lighthouse-Performance%2095%25-brightgreen)
-![Accessibility](https://img.shields.io/badge/Accessibility-AA-success)
-![SEO](https://img.shields.io/badge/SEO-Optimized-informational)
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-success)
-![Open Source](https://img.shields.io/badge/Open%20Source-Yes-blue)
-![License](https://img.shields.io/github/license/mohammadsaleem-dev/mohammadsaleem-dev.github.io)
-![Last Commit](https://img.shields.io/github/last-commit/mohammadsaleem-dev/mohammadsaleem-dev.github.io)
-![Repo Size](https://img.shields.io/github/repo-size/mohammadsaleem-dev/mohammadsaleem-dev.github.io)
-![Stars](https://img.shields.io/github/stars/mohammadsaleem-dev/mohammadsaleem-dev.github.io?style=social)
+[![Website Status](https://img.shields.io/website?url=https%3A%2F%2Fmohammadsaleem-dev.github.io&label=Website&up_message=ONLINE&down_message=OFFLINE&style=for-the-badge&color=00e676&logo=google-chrome&logoColor=white)](https://mohammadsaleem-dev.github.io)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://pages.github.com/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mohammad-saleem-7b977621a/)
+
+---
+
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)]()
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)]()
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=flat-square&logo=javascript&logoColor=black)]()
+[![Responsive](https://img.shields.io/badge/Responsive-Mobile%20Friendly-00c853?style=flat-square&logo=google&logoColor=white)]()
+[![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white)]()
+[![SEO](https://img.shields.io/badge/SEO-Optimized-4285F4?style=flat-square&logo=google&logoColor=white)]()
+[![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%20AA-success?style=flat-square&logo=w3c&logoColor=white)]()
+[![Lighthouse](https://img.shields.io/badge/Lighthouse-Performance%2095%25-brightgreen?style=flat-square&logo=lighthouse&logoColor=white)]()
+
+---
+
+[![License](https://img.shields.io/github/license/mohammadsaleem-dev/mohammadsaleem-dev.github.io?style=flat-square)]()
+[![Last Commit](https://img.shields.io/github/last-commit/mohammadsaleem-dev/mohammadsaleem-dev.github.io?style=flat-square)]()
+[![Repo Size](https://img.shields.io/github/repo-size/mohammadsaleem-dev/mohammadsaleem-dev.github.io?style=flat-square)]()
+[![Stars](https://img.shields.io/github/stars/mohammadsaleem-dev/mohammadsaleem-dev.github.io?style=social)]()
+[![Forks](https://img.shields.io/github/forks/mohammadsaleem-dev/mohammadsaleem-dev.github.io?style=social)]()
+
 
 🌐 **Live Website:**  
 https://mohammadsaleem-dev.github.io
