@@ -457,16 +457,38 @@ const runIntro = ({ goTop }) => {
 // =========================
 // PWA Service Worker Register
 // =========================
+/* main.js (UPDATED SW register block ONLY)
+   Put this at the bottom where you already register the SW */
 (function () {
   if (!("serviceWorker" in navigator)) return;
 
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(() => {
-        // registered ✅
-      })
-      .catch((err) => {
-        console.warn("SW register failed:", err);
+  window.addEventListener("load", async () => {
+    try {
+      // ✅ Cache-bust SW so browser checks updates immediately
+      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.2");
+
+      // ✅ If a new SW is waiting, activate it immediately
+      if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+
+      reg.addEventListener("updatefound", () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener("statechange", () => {
+          if (sw.state === "installed" && navigator.serviceWorker.controller) {
+            sw.postMessage({ type: "SKIP_WAITING" });
+          }
+        });
       });
+
+      // ✅ When controller changes, reload once to use the new JS/CSS immediately
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (reloaded) return;
+        reloaded = true;
+        window.location.reload();
+      });
+    } catch (err) {
+      console.warn("SW register failed:", err);
+    }
   });
 })();
