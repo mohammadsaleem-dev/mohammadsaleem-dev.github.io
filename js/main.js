@@ -453,21 +453,21 @@ const runIntro = ({ goTop }) => {
   });
 })();
 
-
 // =========================
 // PWA Service Worker Register
 // =========================
-/* main.js (UPDATED SW register block ONLY)
-   Put this at the bottom where you already register the SW */
 (function () {
   if (!("serviceWorker" in navigator)) return;
 
   window.addEventListener("load", async () => {
+    const hadController = !!navigator.serviceWorker.controller; // ✅ capture before register
+    let reloaded = false;
+
     try {
       // ✅ Cache-bust SW so browser checks updates immediately
       const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.2");
 
-      // ✅ If a new SW is waiting, activate it immediately
+      // ✅ If a new SW is waiting, activate it immediately (only if this is an update)
       if (reg.waiting && navigator.serviceWorker.controller) {
         reg.waiting.postMessage({ type: "SKIP_WAITING" });
       }
@@ -475,6 +475,7 @@ const runIntro = ({ goTop }) => {
       reg.addEventListener("updatefound", () => {
         const sw = reg.installing;
         if (!sw) return;
+
         sw.addEventListener("statechange", () => {
           if (sw.state === "installed" && navigator.serviceWorker.controller) {
             sw.postMessage({ type: "SKIP_WAITING" });
@@ -482,16 +483,16 @@ const runIntro = ({ goTop }) => {
         });
       });
 
-  // ✅ When controller changes, reload ONLY if this was an UPDATE (not first install)
-  const hadController = !!navigator.serviceWorker.controller;
-  let reloaded = false;
-  
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    // first-ever install: don't reload, it will restart your intro
-    if (!hadController) return;
-  
-    if (reloaded) return;
-    reloaded = true;
-    window.location.reload();
+      // ✅ Reload ONLY for updates (not first install / incognito fresh load)
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (!hadController) return; // first install: don't reload
+        if (reloaded) return;
+        reloaded = true;
+        window.location.reload();
+      });
+
+    } catch (err) {
+      console.warn("SW register failed:", err);
+    }
   });
 })();
