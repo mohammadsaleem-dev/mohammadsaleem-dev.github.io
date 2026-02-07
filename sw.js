@@ -1,5 +1,5 @@
 /* sw.js (UPDATED) */
-const CACHE_VERSION = "v1.0.2"; // ✅ bump this on every deploy
+const CACHE_VERSION = "v1.0.3"; // ✅ bump this on every deploy
 const PRECACHE = `precache-${CACHE_VERSION}`;
 const RUNTIME = `runtime-${CACHE_VERSION}`;
 
