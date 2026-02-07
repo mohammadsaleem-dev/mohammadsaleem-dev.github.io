@@ -241,7 +241,7 @@ const runIntro = ({ goTop }) => {
     hideTimer = setTimeout(() => {
       hideOverlay();
       isRunning = false;
-    }, 2400);
+    }, 900);
   });
 };
 
@@ -465,7 +465,7 @@ const runIntro = ({ goTop }) => {
 
     try {
       // ✅ Cache-bust SW so browser checks updates immediately
-      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.2");
+      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.3");
 
       // ✅ If a new SW is waiting, activate it immediately (only if this is an update)
       if (reg.waiting && navigator.serviceWorker.controller) {
