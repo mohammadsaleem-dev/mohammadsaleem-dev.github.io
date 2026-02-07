@@ -468,7 +468,9 @@ const runIntro = ({ goTop }) => {
       const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.2");
 
       // ✅ If a new SW is waiting, activate it immediately
-      if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      if (reg.waiting && navigator.serviceWorker.controller) {
+        reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
 
       reg.addEventListener("updatefound", () => {
         const sw = reg.installing;
@@ -480,15 +482,16 @@ const runIntro = ({ goTop }) => {
         });
       });
 
-      // ✅ When controller changes, reload once to use the new JS/CSS immediately
-      let reloaded = false;
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        if (reloaded) return;
-        reloaded = true;
-        window.location.reload();
-      });
-    } catch (err) {
-      console.warn("SW register failed:", err);
-    }
+  // ✅ When controller changes, reload ONLY if this was an UPDATE (not first install)
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    // first-ever install: don't reload, it will restart your intro
+    if (!hadController) return;
+  
+    if (reloaded) return;
+    reloaded = true;
+    window.location.reload();
   });
 })();
