@@ -10,19 +10,7 @@ const PRECACHE_URLS = [
   "/css/style.css",
   "/js/main.js",
   "/manifest.webmanifest",
-
-  "/assets/favicon.png",
-  "/assets/profile.png",
-  "/assets/preview.png",
-  "/assets/resume.pdf",
-
-  "/assets/uoj.png",
-  "/assets/aljazeera.png",
-  "/assets/edco.png",
-  "/assets/cisco.png",
-  "/assets/aws.png",
-  "/assets/sololearn.png",
-  "/assets/coursera.png"
+  "/assets/favicon.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -43,7 +31,7 @@ self.addEventListener("install", (event) => {
       }
     });
 
-    await self.skipWaiting();
+    //await self.skipWaiting();
   })());
 });
 
@@ -88,7 +76,7 @@ async function networkFirst(request) {
     return response;
   } catch (err) {
     const cached = await caches.match(request);
-    return cached || caches.match("/index.html");
+    return cached || (await caches.match("/index.html")) || (await caches.match("/"));
   }
 }
 
