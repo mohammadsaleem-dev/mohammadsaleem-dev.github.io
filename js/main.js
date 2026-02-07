@@ -241,7 +241,7 @@ const runIntro = ({ goTop }) => {
     hideTimer = setTimeout(() => {
       hideOverlay();
       isRunning = false;
-    }, );
+    }, 2400);
   });
 };
 
