@@ -18,11 +18,10 @@ self.addEventListener("install", (event) => {
     const cache = await caches.open(PRECACHE);
 
     // Cache each item individually so one 404 doesn’t kill the whole install
-    const results = await Promise.allSettled(
-      PRECACHE_URLS.map((url) =>
-        cache.add(new Request(url, { cache: "reload" }))
-      )
-    );
+      const results = await Promise.allSettled(
+        PRECACHE_URLS.map((url) => cache.add(url))
+      );
+
 
     // Optional: log failed ones (visible in SW console)
     results.forEach((r, i) => {
@@ -32,6 +31,7 @@ self.addEventListener("install", (event) => {
     });
 
     //await self.skipWaiting();
+    self.skipWaiting();
   })());
 });
 
