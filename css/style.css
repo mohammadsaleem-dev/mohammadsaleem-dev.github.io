@@ -610,7 +610,9 @@ button.brand{
 }
 
 .mini-pc i{
-  font-size: 14px;
+  font-size: 18px;     
+  position: relative;
+  top: -2px;            
   color: var(--accent);
   transition: transform var(--hover-dur) var(--hover-ease),
               filter var(--hover-dur) var(--hover-ease);
@@ -1571,10 +1573,6 @@ button.brand{
   top: 2px;              /* increase to 3px if you want more */
 }
 
-/* If you prefer moving the ICON up instead, use this instead of .subtitle top:
-.mini-pc i{ position: relative; top: -1px; }
-*/
-
 /* 2) Location row (pin icon + text) */
 .locline{
   align-items: center;
@@ -1694,7 +1692,7 @@ button.brand{
   font-size: 18px;      
   width: 28px;              
   height: 28px;
-  margin-left: 4px;  
+  margin-left: 0px;  
   display: inline-flex;
   align-items: center;
   justify-content: center;
