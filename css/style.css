@@ -1793,3 +1793,62 @@ button.brand{
 .acad-sign.is-plain::after{
   content: none !important;   /* ✅ kill any animations/lines */
 }
+
+/* Put location + MOI on one line */
+.locwrap{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;                 /* wraps nicely on small screens */
+  margin: 0 0 14px;
+  margin-left: 8px;                /* same as your locline */
+}
+
+/* Make locline behave nicely inside locwrap */
+.locwrap .locline{
+  margin: 0;                       /* override old margin */
+  margin-left: 0;                  /* handled by locwrap */
+}
+
+/* MOI next to location (same visual language) */
+.moi-inline{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* MOI icon = same as location icon */
+.moi-inline i{
+  font-size: 16px;                 /* slightly smaller like you want */
+  color: var(--accent);
+  transform: translateY(1px);
+  transition: transform var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease);
+}
+
+/* Hover like your location/pc */
+.moi-inline:hover i{
+  transform: translateY(-1px) scale(1.08) rotate(-6deg);
+  filter: drop-shadow(0 0 12px rgba(88,166,255,0.35));
+}
+
+/* keep muted part consistent */
+.moi-inline .muted{
+  opacity: .75;
+  font-weight: 700;
+}
+
+/* Subtitle + location alignment cleanup (no manual top offsets) */
+.subtitle-row,
+.locline,
+.moi-inline{
+  align-items: center;
+}
+
+/* Remove old manual nudges if you added them earlier */
+.subtitle{ top: 0 !important; position: static !important; }
+.locline span{ top: 0 !important; position: static !important; }
+
