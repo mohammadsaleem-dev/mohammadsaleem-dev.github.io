@@ -1674,6 +1674,7 @@ button.brand{
   font-size: 18px;      
   width: 28px;              
   height: 28px;
+  margin-left: 4px;  
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1700,6 +1701,7 @@ button.brand{
 .acad-sign{
   position: relative;
   display: inline-block;
+  margin-left: -4px;  /* pull GRE closer to icon */
   padding: 8px 12px;
   border-radius: 999px;
 
@@ -1851,4 +1853,8 @@ button.brand{
 /* Remove old manual nudges if you added them earlier */
 .subtitle{ top: 0 !important; position: static !important; }
 .locline span{ top: 0 !important; position: static !important; }
+
+.moi-inline span{
+  margin-left: 6px;   /* more breathing from icon */
+}
 
