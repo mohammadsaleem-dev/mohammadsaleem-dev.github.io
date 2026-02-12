@@ -1648,3 +1648,114 @@ button.brand{
   background: none;
   border: none;
 }
+
+/* Academic highlights (2 lines + animated blue sign) */
+.acadline{
+  margin: 10px 0 6px;
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.acad-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.acad-row i{
+  opacity: .9;
+  transform: translateY(1px);
+}
+
+/* The "sign" container */
+.acad-sign{
+  position: relative;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(47,129,247,.22);
+  background: rgba(47,129,247,.06);
+  overflow: hidden;
+  white-space: normal;
+}
+
+/* soft glow */
+.acad-sign{
+  box-shadow:
+    0 0 0 1px rgba(47,129,247,.10),
+    0 10px 24px rgba(0,0,0,.18);
+}
+
+/* animated sweep highlight */
+.acad-sign::before{
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 60%;
+  height: 180%;
+  transform: rotate(18deg);
+  background: linear-gradient(
+    90deg,
+    rgba(67,229,255,0) 0%,
+    rgba(67,229,255,.22) 40%,
+    rgba(47,129,247,.30) 60%,
+    rgba(27,76,255,0) 100%
+  );
+  filter: blur(1px);
+  opacity: .9;
+  animation: acadSweep 3.2s ease-in-out infinite;
+}
+
+/* animated underline glow */
+.acad-sign::after{
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(67,229,255,.0),
+    rgba(67,229,255,.9),
+    rgba(47,129,247,.9),
+    rgba(27,76,255,0)
+  );
+  opacity: .65;
+  animation: acadLine 2.6s ease-in-out infinite;
+}
+
+.acadline .muted{
+  opacity: .75;
+  font-weight: 500;
+}
+
+@keyframes acadSweep{
+  0%   { transform: translateX(-120%) rotate(18deg); opacity: .0; }
+  15%  { opacity: .95; }
+  50%  { opacity: .85; }
+  100% { transform: translateX(260%) rotate(18deg); opacity: 0; }
+}
+
+@keyframes acadLine{
+  0%,100% { transform: scaleX(.35); opacity: .35; }
+  50%     { transform: scaleX(1);   opacity: .75; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .acad-sign::before,
+  .acad-sign::after{
+    animation: none !important;
+  }
+}
+
+.acad-row i{
+  color: rgba(47,129,247,.95);
+  filter: drop-shadow(0 0 6px rgba(47,129,247,.35));
+}
