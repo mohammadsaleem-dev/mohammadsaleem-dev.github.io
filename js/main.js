@@ -2,20 +2,31 @@
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
+const THEME_KEY = "theme";
+
 const syncToggleIcon = () => {
   toggle.classList.toggle("is-light", document.body.classList.contains("light"));
 };
 
 (function initTheme(){
-  const saved = localStorage.getItem("theme");
-  if (saved === "light") document.body.classList.add("light");
+  const saved = localStorage.getItem(THEME_KEY);
+
+  // ✅ FIRST VISIT: no saved theme -> follow system
+  if (!saved) {
+    const systemLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    if (systemLight) document.body.classList.add("light");
+  } 
+  // ✅ AFTER THAT: if saved, use it exactly
+  else if (saved === "light") {
+    document.body.classList.add("light");
+  } 
+  // if saved === "dark" do nothing (default is dark)
+
   syncToggleIcon();
 
   toggle.addEventListener("click", () => {
-    // Prevent hover transforms / weird mid-toggle pops
     document.body.classList.add("theme-switching");
 
-    // snapshot current background into overlay
     const cs = getComputedStyle(document.body);
     fade.style.backgroundColor = cs.backgroundColor;
     fade.style.backgroundImage = cs.backgroundImage;
@@ -23,27 +34,26 @@ const syncToggleIcon = () => {
     fade.style.backgroundPosition = cs.backgroundPosition;
     fade.style.backgroundRepeat = cs.backgroundRepeat;
 
-    // show overlay
     fade.classList.add("show");
 
-    // switch theme next frame
     requestAnimationFrame(() => {
       document.body.classList.toggle("light");
-      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 
-      // update meta theme-color
+      // ✅ Save user's choice so refresh stays the same
+      localStorage.setItem(
+        THEME_KEY,
+        document.body.classList.contains("light") ? "light" : "dark"
+      );
+
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {
         themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
       }
 
-      // icon crossfade (no emoji swapping)
       syncToggleIcon();
 
-      // fade overlay out
       requestAnimationFrame(() => fade.classList.remove("show"));
 
-      // release "theme-switching" after transition finishes
       window.setTimeout(() => {
         document.body.classList.remove("theme-switching");
       }, 540);
