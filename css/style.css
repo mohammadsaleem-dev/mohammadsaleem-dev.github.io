@@ -1666,7 +1666,7 @@ button.brand{
 .acad-row{
   display: inline-flex;
   align-items: center;
-  gap: 6px;            
+  gap: 0px;            
 }
 
 /* Icons same scale as PC/location (slightly smaller) */
