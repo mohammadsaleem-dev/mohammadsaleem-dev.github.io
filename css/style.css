@@ -1669,14 +1669,20 @@ button.brand{
   gap: 12px;            /* ✅ same as subtitle-row / locline */
 }
 
-/* ICON color must match your location/pc blue */
+/* Icons same scale as PC/location (slightly smaller) */
 .acad-row i{
-  font-size: 18px;          /* ✅ similar to location icon */
-  color: var(--accent);     /* ✅ same token used by pc + location */
+  font-size: 16px;          /* ✅ a bit smaller than location (18px) */
+  width: 28px;              /* ✅ matches mini-pc box width */
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--accent);
   transform: translateY(1px);
+
   transition: transform var(--hover-dur) var(--hover-ease),
               filter var(--hover-dur) var(--hover-ease);
-  transform-origin: 50% 80%;
 }
 
 /* SAME hover feeling like location/pc */
@@ -1774,3 +1780,16 @@ button.brand{
   }
 }
 
+/* MOI = plain text (no pill, no border, no bg) */
+.acad-sign.is-plain{
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.acad-sign.is-plain::before,
+.acad-sign.is-plain::after{
+  content: none !important;   /* ✅ kill any animations/lines */
+}
