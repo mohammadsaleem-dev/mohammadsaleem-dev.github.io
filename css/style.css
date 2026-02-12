@@ -1656,23 +1656,23 @@ button.brand{
 /* Align left exactly like subtitle/location */
 .acadline{
   margin: 6px 0 10px;
-  margin-left: 8px;     /* ✅ same as .locline */
+  margin-left: 0px;  
   display: grid;
-  gap: 12px;            /* ✅ same "breathing" like subtitle->location */
-  font-size: 16px;      /* ✅ match subtitle/location size */
+  gap: 12px;           
+  font-size: 16px;   
   line-height: 1;
 }
 
 .acad-row{
   display: inline-flex;
   align-items: center;
-  gap: 12px;            /* ✅ same as subtitle-row / locline */
+  gap: 12px;            
 }
 
 /* Icons same scale as PC/location (slightly smaller) */
 .acad-row i{
-  font-size: 16px;          /* ✅ a bit smaller than location (18px) */
-  width: 28px;              /* ✅ matches mini-pc box width */
+  font-size: 18px;      
+  width: 28px;              
   height: 28px;
   display: inline-flex;
   align-items: center;
@@ -1791,17 +1791,17 @@ button.brand{
 
 .acad-sign.is-plain::before,
 .acad-sign.is-plain::after{
-  content: none !important;   /* ✅ kill any animations/lines */
+  content: none !important;   
 }
 
 /* Put location + MOI on one line */
 .locwrap{
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;                 /* wraps nicely on small screens */
+  gap: 22px;
+  flex-wrap: wrap;          
   margin: 0 0 14px;
-  margin-left: 8px;                /* same as your locline */
+  margin-left: 8px;              
 }
 
 /* Make locline behave nicely inside locwrap */
