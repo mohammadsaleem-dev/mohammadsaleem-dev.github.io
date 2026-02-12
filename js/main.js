@@ -1,65 +1,84 @@
-// Theme toggle (no white flash) + stable icon crossfade
+// Theme toggle (first visit follows system, then persist user choice)
+// - No HTML inline script needed
+// - Keeps your fade overlay + icon crossfade behavior
+
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
 const THEME_KEY = "theme";
+const LIGHT_CLASS = "light";
+const SWITCHING_CLASS = "theme-switching";
+const TRANSITION_MS = 540;
 
-const syncToggleIcon = () => {
-  toggle.classList.toggle("is-light", document.body.classList.contains("light"));
-};
+if (toggle && fade) {
+  const isLight = () => document.body.classList.contains(LIGHT_CLASS);
 
-(function initTheme(){
-  const saved = localStorage.getItem(THEME_KEY);
+  const setTheme = (mode /* "light" | "dark" */) => {
+    document.body.classList.toggle(LIGHT_CLASS, mode === "light");
 
-  // ✅ FIRST VISIT: no saved theme -> follow system
-  if (!saved) {
-    const systemLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-    if (systemLight) document.body.classList.add("light");
-  } 
-  // ✅ AFTER THAT: if saved, use it exactly
-  else if (saved === "light") {
-    document.body.classList.add("light");
-  } 
-  // if saved === "dark" do nothing (default is dark)
+    // persist user choice
+    localStorage.setItem(THEME_KEY, mode);
 
-  syncToggleIcon();
+    // meta theme-color
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) themeMeta.setAttribute("content", mode === "light" ? "#ffffff" : "#0d1117");
+  };
 
-  toggle.addEventListener("click", () => {
-    document.body.classList.add("theme-switching");
+  const syncToggleIcon = () => {
+    toggle.classList.toggle("is-light", isLight());
+  };
 
+  const snapshotBodyBgToFade = () => {
     const cs = getComputedStyle(document.body);
     fade.style.backgroundColor = cs.backgroundColor;
     fade.style.backgroundImage = cs.backgroundImage;
     fade.style.backgroundSize = cs.backgroundSize;
     fade.style.backgroundPosition = cs.backgroundPosition;
     fade.style.backgroundRepeat = cs.backgroundRepeat;
+  };
 
+  const applyInitialTheme = () => {
+    const saved = localStorage.getItem(THEME_KEY);
+
+    // ✅ first visit: no saved → follow system
+    if (!saved) {
+      const systemPrefersLight =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: light)").matches;
+
+      if (systemPrefersLight) document.body.classList.add(LIGHT_CLASS);
+    } else {
+      // ✅ later visits: saved choice wins
+      document.body.classList.toggle(LIGHT_CLASS, saved === "light");
+    }
+
+    syncToggleIcon();
+  };
+
+  applyInitialTheme();
+
+  toggle.addEventListener("click", () => {
+    document.body.classList.add(SWITCHING_CLASS);
+
+    snapshotBodyBgToFade();
     fade.classList.add("show");
 
     requestAnimationFrame(() => {
-      document.body.classList.toggle("light");
-
-      // ✅ Save user's choice so refresh stays the same
-      localStorage.setItem(
-        THEME_KEY,
-        document.body.classList.contains("light") ? "light" : "dark"
-      );
-
-      const themeMeta = document.querySelector('meta[name="theme-color"]');
-      if (themeMeta) {
-        themeMeta.setAttribute("content", document.body.classList.contains("light") ? "#ffffff" : "#0d1117");
-      }
+      // flip theme
+      const next = isLight() ? "dark" : "light";
+      setTheme(next);
 
       syncToggleIcon();
 
+      // fade overlay out
       requestAnimationFrame(() => fade.classList.remove("show"));
 
       window.setTimeout(() => {
-        document.body.classList.remove("theme-switching");
-      }, 540);
+        document.body.classList.remove(SWITCHING_CLASS);
+      }, TRANSITION_MS);
     });
   });
-})();
+}
 
     // Mobile/Tablet menu toggle (<=1024px)
     (function () {
