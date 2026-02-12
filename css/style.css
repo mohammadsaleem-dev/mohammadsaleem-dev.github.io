@@ -1649,48 +1649,72 @@ button.brand{
   border: none;
 }
 
-/* Academic highlights (2 lines + animated blue sign) */
+/* =========================
+   Academic highlights (align + only GRE animated)
+   ========================= */
+
+/* Align left exactly like subtitle/location */
 .acadline{
-  margin: 10px 0 6px;
+  margin: 6px 0 10px;
+  margin-left: 8px;     /* ✅ same as .locline */
   display: grid;
-  gap: 8px;
-  font-size: 14px;
-  line-height: 1.25;
+  gap: 12px;            /* ✅ same "breathing" like subtitle->location */
+  font-size: 16px;      /* ✅ match subtitle/location size */
+  line-height: 1;
 }
 
 .acad-row{
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-width: 0;
+  gap: 12px;            /* ✅ same as subtitle-row / locline */
 }
 
+/* ICON color must match your location/pc blue */
 .acad-row i{
-  opacity: .9;
+  font-size: 18px;          /* ✅ similar to location icon */
+  color: var(--accent);     /* ✅ same token used by pc + location */
   transform: translateY(1px);
+  transition: transform var(--hover-dur) var(--hover-ease),
+              filter var(--hover-dur) var(--hover-ease);
+  transform-origin: 50% 80%;
 }
 
-/* The "sign" container */
+/* SAME hover feeling like location/pc */
+.acad-row:hover i{
+  transform: translateY(-1px) scale(1.08);
+  filter: drop-shadow(0 0 12px rgba(88,166,255,0.35));
+}
+
+/* Make the 2nd icon (document) do a tiny tilt (nice) */
+.acad-row:nth-child(2):hover i{
+  transform: translateY(-1px) scale(1.08) rotate(-6deg);
+}
+
+/* Base pill = subtle (like your theme, not darker) */
 .acad-sign{
   position: relative;
   display: inline-block;
-  padding: 6px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(47,129,247,.22);
-  background: rgba(47,129,247,.06);
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: rgba(88,166,255,0.08);         /* ✅ lighter like your chips */
+  border: 1px solid rgba(88,166,255,0.18);    /* ✅ same tone */
+  box-shadow: none;
+}
+
+/* Text tone */
+.acad-sign .muted{
+  opacity: .75;
+  font-weight: 700;
+}
+
+/* ✅ ONLY GRE gets the animation */
+.acad-sign.is-anim{
   overflow: hidden;
-  white-space: normal;
 }
 
-/* soft glow */
-.acad-sign{
-  box-shadow:
-    0 0 0 1px rgba(47,129,247,.10),
-    0 10px 24px rgba(0,0,0,.18);
-}
-
-/* animated sweep highlight */
-.acad-sign::before{
+/* animated sweep highlight (ONLY GRE) */
+.acad-sign.is-anim::before{
   content: "";
   position: absolute;
   top: -40%;
@@ -1702,7 +1726,7 @@ button.brand{
     90deg,
     rgba(67,229,255,0) 0%,
     rgba(67,229,255,.22) 40%,
-    rgba(47,129,247,.30) 60%,
+    rgba(88,166,255,.30) 60%,
     rgba(27,76,255,0) 100%
   );
   filter: blur(1px);
@@ -1710,29 +1734,24 @@ button.brand{
   animation: acadSweep 3.2s ease-in-out infinite;
 }
 
-/* animated underline glow */
-.acad-sign::after{
+/* animated underline glow (ONLY GRE) */
+.acad-sign.is-anim::after{
   content: "";
   position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 5px;
+  left: 12px;
+  right: 12px;
+  bottom: 6px;
   height: 2px;
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    rgba(67,229,255,.0),
+    rgba(67,229,255,0),
     rgba(67,229,255,.9),
-    rgba(47,129,247,.9),
+    rgba(88,166,255,.9),
     rgba(27,76,255,0)
   );
   opacity: .65;
   animation: acadLine 2.6s ease-in-out infinite;
-}
-
-.acadline .muted{
-  opacity: .75;
-  font-weight: 500;
 }
 
 @keyframes acadSweep{
@@ -1749,13 +1768,9 @@ button.brand{
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .acad-sign::before,
-  .acad-sign::after{
+  .acad-sign.is-anim::before,
+  .acad-sign.is-anim::after{
     animation: none !important;
   }
 }
 
-.acad-row i{
-  color: rgba(47,129,247,.95);
-  filter: drop-shadow(0 0 6px rgba(47,129,247,.35));
-}
