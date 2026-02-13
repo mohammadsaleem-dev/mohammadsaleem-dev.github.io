@@ -1,5 +1,5 @@
 /* sw.js (UPDATED) */
-const CACHE_VERSION = "v1.0.3"; // ✅ bump this on every deploy
+const CACHE_VERSION = "v1.0.4"; // ✅ bump this on every deploy
 const PRECACHE = `precache-${CACHE_VERSION}`;
 const RUNTIME = `runtime-${CACHE_VERSION}`;
 
@@ -7,8 +7,6 @@ const RUNTIME = `runtime-${CACHE_VERSION}`;
 const PRECACHE_URLS = [
   "/",
   "/index.html",
-  "/css/style.css",
-  "/js/main.js",
   "/manifest.webmanifest",
   "/assets/favicon.png"
 ];
@@ -123,7 +121,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin === self.location.origin) {
     // ✅ always keep JS/CSS fresh
     if (req.destination === "script" || req.destination === "style") {
-      event.respondWith(staleWhileRevalidate(req));
+      event.respondWith(networkFirst(req));
       return;
     }
 
