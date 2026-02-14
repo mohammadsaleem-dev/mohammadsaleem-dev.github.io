@@ -1,12 +1,15 @@
-/* sw.js (UPDATED) */
-const CACHE_VERSION = "v1.0.4"; // ✅ bump this on every deploy
+/* sw.js (CLEAN + STABLE) */
+const CACHE_VERSION = "v1.0.4"; // bump on every deploy
 const PRECACHE = `precache-${CACHE_VERSION}`;
 const RUNTIME = `runtime-${CACHE_VERSION}`;
 
-// ✅ IMPORTANT: use absolute paths (GitHub Pages-safe)
+// ✅ Precache *critical shell* so theme + UI stays consistent
+// Use absolute paths for GitHub Pages
 const PRECACHE_URLS = [
   "/",
   "/index.html",
+  "/css/style.css",
+  "/js/main.js",
   "/manifest.webmanifest",
   "/assets/favicon.png"
 ];
@@ -15,21 +18,20 @@ self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(PRECACHE);
 
-    // Cache each item individually so one 404 doesn’t kill the whole install
-      const results = await Promise.allSettled(
-        PRECACHE_URLS.map((url) => cache.add(url))
-      );
+    // ✅ Bypass HTTP cache on install so updates actually download
+    const requests = PRECACHE_URLS.map((url) => new Request(url, { cache: "reload" }));
 
+    const results = await Promise.allSettled(requests.map((req) => cache.add(req)));
 
-    // Optional: log failed ones (visible in SW console)
+    // Optional: log failures (won't break install)
     results.forEach((r, i) => {
       if (r.status === "rejected") {
         console.warn("Precache failed:", PRECACHE_URLS[i], r.reason);
       }
     });
 
-    //await self.skipWaiting();
-    self.skipWaiting();
+    // ✅ Activate ASAP (we also support SKIP_WAITING message)
+    await self.skipWaiting();
   })());
 });
 
@@ -41,53 +43,49 @@ self.addEventListener("activate", (event) => {
         if (key !== PRECACHE && key !== RUNTIME) return caches.delete(key);
       })
     );
+
+    // Take control immediately
     await self.clients.claim();
   })());
 });
 
-// =========================
+// -------------------------
 // Strategies
-// =========================
-
-// Cache-first (good for images, pdf, etc.)
+// -------------------------
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
 
-  const response = await fetch(request);
+  const res = await fetch(request);
   const cache = await caches.open(RUNTIME);
 
-  if (response && response.status === 200 && response.type === "basic") {
-    cache.put(request, response.clone());
-  }
-  return response;
+  // Cache same-origin “basic” responses only
+  if (res && res.ok && res.type === "basic") cache.put(request, res.clone());
+  return res;
 }
 
-// Network-first (good for HTML navigation)
 async function networkFirst(request) {
   const cache = await caches.open(RUNTIME);
   try {
-    const response = await fetch(request);
-    if (response && response.status === 200) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (err) {
-    const cached = await caches.match(request);
-    return cached || (await caches.match("/index.html")) || (await caches.match("/"));
+    const res = await fetch(request);
+    if (res && res.ok && res.type === "basic") cache.put(request, res.clone());
+    return res;
+  } catch {
+    return (
+      (await caches.match(request)) ||
+      (await caches.match("/index.html")) ||
+      (await caches.match("/"))
+    );
   }
 }
 
-// ✅ Stale-while-revalidate (best for JS/CSS so you never get “new HTML + old JS”)
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(RUNTIME);
   const cached = await cache.match(request);
 
   const networkPromise = fetch(request)
     .then((res) => {
-      if (res && res.status === 200 && res.type === "basic") {
-        cache.put(request, res.clone());
-      }
+      if (res && res.ok && res.type === "basic") cache.put(request, res.clone());
       return res;
     })
     .catch(() => null);
@@ -101,7 +99,26 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
 
-  // ✅ Cache Google Fonts & CDN assets
+  // ✅ HTML navigations
+  if (req.mode === "navigate") {
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
+  // ✅ Same-origin assets
+  if (url.origin === self.location.origin) {
+    // Keep CSS/JS stable + refresh in background (prevents mismatch)
+    if (req.destination === "style" || req.destination === "script") {
+      event.respondWith(staleWhileRevalidate(req));
+      return;
+    }
+
+    // Images/fonts/etc.
+    event.respondWith(cacheFirst(req));
+    return;
+  }
+
+  // ✅ Cross-origin (fonts/cdn): SWR is best
   if (
     url.hostname.includes("fonts.googleapis.com") ||
     url.hostname.includes("fonts.gstatic.com") ||
@@ -111,31 +128,11 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // ✅ 1) Navigations
-  if (req.mode === "navigate") {
-    event.respondWith(networkFirst(req));
-    return;
-  }
-
-  // ✅ 2) Same-origin assets
-  if (url.origin === self.location.origin) {
-    // ✅ always keep JS/CSS fresh
-    if (req.destination === "script" || req.destination === "style") {
-      event.respondWith(networkFirst(req));
-      return;
-    }
-
-    // ✅ images / pdf / others can be cache-first
-    event.respondWith(cacheFirst(req));
-    return;
-  }
-
-  // ✅ 3) Cross-origin fallback
+  // Default: just try cache then network
   event.respondWith(caches.match(req).then((c) => c || fetch(req)));
 });
 
-/* sw.js (ADD THIS MESSAGE LISTENER)
-   Put this anywhere in sw.js (top or bottom) */
+// ✅ Message: allow page to force activate waiting SW
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
