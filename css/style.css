@@ -325,7 +325,7 @@ button.brand{
   font-weight: 700;
   white-space: nowrap;
   min-width: 0;
-  overflow: hidden; 
+  overflow: hidden;
 }
 .nav-links a{
   padding: 10px 12px;
@@ -384,9 +384,10 @@ button.brand{
   opacity: .85;
 }
 
-@media (max-width: 960px){
+@media (max-width: 1024px){
   .menu-btn{ display: inline-flex; }
 
+  /* Dropdown panel animation: smooth open/close */
   .nav-links{
     display: flex;
     position: absolute;
@@ -403,6 +404,7 @@ button.brand{
     flex-direction: column;
     gap: 14px;
 
+    /* Smooth animation */
     opacity: 0;
     transform: translateY(-10px) scale(0.98);
     pointer-events: none;
@@ -426,23 +428,26 @@ button.brand{
       visibility 0ms;
   }
 
+  /* ✅ Links: text-only (no gray boxes, no borders) */
   .nav-links a{
-    padding: 0;
-    background: transparent;
-    border: 0;
+    padding: 0;                  /* no box */
+    background: transparent;      /* no gray */
+    border: 0;                    /* no border */
     border-radius: 0;
     color: var(--text);
     font-weight: 800;
     text-align: left;
+
     transition: color 200ms ease, transform 220ms var(--theme-ease);
   }
 
   .nav-links a:hover{
-    background: transparent;
+    background: transparent;      /* keep it clean */
     color: var(--accent);
     transform: translateX(2px);
   }
 }
+
 
 /* -------------------------
    BUTTONS
@@ -496,8 +501,6 @@ button.brand{
   position: relative;
   overflow: hidden;
 }
-/* ✅ Allow the badge shine to escape ONLY in the hero card */
-.hero-card{ overflow: visible; }
 
 /* ✅ Cards: no translateY (prevents hover loop glitch at the bottom edge) */
 .card:hover{
@@ -1115,44 +1118,6 @@ button.brand{
    SOCIAL ICON BUTTONS
 ------------------------- */
 .icon-row{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 8px; }
-
-/* Quick Links card alignment fixes */
-.quick-card{
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.quick-title{
-  margin: 0;
-  font-size: 26px;        /* matches your previous inline size */
-  letter-spacing: -0.2px;
-}
-
-/* Row inside Quick Links */
-.quick-actions{
-  display: flex;
-  align-items: center;     /* cross-axis alignment (MDN) */
-  gap: 12px;               /* spacing between items (MDN) */
-  flex-wrap: wrap;         /* wrap on small screens (MDN) */
-}
-
-/* Make the Resume button match icon button height */
-.quick-actions .btn{
-  height: 46px;
-  padding: 0 16px;
-}
-
-/* Desktop: keep in one line + push Resume to the right */
-@media (min-width: 961px){
-  .quick-actions{
-    flex-wrap: nowrap;
-  }
-  .quick-actions .quick-resume{
-    margin-left: auto;
-  }
-}
-
 
 .icon-btn{
   width: 46px;
@@ -1891,8 +1856,7 @@ button.brand{
   margin-left: 6px;   /* more breathing from icon */
 }
 
-/* Theme switching transitions (fixed syntax) */
-html.theme-switching :where(
+:where(html, body).theme-switching :where(
   .nav-inner, .nav, .nav-links, .nav-actions,
   .card, .btn,
   .project-card, .timeline-item, .item,
@@ -1903,52 +1867,4 @@ html.theme-switching :where(
   transition-property: background-color, border-color, box-shadow, filter, opacity, color;
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
-}
-
-/* Force both grid cards to the same height */
-.grid{
-  align-items: stretch;
-}
-.grid > .card{
-  height: 100%;
-}
-
-/* =========================
-   QUICK LINKS ALIGN FIX
-   ========================= */
-
-/* Make the row a real flex row with perfect vertical centering */
-.quick-actions{
-  display: flex !important;
-  align-items: center !important;   /* ✅ key */
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-/* Force SAME height for all items in the row */
-.quick-actions .icon-btn,
-.quick-actions .btn{
-  height: 46px !important;
-}
-
-/* Icons: center perfectly (no baseline weirdness) */
-.quick-actions .icon-btn{
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* The text button: center text vertically */
-.quick-actions .btn{
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;        /* ✅ fixes "text sits high" */
-  padding: 0 16px !important;       /* ✅ consistent with height */
-}
-
-/* Icon inside: remove line-height/baseline shift */
-.quick-actions .icon-btn i{
-  line-height: 1 !important;
-  display: block;
 }
