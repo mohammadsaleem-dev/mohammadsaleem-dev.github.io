@@ -326,7 +326,7 @@ button.brand{
   white-space: nowrap;
   min-width: 0;
   overflow: hidden; 
-
+}
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
