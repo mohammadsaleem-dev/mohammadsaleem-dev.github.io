@@ -384,10 +384,9 @@ button.brand{
   opacity: .85;
 }
 
-@media (max-width: 1024px){
+@media (max-width: 960px){
   .menu-btn{ display: inline-flex; }
 
-  /* Dropdown panel animation: smooth open/close */
   .nav-links{
     display: flex;
     position: absolute;
@@ -404,7 +403,6 @@ button.brand{
     flex-direction: column;
     gap: 14px;
 
-    /* Smooth animation */
     opacity: 0;
     transform: translateY(-10px) scale(0.98);
     pointer-events: none;
@@ -428,26 +426,23 @@ button.brand{
       visibility 0ms;
   }
 
-  /* ✅ Links: text-only (no gray boxes, no borders) */
   .nav-links a{
-    padding: 0;                  /* no box */
-    background: transparent;      /* no gray */
-    border: 0;                    /* no border */
+    padding: 0;
+    background: transparent;
+    border: 0;
     border-radius: 0;
     color: var(--text);
     font-weight: 800;
     text-align: left;
-
     transition: color 200ms ease, transform 220ms var(--theme-ease);
   }
 
   .nav-links a:hover{
-    background: transparent;      /* keep it clean */
+    background: transparent;
     color: var(--accent);
     transform: translateX(2px);
   }
 }
-
 
 /* -------------------------
    BUTTONS
