@@ -1858,3 +1858,55 @@ button.brand{
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
+
+/* ===== Mobile performance mode ===== */
+@media (max-width: 768px){
+  /* Disable expensive animations on mobile */
+  #introOverlay,
+  .reveal,
+  .sig-pulse,
+  .ms-stroke,
+  .sig-path,
+  .acad-sign.is-anim::before,
+  .acad-sign.is-anim::after{
+    animation: none !important;
+  }
+
+  /* Remove transitions that cause repaints */
+  .icon-btn,
+  .item,
+  .timeline-item,
+  .project-card,
+  .cert,
+  .verify-card,
+  .stat,
+  .time-card,
+  .objective,
+  .pill,
+  .tag,
+  .icon-chip,
+  .brand,
+  .nav-links a,
+  .btn{
+    transition: none !important;
+  }
+
+  /* No hover lifting on mobile */
+  .item:hover,
+  .timeline-item:hover,
+  .project-card:hover,
+  .cert:hover,
+  .verify-card:hover,
+  .stat:hover,
+  .time-card:hover,
+  .objective:hover{
+    transform: none !important;
+    box-shadow: var(--shadow) !important;
+  }
+}
+/* Render below-the-fold sections later */
+#projects, #skills, #education, #experience, #awards, #certificates, #contact, footer{
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
