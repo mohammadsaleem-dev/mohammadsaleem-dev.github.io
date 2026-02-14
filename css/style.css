@@ -268,7 +268,7 @@ footer{
 .nav-inner{
   height: var(--navh);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 14px;
   padding: 0 18px;
@@ -326,7 +326,16 @@ button.brand{
   white-space: nowrap;
   min-width: 0;
   overflow: hidden;
+
+  /* ✅ ADD */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-right: 14px;
 }
+.nav-links::-webkit-scrollbar{ display:none; }
+
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
@@ -353,7 +362,7 @@ button.brand{
 .nav-actions{
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   flex-shrink: 0;
 }
 
@@ -531,6 +540,7 @@ button.brand{
   align-items: center;
   gap: 14px;
   flex-wrap: nowrap;
+  min-width: 0; /* ✅ ADD */
 }
 
 .profile-avatar{
@@ -549,6 +559,12 @@ button.brand{
   white-space: nowrap;
   transition: none !important;
   color: var(--text) !important;
+
+  /* ✅ ADD THESE */
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Optional: if you also want the subtitle/location to snap instantly */
@@ -569,6 +585,25 @@ button.brand{
     margin: 0 0 14px !important;
   }
   .profile-avatar{ width: 46px; height: 46px; }
+}
+
+/* ✅ Clean resize for name + badge on mid widths */
+@media (max-width: 900px){
+  .hero-title h1{
+    white-space: normal !important;
+    overflow: visible;
+    text-overflow: initial;
+  }
+
+  .name-wrap{
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .v-badge{
+    transform: none;
+    margin-left: 6px;
+  }
 }
 
 .subtitle-row{
@@ -1407,6 +1442,7 @@ button.brand{
   place-items: center;
   overflow: hidden;
 }
+#themeToggle{ margin-left: 6px; }
 #themeToggle:active{ transform: scale(0.97); }
 
 #themeToggle .ticon{
@@ -1515,6 +1551,9 @@ button.brand{
 @media (max-width: 520px){
   .hero-actions{ flex-direction: column; align-items: stretch; }
   .hero-actions .btn{ width: 100%; }
+}
+@media (max-width: 1100px){
+  .nav-links a{ padding: 10px 10px; }
 }
 
 /* ✅ Mobile fix: prevent title/date collision in timeline items */
