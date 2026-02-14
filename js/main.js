@@ -11,10 +11,12 @@ const SWITCHING_CLASS = "theme-switching";
 const TRANSITION_MS = 540;
 
 if (toggle && fade) {
-  const isLight = () => document.body.classList.contains(LIGHT_CLASS);
+  const root = document.documentElement; // ✅ html element
+
+  const isLight = () => root.classList.contains(LIGHT_CLASS);
 
   const setTheme = (mode /* "light" | "dark" */) => {
-    document.body.classList.toggle(LIGHT_CLASS, mode === "light");
+    root.classList.toggle(LIGHT_CLASS, mode === "light");
 
     // persist user choice
     localStorage.setItem(THEME_KEY, mode);
@@ -46,10 +48,10 @@ if (toggle && fade) {
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: light)").matches;
 
-      if (systemPrefersLight) document.body.classList.add(LIGHT_CLASS);
+      root.classList.toggle(LIGHT_CLASS, systemPrefersLight);
     } else {
       // ✅ later visits: saved choice wins
-      document.body.classList.toggle(LIGHT_CLASS, saved === "light");
+      root.classList.toggle(LIGHT_CLASS, saved === "light");
     }
 
     syncToggleIcon();
@@ -58,23 +60,21 @@ if (toggle && fade) {
   applyInitialTheme();
 
   toggle.addEventListener("click", () => {
-    document.body.classList.add(SWITCHING_CLASS);
+    root.classList.add(SWITCHING_CLASS);
 
     snapshotBodyBgToFade();
     fade.classList.add("show");
 
     requestAnimationFrame(() => {
-      // flip theme
       const next = isLight() ? "dark" : "light";
       setTheme(next);
 
       syncToggleIcon();
 
-      // fade overlay out
       requestAnimationFrame(() => fade.classList.remove("show"));
 
       window.setTimeout(() => {
-        document.body.classList.remove(SWITCHING_CLASS);
+        root.classList.remove(SWITCHING_CLASS);
       }, TRANSITION_MS);
     });
   });
