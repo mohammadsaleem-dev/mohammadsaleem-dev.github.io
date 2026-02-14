@@ -41,18 +41,37 @@
    <meta name="theme-color" content="#0d1117">
   
   <!-- ===== Security Policy ===== -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    base-uri 'self';
-    object-src 'none';
-    img-src 'self' https: data:;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-    script-src 'self' 'unsafe-inline' https://platform.linkedin.com https://www.linkedin.com;
-    connect-src 'self' https://www.linkedin.com https://platform.linkedin.com;
-    frame-src https://www.linkedin.com https://platform.linkedin.com;
-    upgrade-insecure-requests;
-  ">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  base-uri 'self';
+  object-src 'none';
+
+  img-src 'self' https: data:;
+
+  style-src 'self' 'unsafe-inline'
+    https://fonts.googleapis.com
+    https://cdnjs.cloudflare.com
+    https://www.linkedin.com;
+
+  font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+
+  script-src 'self' 'unsafe-inline'
+    https://platform.linkedin.com
+    https://www.linkedin.com
+    https://snap.licdn.com;
+
+  connect-src 'self'
+    https://www.linkedin.com
+    https://platform.linkedin.com
+    https://snap.licdn.com;
+
+  frame-src
+    https://www.linkedin.com
+    https://platform.linkedin.com;
+
+  upgrade-insecure-requests;
+">
+
   
   <!-- ===== Privacy & Compatibility ===== -->
   <meta name="referrer" content="strict-origin-when-cross-origin">
