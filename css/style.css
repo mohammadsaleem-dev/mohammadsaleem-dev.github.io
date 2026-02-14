@@ -105,7 +105,7 @@ body{
 }
 
 /* ✅ Only animate theme changes on major UI blocks (avoid * which breaks iOS SVG animations) */
-body.theme-switching :where(
+html.theme-switching :where(
   html, body,
   .nav-inner, .nav, .nav-links, .nav-actions,
   .card, .btn,
@@ -171,7 +171,7 @@ a:focus-visible, button:focus-visible{
 
 
 /* During toggle: disable hover “jump” while colors change */
-body.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, .verify-card, .stat, .time-card, .objective, .icon-chip, .pill, .tag, .icon-btn):hover{
+html.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, .verify-card, .stat, .time-card, .objective, .icon-chip, .pill, .tag, .icon-btn):hover{
   transform: none !important;
   box-shadow: var(--shadow) !important;
 }
