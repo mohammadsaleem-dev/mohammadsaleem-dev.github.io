@@ -41,41 +41,23 @@
    <meta name="theme-color" content="#0d1117">
   
   <!-- ===== Security Policy ===== -->
-<meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  base-uri 'self';
-  object-src 'none';
-
-  img-src 'self' https: data:;
-
-  style-src 'self' 'unsafe-inline'
-    https://fonts.googleapis.com
-    https://cdnjs.cloudflare.com
-    https://www.linkedin.com;
-
-  font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-
-  script-src 'self' 'unsafe-inline'
-    https://platform.linkedin.com
-    https://www.linkedin.com
-    https://snap.licdn.com
-    https://badges.linkedin.com;
-
-  connect-src 'self'
-    https://www.linkedin.com
-    https://platform.linkedin.com
-    https://snap.licdn.com
-    https://badges.linkedin.com;
-
-  frame-src
-    https://www.linkedin.com
-    https://platform.linkedin.com;
-
-  upgrade-insecure-requests;
-">  
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    base-uri 'self';
+    object-src 'none';
+    img-src 'self' https: data:;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+    script-src 'self' 'unsafe-inline';
+    connect-src 'self';
+    upgrade-insecure-requests;
+  ">
+  
   <!-- ===== Privacy & Compatibility ===== -->
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+
   <!-- ================= GOOGLE PERSON STRUCTURED DATA ================= -->
   <script type="application/ld+json">
   {
@@ -797,75 +779,56 @@
 
     <section id="contact" class="anchor reveal">
       <h2 class="section-title">Contact</h2>
-<div class="card reveal">
-  <p class="lead" style="margin:0 0 14px;">
-    Feel free to reach out for research collaboration, assistantships, or software roles.
-  </p>
+      <div class="card reveal">
+        <p class="lead" style="margin:0 0 14px;">
+          Feel free to reach out for research collaboration, assistantships, or software roles.
+        </p>
 
-  <div class="contact-split">
-    <!-- LEFT: your icons + buttons -->
-    <div class="contact-left">
       <div class="icon-row" aria-label="Contact links">
-        <a class="icon-btn brand email"
-           href="mailto:mohammadssaleem2001@gmail.com"
-           target="_blank"
-           rel="noopener noreferrer"
-           aria-label="Email">
-          <i class="fa-solid fa-envelope"></i>
-        </a>
+          <a class="icon-btn brand email"
+             href="mailto:mohammadssaleem2001@gmail.com"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="Email">
+            <i class="fa-solid fa-envelope"></i>
+          </a>
 
+      
         <a class="icon-btn brand github" href="https://github.com/mohammadsaleem-dev" target="_blank" rel="noopener" aria-label="GitHub">
           <i class="fa-brands fa-github"></i>
         </a>
-
+      
         <a class="icon-btn brand linkedin" href="https://www.linkedin.com/in/mohammad-saleem-7b977621a/" target="_blank" rel="noopener" aria-label="LinkedIn">
           <i class="fa-brands fa-linkedin-in"></i>
         </a>
-
+      
         <a class="icon-btn brand x" href="https://x.com/MoTech00" target="_blank" rel="noopener" aria-label="X (Twitter)">
           <i class="fa-brands fa-x-twitter"></i>
         </a>
-
+      
         <a class="icon-btn brand facebook" href="https://www.facebook.com/mohammed.saleem.685505" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-brands fa-facebook-f"></i>
         </a>
-
+      
         <a class="icon-btn brand instagram" href="https://www.instagram.com/mohammad_saleemo/" target="_blank" rel="noopener" aria-label="Instagram">
           <i class="fa-brands fa-instagram"></i>
         </a>
       </div>
 
-      <div class="hero-actions" style="margin-top:14px;">
-        <a class="btn btn-primary" href="#projects">View Projects</a>
 
+              <div class="hero-actions" style="margin-top:14px;">
+        <a class="btn btn-primary" href="#projects">View Projects</a>
+      
         <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">
           View Resume (PDF)
         </a>
-
+      
         <a class="btn" href="assets/resume.pdf" download="Mohammad_Saleem_Resume.pdf">
           Download Resume
         </a>
       </div>
-    </div>
 
-    <!-- RIGHT: LinkedIn badge -->
-    <div class="contact-right">
-      <div class="badge-base LI-profile-badge"
-           data-locale="en_US"
-           data-size="medium"
-           data-theme="light"
-           data-type="VERTICAL"
-           data-vanity="mohammad-saleem-7b977621a"
-           data-version="v1">
-        <a class="badge-base__link LI-simple-link"
-           href="https://jo.linkedin.com/in/mohammad-saleem-7b977621a?trk=profile-badge">
-          Mohammad Saleem
-        </a>
       </div>
-    </div>
-  </div>
-</div>
-
     </section>
 
     <footer class="reveal">
@@ -880,6 +843,5 @@
 
 <!-- ✅ Your JS file (put it at the end like now) -->
 <script src="js/main.js"></script>
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
 </body>
 </html>
