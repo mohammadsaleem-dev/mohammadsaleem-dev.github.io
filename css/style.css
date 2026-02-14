@@ -268,18 +268,17 @@ footer{
 .nav-inner{
   height: var(--navh);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto 1fr auto;   /* ✅ prevents overlap */
   align-items: center;
   gap: 14px;
   padding: 0 18px;
   border-radius: 999px;
-  padding-top: 0;
-  padding-bottom: 0;
 
   background-color: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   box-shadow: var(--shadow);
 }
+
 .nav-inner:hover{
   border-color: var(--border);
   box-shadow: var(--shadow), var(--hover-ring);
@@ -323,10 +322,15 @@ button.brand{
   gap: 12px;
   color: var(--muted);
   font-weight: 700;
+
   white-space: nowrap;
-  min-width: 0;
-  overflow: hidden;
+  min-width: 0;                 /* ✅ critical */
+  overflow-x: auto;             /* ✅ scroll instead of overlap */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.nav-links::-webkit-scrollbar{ display:none; }
+
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
@@ -526,13 +530,6 @@ button.brand{
 /* -------------------------
    HERO (NAME + SUBTITLE + LOCATION)
 ------------------------- */
-.hero-title{
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: nowrap;
-}
-
 .profile-avatar{
   width: 60px;
   height: 60px;
@@ -541,15 +538,39 @@ button.brand{
   flex-shrink: 0;
   box-shadow: var(--shadow);
 }
+.hero-title{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: nowrap;
+  min-width: 0;     /* ✅ */
+}
+
+.name-wrap{
+  display: flex;          /* ✅ */
+  align-items: center;
+  gap: 10px;
+  min-width: 0;           /* ✅ */
+  flex: 1;                /* ✅ name area takes remaining width */
+}
 
 .hero-title h1{
-  margin: 0 0 8px;
+  margin: 0;
   font-size: var(--h1);
   letter-spacing: -0.7px;
-  white-space: nowrap;
-  transition: none !important;
   color: var(--text) !important;
+
+  min-width: 0;           /* ✅ */
+  flex: 1;                /* ✅ */
+  overflow: hidden;       /* ✅ */
+  text-overflow: ellipsis;/* ✅ */
+  white-space: nowrap;    /* ✅ desktop stays one line */
 }
+
+.v-badge{
+  flex: 0 0 auto;         /* ✅ never shrink away */
+}
+
 
 /* Optional: if you also want the subtitle/location to snap instantly */
 .subtitle,
@@ -1868,3 +1889,22 @@ button.brand{
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
+
+@media (max-width: 520px){
+  .hero-title{ align-items: flex-start; }
+  .hero-title h1{
+    white-space: normal;     /* ✅ allow 2 lines */
+    overflow: visible;
+    text-overflow: initial;
+    line-height: 1.05;
+    font-size: clamp(28px, 7vw, 40px);
+  }
+
+  .v-badge{
+    width: 26px;             /* ✅ slightly smaller so it fits */
+    height: 26px;
+    transform: translateY(3px);
+  }
+  .v-icon{ width: 18px; height: 18px; }
+}
+
