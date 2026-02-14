@@ -13,7 +13,7 @@
 :root{
   --radius: 24px;
   --radius2: 18px;
-  --max: 1240px;
+  --max: 1400px;
   --navh: 56px;
 
   --ease: cubic-bezier(.22,.61,.36,1);
@@ -86,6 +86,7 @@ html{
 
 body{
   margin: 0;
+  position: relative;   /* ✅ ADD THIS LINE */
 
   /* ✅ Safe area padding (iPhone notch + home indicator) */
   padding-top: env(safe-area-inset-top);
@@ -102,6 +103,19 @@ body{
 
   transition:
     background-color var(--theme-dur) var(--theme-ease);
+}
+
+/* Subtle wide-screen glow (Apple-like background depth) */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  background:
+    radial-gradient(900px 500px at 20% 0%, rgba(88,166,255,0.12), transparent 60%),
+    radial-gradient(900px 500px at 80% 10%, rgba(88,166,255,0.08), transparent 65%);
 }
 
 /* ✅ Only animate theme changes on major UI blocks (avoid * which breaks iOS SVG animations) */
@@ -180,14 +194,20 @@ html.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, 
    CONTAINER / LAYOUT
 ------------------------- */
 .container{
+  width: 100%;
   max-width: var(--max);
   margin: 0 auto;
-  padding: 22px 18px 80px;
+
+  /* Apple-like fluid side padding */
+  padding-left: clamp(16px, 4vw, 72px);
+  padding-right: clamp(16px, 4vw, 72px);
+
+  /* keep your top/bottom spacing */
+  padding-top: 22px;
+  padding-bottom: 80px;
+
   position: relative;
   z-index: 2;
-}
-@media (min-width: 1200px){
-  .container{ padding-left: 28px; padding-right: 28px; }
 }
 
   /* NAV container spacing fix */
