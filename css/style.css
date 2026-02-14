@@ -325,7 +325,13 @@ button.brand{
   font-weight: 700;
   white-space: nowrap;
   min-width: 0;
-  overflow: hidden;
+   overflow-x: auto;               /* ✅ instead of hidden */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar{ display:none; }
+
 }
 .nav-links a{
   padding: 10px 12px;
@@ -501,6 +507,8 @@ button.brand{
   position: relative;
   overflow: hidden;
 }
+/* ✅ Allow the badge shine to escape ONLY in the hero card */
+.hero-card{ overflow: visible; }
 
 /* ✅ Cards: no translateY (prevents hover loop glitch at the bottom edge) */
 .card:hover{
