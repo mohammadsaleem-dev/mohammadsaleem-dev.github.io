@@ -1912,3 +1912,43 @@ html.theme-switching :where(
 .grid > .card{
   height: 100%;
 }
+
+/* =========================
+   QUICK LINKS ALIGN FIX
+   ========================= */
+
+/* Make the row a real flex row with perfect vertical centering */
+.quick-actions{
+  display: flex !important;
+  align-items: center !important;   /* ✅ key */
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Force SAME height for all items in the row */
+.quick-actions .icon-btn,
+.quick-actions .btn{
+  height: 46px !important;
+}
+
+/* Icons: center perfectly (no baseline weirdness) */
+.quick-actions .icon-btn{
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* The text button: center text vertically */
+.quick-actions .btn{
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;        /* ✅ fixes "text sits high" */
+  padding: 0 16px !important;       /* ✅ consistent with height */
+}
+
+/* Icon inside: remove line-height/baseline shift */
+.quick-actions .icon-btn i{
+  line-height: 1 !important;
+  display: block;
+}
