@@ -1858,25 +1858,24 @@ button.brand{
   margin-left: 6px;   /* more breathing from icon */
 }
 
-:where(html, body).theme-switching :where(
+/* Theme switching transitions (fixed syntax) */
+html.theme-switching :where(
   .nav-inner, .nav, .nav-links, .nav-actions,
   .card, .btn,
   .project-card, .timeline-item, .item,
   .cert, .verify-card, .stat, .time-card,
   .objective, .icon-chip, .pill, .tag, .icon-btn,
   #themeFade
-)
-/* Force both grid cards to the same height */
-.grid{
-  align-items: stretch;          /* make items stretch in block direction */
-}
-
-.grid > .card{
-  height: 100%;                  /* ensure card can fill the stretched area */
-}
-
-   
+){
   transition-property: background-color, border-color, box-shadow, filter, opacity, color;
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
+}
+
+/* Force both grid cards to the same height */
+.grid{
+  align-items: stretch;
+}
+.grid > .card{
+  height: 100%;
 }
