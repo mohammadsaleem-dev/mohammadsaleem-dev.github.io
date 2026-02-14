@@ -1858,33 +1858,3 @@ button.brand{
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
-
-/* Contact: left content + right LinkedIn badge */
-.contact-split{
-  display:flex;
-  gap:24px;
-  align-items:flex-start;
-  justify-content:space-between;
-}
-
-.contact-left{
-  flex:1;
-  min-width: 0;
-}
-
-.contact-right{
-  width: 320px;              /* adjust if you want wider/narrower */
-  display:flex;
-  justify-content:flex-end;
-}
-
-/* Responsive: stack on small screens */
-@media (max-width: 900px){
-  .contact-split{
-    flex-direction:column;
-  }
-  .contact-right{
-    width: 100%;
-    justify-content:flex-start;
-  }
-}
