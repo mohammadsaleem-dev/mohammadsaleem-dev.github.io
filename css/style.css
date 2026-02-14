@@ -268,7 +268,7 @@ footer{
 .nav-inner{
   height: var(--navh);
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 14px;
   padding: 0 18px;
@@ -320,27 +320,19 @@ button.brand{
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 12px;
   color: var(--muted);
   font-weight: 700;
-
   white-space: nowrap;
   min-width: 0;
-
-  /* ✅ allow scroll if needed */
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.nav-links::-webkit-scrollbar{ display:none; }
+  overflow: hidden; 
 
 .nav-links a{
   padding: 10px 12px;
   border-radius: 999px;
   flex: 0 0 auto;
 
+  /* Smooth premium animation */
   transition:
     color 220ms ease,
     transform 220ms cubic-bezier(.22,.61,.36,1);
