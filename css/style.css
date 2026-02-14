@@ -614,6 +614,10 @@ button.brand{
 
 /* ===== Location icon hover animation ===== */
 .locline i{
+  font-size: 18px;
+  color: var(--accent);
+  transform: translateY(1px);
+
   transition: transform var(--hover-dur) var(--hover-ease),
               filter var(--hover-dur) var(--hover-ease);
   transform-origin: 50% 80%;
@@ -637,13 +641,17 @@ button.brand{
   .locline:hover i{ animation: none !important; }
 }
 
-
 .subtitle{
   color: var(--muted);
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 10px;
+
+  /* alignment nudge */
+  position: relative;
+  top: 2px;
 }
+
 
 /* Location row */
 .locline{
@@ -656,7 +664,6 @@ button.brand{
   font-weight: 800;
   margin-left: 8px;
 }
-.locline i{ font-size: 18px; transform: translateY(1px); color: var(--accent); }
 .locline span{ padding-left: 6px; }
 
 /* -------------------------
@@ -1170,15 +1177,8 @@ button.brand{
 /* -------------------------
    REVEAL
 ------------------------- */
-.reveal{
-  opacity: 0;
-  transform: translateY(12px);
-  will-change: opacity, transform;
-}
-
-.reveal.show{
-  animation: revealIn 520ms var(--theme-ease) forwards;
-}
+.reveal{ opacity:0; transform: translateY(12px); }
+.reveal.show{ will-change: opacity, transform; animation: revealIn 520ms var(--theme-ease) forwards; }
 
 @keyframes revealIn{
   to{
@@ -1534,23 +1534,7 @@ button.brand{
   opacity: 0.92;
 }
 
-  .nav-links a.active{
-  color: var(--accent);
-  font-weight: 900;
-}
-
 /* ===== Fix vertical alignment: subtitle + location rows ===== */
-
-/* 1) Subtitle row (PC icon + text) */
-.subtitle-row{
-  align-items: center;   /* keep them centered */
-}
-
-/* Option A (recommended): move the TEXT slightly down */
-.subtitle{
-  position: relative;
-  top: 2px;              /* increase to 3px if you want more */
-}
 
 /* 2) Location row (pin icon + text) */
 .locline{
@@ -1847,11 +1831,22 @@ button.brand{
   align-items: center;
 }
 
-/* Remove old manual nudges if you added them earlier */
-.subtitle{ top: 0 !important; position: static !important; }
 .locline span{ top: 0 !important; position: static !important; }
 
 .moi-inline span{
   margin-left: 6px;   /* more breathing from icon */
+}
+
+:where(html, body).theme-switching :where(
+  .nav-inner, .nav, .nav-links, .nav-actions,
+  .card, .btn,
+  .project-card, .timeline-item, .item,
+  .cert, .verify-card, .stat, .time-card,
+  .objective, .icon-chip, .pill, .tag, .icon-btn,
+  #themeFade
+){
+  transition-property: background-color, border-color, box-shadow, filter, opacity, color;
+  transition-duration: var(--theme-dur);
+  transition-timing-function: var(--theme-ease);
 }
 
