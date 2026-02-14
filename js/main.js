@@ -1,7 +1,7 @@
 // Theme toggle (first visit follows system, then persist user choice)
 // - No HTML inline script needed
 // - Keeps your fade overlay + icon crossfade behavior
-const doc = document.documentElement;
+
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
@@ -368,8 +368,8 @@ const runIntro = ({ goTop }) => {
 })();
 
 // =========================
-// Scroll-spy (optimized) + click lock
-// Keeps your behavior but removes forced reflow on scroll
+// Scroll-spy (single source of truth) + click lock
+// (Old logic + FIX: Projects won't highlight while still in Home)
 // =========================
 (function () {
   const navInner = document.querySelector(".nav-inner");
@@ -387,11 +387,7 @@ const runIntro = ({ goTop }) => {
     })
     .filter(Boolean);
 
-  let activeId = "";
   const setActive = (id) => {
-    if (id === activeId) return; // ✅ avoid useless DOM work
-    activeId = id;
-
     items.forEach(({ a, id: sid }) => {
       const on = sid === id;
       a.classList.toggle("active", on);
@@ -400,41 +396,14 @@ const runIntro = ({ goTop }) => {
     });
   };
 
-  let navOffset = 78;        // cached nav height + 22
-  let tops = [];             // cached section tops [{id, top}]
-  let projectsTop = 0;       // cached projects top
+  const getOffset = () =>
+    (navInner ? navInner.getBoundingClientRect().height : 56) + 22;
+
   let ticking = false;
   let clickLockUntil = 0;
 
+  const homeEl = document.getElementById(HOME_ID);
   const projectsEl = document.getElementById(PROJECTS_ID);
-
-  const compute = () => {
-    // ✅ layout reads happen here (rare), not on every scroll frame
-    const navH = navInner ? navInner.getBoundingClientRect().height : 56;
-    navOffset = navH + 22;
-
-    tops = items.map(({ id, el }) => ({
-      id,
-      top: Math.floor(el.getBoundingClientRect().top + window.scrollY)
-    }));
-
-    projectsTop = projectsEl
-      ? Math.floor(projectsEl.getBoundingClientRect().top + window.scrollY)
-      : 0;
-  };
-
-  const findCurrent = (y) => {
-    // binary search: last section whose top <= y
-    let lo = 0, hi = tops.length - 1, ans = HOME_ID;
-    while (lo <= hi) {
-      const mid = (lo + hi) >> 1;
-      if (tops[mid].top <= y) {
-        ans = tops[mid].id;
-        lo = mid + 1;
-      } else hi = mid - 1;
-    }
-    return ans;
-  };
 
   const update = () => {
     ticking = false;
@@ -442,31 +411,41 @@ const runIntro = ({ goTop }) => {
     // ✅ Don't override highlight during smooth scroll after click
     if (performance.now() < clickLockUntil) return;
 
-    const doc = document.documentElement;
+    const y = window.scrollY + getOffset();
 
     // ✅ Bottom-of-page fix: always highlight last section
+    const doc = document.documentElement;
     const atBottom = (window.innerHeight + window.scrollY) >= (doc.scrollHeight - 6);
     if (atBottom) {
-      const last = tops[tops.length - 1];
+      const last = items[items.length - 1];
       if (last) setActive(last.id);
       return;
     }
 
     // ✅ TRUE TOP fix
     if (window.scrollY < 10) {
-      setActive(HOME_ID);
+      setActive(HOME_ID); // keep Home active at top
       return;
     }
 
-    const y = window.scrollY + navOffset;
-
-    // ✅ your "Projects won't highlight early" rule (cached)
-    if (projectsEl && y < projectsTop) {
-      setActive(HOME_ID);
-      return;
+    // ✅ HARD FIX for your bug:
+    // If Projects top is still BELOW the "active line", then we are still in Home zone.
+    // Keep Home active so Projects never highlights early.
+    if (projectsEl) {
+      const projectsTop = projectsEl.offsetTop;
+      if (y < projectsTop) {
+        setActive(HOME_ID);
+        return;
+      }
     }
 
-    setActive(findCurrent(y));
+    // ✅ Old logic: last section whose offsetTop <= y
+    let current = HOME_ID;
+    for (const { id, el } of items) {
+      if (el.offsetTop <= y) current = id;
+    }
+
+    setActive(current);
   };
 
   const onScroll = () => {
@@ -475,11 +454,15 @@ const runIntro = ({ goTop }) => {
     requestAnimationFrame(update);
   };
 
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
   // ✅ Click: set active immediately and lock briefly
   links.forEach(a => {
     a.addEventListener("click", (e) => {
       const id = decodeURIComponent(a.getAttribute("href") || "").slice(1);
 
+      // Optional: make Home always scroll to true top
       if (id === HOME_ID) {
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -493,35 +476,13 @@ const runIntro = ({ goTop }) => {
     });
   });
 
-  // Recompute on layout changes (images/fonts/resize)
-  const recomputeSoon = () => {
-    compute();
-    requestAnimationFrame(update);
-  };
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  let resizeTimer = 0;
-  window.addEventListener("resize", () => {
-    // Debounce resize (zoom triggers many resize events)
-    if (resizeTimer) clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      recomputeSoon(); // compute + update once after resizing stops
-    }, 140);
-  }, { passive: true });
-
-  window.addEventListener("load", () => {
-    recomputeSoon();
-    setTimeout(recomputeSoon, 200);
-    setTimeout(recomputeSoon, 600);
-  });
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(recomputeSoon).catch(() => {});
-  }
-
-  // first run
-  compute();
+  // Run once now + after layout settles (fonts/images)
   requestAnimationFrame(update);
+  window.addEventListener("load", () => {
+    requestAnimationFrame(update);
+    setTimeout(update, 120);
+    setTimeout(update, 400);
+  });
 })();
 
 // =========================
