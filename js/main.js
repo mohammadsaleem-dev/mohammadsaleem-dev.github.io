@@ -30,14 +30,15 @@ if (toggle && fade) {
     toggle.classList.toggle("is-light", isLight());
   };
 
-  const snapshotBodyBgToFade = () => {
-    const cs = getComputedStyle(document.body);
-    fade.style.backgroundColor = cs.backgroundColor;
-    fade.style.backgroundImage = cs.backgroundImage;
-    fade.style.backgroundSize = cs.backgroundSize;
-    fade.style.backgroundPosition = cs.backgroundPosition;
-    fade.style.backgroundRepeat = cs.backgroundRepeat;
-  };
+const snapshotBodyBgToFade = () => {
+  const csRoot = getComputedStyle(root);
+  const csBody = getComputedStyle(document.body);
+  fade.style.backgroundColor = csBody.backgroundColor || csRoot.backgroundColor;
+  fade.style.backgroundImage = csBody.backgroundImage || csRoot.backgroundImage;
+  fade.style.backgroundSize = csBody.backgroundSize || csRoot.backgroundSize;
+  fade.style.backgroundPosition = csBody.backgroundPosition || csRoot.backgroundPosition;
+  fade.style.backgroundRepeat = csBody.backgroundRepeat || csRoot.backgroundRepeat;
+};
 
   const applyInitialTheme = () => {
     const saved = localStorage.getItem(THEME_KEY);
@@ -60,6 +61,7 @@ if (toggle && fade) {
   applyInitialTheme();
 
   toggle.addEventListener("click", () => {
+    document.body.classList.add(SWITCHING_CLASS);
     root.classList.add(SWITCHING_CLASS);
 
     snapshotBodyBgToFade();
@@ -74,6 +76,7 @@ if (toggle && fade) {
       requestAnimationFrame(() => fade.classList.remove("show"));
 
       window.setTimeout(() => {
+        document.body.classList.remove(SWITCHING_CLASS);
         root.classList.remove(SWITCHING_CLASS);
       }, TRANSITION_MS);
     });
