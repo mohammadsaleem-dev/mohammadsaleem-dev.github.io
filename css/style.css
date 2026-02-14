@@ -13,7 +13,7 @@
 :root{
   --radius: 24px;
   --radius2: 18px;
-  --max: 1400px;
+  --max: 1600px;
   --navh: 56px;
 
   --ease: cubic-bezier(.22,.61,.36,1);
