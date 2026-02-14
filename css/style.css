@@ -106,17 +106,7 @@ body{
 }
 
 /* Subtle wide-screen glow (Apple-like background depth) */
-body::before{
-  content:"";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-
-  background:
-    radial-gradient(900px 500px at 20% 0%, rgba(88,166,255,0.12), transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, rgba(88,166,255,0.08), transparent 65%);
-}
+body::before{ content: none !important; }
 
 /* ✅ Only animate theme changes on major UI blocks (avoid * which breaks iOS SVG animations) */
 html.theme-switching :where(
