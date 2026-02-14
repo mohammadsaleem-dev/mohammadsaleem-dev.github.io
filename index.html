@@ -12,8 +12,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-
+  <link rel="preload" as="image" href="/assets/profile.webp" fetchpriority="high">
   <title>Mohammad Saleem | Computer Engineer Portfolio</title>
 
   <!-- ===== SEO Description ===== -->
@@ -92,7 +91,8 @@
         referrerpolicy="no-referrer">
 
   <!-- ✅ Your CSS file -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="/css/style.css" as="style">
+  <link rel="stylesheet" href="/css/style.css">
     <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-D9JK6LR4XJ"></script>
   <script>
@@ -850,6 +850,6 @@
   </button>
 
 <!-- ✅ Your JS file (put it at the end like now) -->
-<script src="js/main.js"></script>
+<script src="/js/main.js" defer></script>
 </body>
 </html>
