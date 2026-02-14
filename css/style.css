@@ -1116,6 +1116,44 @@ button.brand{
 ------------------------- */
 .icon-row{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 8px; }
 
+/* Quick Links card alignment fixes */
+.quick-card{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.quick-title{
+  margin: 0;
+  font-size: 26px;        /* matches your previous inline size */
+  letter-spacing: -0.2px;
+}
+
+/* Row inside Quick Links */
+.quick-actions{
+  display: flex;
+  align-items: center;     /* cross-axis alignment (MDN) */
+  gap: 12px;               /* spacing between items (MDN) */
+  flex-wrap: wrap;         /* wrap on small screens (MDN) */
+}
+
+/* Make the Resume button match icon button height */
+.quick-actions .btn{
+  height: 46px;
+  padding: 0 16px;
+}
+
+/* Desktop: keep in one line + push Resume to the right */
+@media (min-width: 961px){
+  .quick-actions{
+    flex-wrap: nowrap;
+  }
+  .quick-actions .quick-resume{
+    margin-left: auto;
+  }
+}
+
+
 .icon-btn{
   width: 46px;
   height: 46px;
