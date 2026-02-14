@@ -1907,3 +1907,137 @@ button.brand{
   transition-duration: var(--theme-dur);
   transition-timing-function: var(--theme-ease);
 }
+
+
+/* =========================================================
+   PATCH: HERO NAME (2 lines on mobile) + BADGE ALWAYS RIGHT
+   ========================================================= */
+
+/* Make the name + badge a single row where the name can wrap but badge never drops */
+.name-wrap{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+}
+
+.hero-title h1{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* From tablet down: allow wrapping but clamp to 2 lines */
+@media (max-width: 900px){
+  .hero-title h1{
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;   /* ✅ max 2 lines */
+  }
+
+  /* Badge stays on the right edge of the name block */
+  .v-badge{
+    flex: 0 0 auto;
+    margin-left: 6px;
+  }
+}
+
+/* Mobile: slightly smaller + nicer line-height */
+@media (max-width: 520px){
+  .hero-title h1{
+    font-size: clamp(26px, 7.2vw, 34px);
+    line-height: 1.08;
+  }
+
+  /* Optical align with wrapped text */
+  .v-badge{
+    transform: none;
+    margin-top: 4px;
+  }
+}
+
+
+/* =========================================================
+   PATCH: NAV (prevent MS overlapping Home + center the 3 dots)
+   ========================================================= */
+
+/* Use the dropdown mode earlier so MS never collides with the first link */
+@media (max-width: 1180px){
+  .menu-btn{ display: inline-flex; }
+
+  /* Keep your dropdown nav-links behavior from your 1024 rule */
+  .nav-links{
+    display: flex;
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: calc(100% + 10px);
+
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--panel);
+    border: 1px solid transparent;
+    box-shadow: var(--shadow);
+
+    flex-direction: column;
+    gap: 14px;
+
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    pointer-events: none;
+    visibility: hidden;
+
+    transition:
+      opacity 220ms var(--theme-ease),
+      transform 260ms var(--theme-ease),
+      visibility 0ms linear 260ms;
+  }
+
+  .nav-links.is-open{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    visibility: visible;
+
+    transition:
+      opacity 220ms var(--theme-ease),
+      transform 260ms var(--theme-ease),
+      visibility 0ms;
+  }
+
+  /* Text-only links inside dropdown */
+  .nav-links a{
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: var(--text);
+    font-weight: 800;
+    text-align: left;
+  }
+}
+
+/* Center the 3-dot menu exactly in the navbar pill */
+@media (max-width: 1180px){
+  .nav-inner{
+    position: relative; /* ✅ needed for absolute centering */
+  }
+
+  .menu-btn{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* ✅ perfect center */
+    z-index: 5;
+  }
+
+  /* Keep actions on the right */
+  .nav-actions{
+    position: relative;
+    z-index: 6;
+  }
+}
