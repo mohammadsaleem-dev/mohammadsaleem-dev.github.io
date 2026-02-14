@@ -1,7 +1,7 @@
 // Theme toggle (first visit follows system, then persist user choice)
 // - No HTML inline script needed
 // - Keeps your fade overlay + icon crossfade behavior
-
+const doc = document.documentElement;
 const toggle = document.getElementById("themeToggle");
 const fade = document.getElementById("themeFade");
 
@@ -500,7 +500,14 @@ const runIntro = ({ goTop }) => {
   };
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", () => { recomputeSoon(); }, { passive: true });
+  let resizeTimer = 0;
+  window.addEventListener("resize", () => {
+    // Debounce resize (zoom triggers many resize events)
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      recomputeSoon(); // compute + update once after resizing stops
+    }, 140);
+  }, { passive: true });
 
   window.addEventListener("load", () => {
     recomputeSoon();
