@@ -49,8 +49,7 @@
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
     font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
     script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
-    connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com;
-    upgrade-insecure-requests;
+    connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.open-meteo.com; upgrade-insecure-requests;
   ">
   
   <!-- ===== Privacy & Compatibility ===== -->
@@ -233,12 +232,23 @@
 
  <div class="container">
 
-    <div class="meta-wrap">
-      <div class="time-card" title="Local time">
-        <div class="time-label">Jordan Time</div>
-        <div class="time-value" id="liveTime">--:--:--</div>
+<div class="meta-wrap">
+  <div class="time-card" title="Local time">
+    <div class="time-label">Jordan Time</div>
+    <div class="time-value" id="liveTime">--:--:--</div>
+
+    <div class="time-sub" id="greeting">Good Evening, Visitor 👋</div>
+
+    <div class="weather-row" aria-label="Weather in Amman">
+      <div class="weather-text" id="weatherText">Amman • --°C</div>
+
+      <div class="unit-toggle" role="group" aria-label="Temperature unit">
+        <button type="button" class="unit-btn" data-unit="C">°C</button>
+        <button type="button" class="unit-btn" data-unit="F">°F</button>
       </div>
     </div>
+  </div>
+</div>
 
    <div class="grid anchor">
      <div class="card hero-card reveal">
