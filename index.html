@@ -239,17 +239,28 @@
       <div class="time-value" id="liveTime">--:--:--</div>
     </div>
 
-    <div class="time-right">
-      <div class="wave" id="greeting" aria-label="Greeting">👋</div>
+<div class="time-card time-compact">
+  <!-- Row 1 (center) -->
+  <div class="time-top">
+    <div class="time-label">Jordan Time</div>
+  </div>
 
-      <div class="weather-row" aria-label="Weather in Amman">
-        <div class="weather-text" id="weatherText">Amman • --°C</div>
-
-        <div class="unit-toggle" role="group" aria-label="Temperature unit">
-          <button type="button" class="unit-btn" data-unit="C">°C</button>
-          <button type="button" class="unit-btn" data-unit="F">°F</button>
+      <!-- Row 2 (time left, weather right) -->
+      <div class="time-bottom">
+        <div class="time-value" id="liveTime">--:--:--</div>
+    
+        <div class="weather-inline" aria-label="Weather in Amman">
+          <span class="wave" id="greeting" aria-label="Greeting">👋</span>
+          <span class="weather-text" id="weatherText">Amman • --°C</span>
+    
+          <div class="unit-toggle" role="group" aria-label="Temperature unit">
+            <button type="button" class="unit-btn" data-unit="C">°C</button>
+            <button type="button" class="unit-btn" data-unit="F">°F</button>
+          </div>
         </div>
       </div>
+    </div>
+
     </div>
   </div>
 </div>
