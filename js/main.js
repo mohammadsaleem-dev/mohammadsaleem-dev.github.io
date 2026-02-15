@@ -159,6 +159,103 @@ const snapshotBodyBgToFade = () => {
       hour12: true
     });
 
+      // =========================
+// Greeting + Weather (Amman) + C/F toggle (saved)
+// =========================
+(function () {
+  const greetingEl = document.getElementById("greeting");
+  const weatherEl = document.getElementById("weatherText");
+  const buttons = document.querySelectorAll(".unit-btn");
+
+  if (!greetingEl || !weatherEl) return;
+
+  const STORAGE_KEY = "tempUnit";
+  const CITY = "Amman";
+  const LAT = 31.9539;
+  const LON = 35.9106;
+  const TZ = "Asia/Amman";
+
+  let lastC = null;
+
+  function getGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return "Good Morning, Visitor 👋";
+    if (h < 18) return "Good Afternoon, Visitor 👋";
+    return "Good Evening, Visitor 👋";
+  }
+
+  function cToF(c) {
+    return (c * 9) / 5 + 32;
+  }
+
+  function getUnit() {
+    return localStorage.getItem(STORAGE_KEY) || "C";
+  }
+
+  function setUnit(unit) {
+    localStorage.setItem(STORAGE_KEY, unit);
+  }
+
+  function setActive(unit) {
+    buttons.forEach((b) => b.classList.toggle("active", b.dataset.unit === unit));
+  }
+
+  function renderTemp(unit) {
+    if (lastC == null) {
+      weatherEl.textContent = `${CITY} • --°${unit}`;
+      return;
+    }
+    const val = unit === "F" ? Math.round(cToF(lastC)) : Math.round(lastC);
+    weatherEl.textContent = `${CITY} • ${val}°${unit}`;
+  }
+
+  async function loadWeather() {
+    try {
+      const url =
+        `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+        `&current=temperature_2m&timezone=${encodeURIComponent(TZ)}`;
+
+      const res = await fetch(url, { cache: "no-store" });
+      const data = await res.json();
+
+      lastC = data?.current?.temperature_2m ?? null;
+
+      const unit = getUnit();
+      setActive(unit);
+      renderTemp(unit);
+    } catch (e) {
+      // silent fail (no ugly errors on UI)
+      const unit = getUnit();
+      setActive(unit);
+      renderTemp(unit);
+    }
+  }
+
+  // greeting now + refresh every minute (in case user stays on page)
+  const updateGreeting = () => (greetingEl.textContent = getGreeting());
+  updateGreeting();
+  setInterval(updateGreeting, 60 * 1000);
+
+  // buttons
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const unit = btn.dataset.unit;
+      setUnit(unit);
+      setActive(unit);
+      renderTemp(unit);
+    });
+  });
+
+  // initial state
+  const unit = getUnit();
+  setActive(unit);
+  renderTemp(unit);
+
+  // load weather now + refresh every 15 minutes
+  loadWeather();
+  setInterval(loadWeather, 15 * 60 * 1000);
+})();
+
 
       const tick = () => { el.textContent = fmt(); };
 
