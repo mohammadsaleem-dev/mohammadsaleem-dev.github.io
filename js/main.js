@@ -158,16 +158,13 @@ const snapshotBodyBgToFade = () => {
       second: "2-digit",
       hour12: true
     });
-
-      // =========================
-// Greeting + Weather (Amman) + C/F toggle (saved)
 // =========================
-(function () {
-  const greetingEl = document.getElementById("greeting");
+// Weather (Amman) + C/F toggle (saved) + animated temp swap
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
   const weatherEl = document.getElementById("weatherText");
-  const buttons = document.querySelectorAll(".unit-btn");
-
-  if (!greetingEl || !weatherEl) return;
+  const buttons = Array.from(document.querySelectorAll(".unit-btn"));
+  if (!weatherEl || buttons.length === 0) return;
 
   const STORAGE_KEY = "tempUnit";
   const CITY = "Amman";
@@ -177,37 +174,31 @@ const snapshotBodyBgToFade = () => {
 
   let lastC = null;
 
-  function getGreeting() {
-    const h = new Date().getHours();
-    if (h < 12) return "Good Morning, Visitor 👋";
-    if (h < 18) return "Good Afternoon, Visitor 👋";
-    return "Good Evening, Visitor 👋";
-  }
+  const cToF = (c) => (c * 9) / 5 + 32;
 
-  function cToF(c) {
-    return (c * 9) / 5 + 32;
-  }
+  const getUnit = () => localStorage.getItem(STORAGE_KEY) || "C";
+  const setUnit = (unit) => localStorage.setItem(STORAGE_KEY, unit);
 
-  function getUnit() {
-    return localStorage.getItem(STORAGE_KEY) || "C";
-  }
-
-  function setUnit(unit) {
-    localStorage.setItem(STORAGE_KEY, unit);
-  }
-
-  function setActive(unit) {
+  const setActive = (unit) => {
     buttons.forEach((b) => b.classList.toggle("active", b.dataset.unit === unit));
-  }
+  };
 
-  function renderTemp(unit) {
+  const animateTemp = () => {
+    weatherEl.classList.remove("temp-swap");
+    // force reflow so animation restarts
+    void weatherEl.offsetWidth;
+    weatherEl.classList.add("temp-swap");
+  };
+
+  const renderTemp = (unit, doAnim = false) => {
     if (lastC == null) {
       weatherEl.textContent = `${CITY} • --°${unit}`;
       return;
     }
     const val = unit === "F" ? Math.round(cToF(lastC)) : Math.round(lastC);
     weatherEl.textContent = `${CITY} • ${val}°${unit}`;
-  }
+    if (doAnim) animateTemp();
+  };
 
   async function loadWeather() {
     try {
@@ -217,44 +208,36 @@ const snapshotBodyBgToFade = () => {
 
       const res = await fetch(url, { cache: "no-store" });
       const data = await res.json();
-
       lastC = data?.current?.temperature_2m ?? null;
 
       const unit = getUnit();
       setActive(unit);
-      renderTemp(unit);
-    } catch (e) {
-      // silent fail (no ugly errors on UI)
+      renderTemp(unit, false);
+    } catch {
       const unit = getUnit();
       setActive(unit);
-      renderTemp(unit);
+      renderTemp(unit, false);
     }
   }
 
-  // greeting now + refresh every minute (in case user stays on page)
-  const updateGreeting = () => (greetingEl.textContent = getGreeting());
-  updateGreeting();
-  setInterval(updateGreeting, 60 * 1000);
+  // init
+  const unit = getUnit();
+  setActive(unit);
+  renderTemp(unit, false);
 
-  // buttons
+  // click handlers
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const unit = btn.dataset.unit;
       setUnit(unit);
       setActive(unit);
-      renderTemp(unit);
+      renderTemp(unit, true); // ✅ animate on switch
     });
   });
 
-  // initial state
-  const unit = getUnit();
-  setActive(unit);
-  renderTemp(unit);
-
-  // load weather now + refresh every 15 minutes
   loadWeather();
   setInterval(loadWeather, 15 * 60 * 1000);
-})();
+});
 
 
       const tick = () => { el.textContent = fmt(); };
@@ -594,7 +577,7 @@ const runIntro = ({ goTop }) => {
 
     try {
       // ✅ Cache-bust SW so browser checks updates immediately
-      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.4");
+      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.5");
       await reg.update();
       // ✅ If a new SW is waiting, activate it immediately (only if this is an update)
       if (reg.waiting && navigator.serviceWorker.controller) {
