@@ -152,12 +152,16 @@ const snapshotBodyBgToFade = () => {
       const el = document.getElementById("liveTime");
       if (!el) return;
 
-    const fmt = () => new Date().toLocaleTimeString("en-US", {
+    const jordanClock = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Amman",
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
       hour12: true
     });
+    
+    const fmt = () => jordanClock.format(new Date());
+
 // =========================
 // Weather (Amman) + C/F toggle (saved) + animated temp swap
 // =========================
