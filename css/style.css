@@ -1062,32 +1062,35 @@ button.brand{
 .issuer-row{ display:flex; align-items:center; gap: 10px; margin-top: 4px; }
 
 /* -------------------------
-   TIME WIDGET (Row layout)
+   TIME WIDGET (Compact Row Layout)
 ------------------------- */
 .meta-wrap{
   display: flex;
   justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 6px;
+  margin-top: 6px;
+  margin-bottom: 4px;
   width: 100%;
 }
 
+/* Card */
 .time-card.time-compact{
-  border-radius: 20px;
+  border-radius: 18px;
   border: 1px solid transparent;
   background: var(--panel);
   box-shadow: var(--shadow);
-  padding: 14px 18px;
-  min-width: 240px;
+  padding: 8px 10px;        /* tighter */
+  min-width: 0;
 
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;                 /* less vertical spacing */
 }
 
-.time-card.time-compact:hover{ border-color: var(--border); }
+.time-card.time-compact:hover{
+  border-color: var(--border);
+}
 
-/* Row 1 centered */
+/* Row 1: centered label */
 .time-top{
   display: flex;
   justify-content: center;
@@ -1106,31 +1109,34 @@ button.brand{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;               /* tighter horizontal spacing */
 }
 
+/* Clock */
 .time-value{
   font-size: 22px;
   font-weight: 900;
   letter-spacing: 0.3px;
   color: var(--text);
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Weather inline */
 .weather-inline{
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
 }
 
+/* Animated wave */
 .wave{
-  font-size: 22px;
+  font-size: 20px;          /* slightly smaller for compact look */
   line-height: 1;
   transform-origin: 70% 70%;
   animation: waveHand 1.35s ease-in-out infinite;
-  filter: drop-shadow(0 0 10px rgba(88,166,255,0.18));
+  filter: drop-shadow(0 0 8px rgba(88,166,255,0.18));
 }
 
 @keyframes waveHand{
@@ -1145,6 +1151,7 @@ button.brand{
   .wave{ animation: none !important; }
 }
 
+/* Weather text */
 .weather-text{
   font-size: 14px;
   font-weight: 850;
@@ -1152,42 +1159,48 @@ button.brand{
   opacity: .92;
 }
 
-/* Toggle */
+/* Toggle container (no gray background) */
 .unit-toggle{
-  display:flex;
-  gap: 6px;
-  padding: 4px;
+  display: flex;
+  gap: 4px;
+  padding: 0;
   border-radius: 999px;
-  background: rgba(127,127,127,0.10);
-  border: 1px solid transparent;
+  background: transparent;
+  border: 0;
 }
 
+/* Unit buttons */
 .unit-btn{
   border: 0;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 4px 8px;        /* smaller */
   border-radius: 999px;
   background: transparent;
   color: var(--text);
-  font-size: 13px;
+  font-size: 12px;         /* smaller */
   font-weight: 900;
-  opacity: .75;
-  transition: transform 180ms ease, background-color 180ms ease, opacity 180ms ease;
+  opacity: .7;
+  transition: transform 160ms ease, background-color 160ms ease, opacity 160ms ease;
 }
-.unit-btn:active{ transform: scale(0.96); }
+
+.unit-btn:active{
+  transform: scale(0.95);
+}
+
 .unit-btn.active{
-  background: rgba(88,166,255,0.18);
+  background: rgba(88,166,255,0.14);  /* subtle blue highlight */
   opacity: 1;
 }
 
-/* Mobile: stack row 2 */
+/* Mobile: stack */
 @media (max-width: 520px){
   .time-bottom{
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 }
+
 /* -------------------------
    VERIFICATION
 ------------------------- */
@@ -1657,13 +1670,6 @@ button.brand{
 .locline{
   align-items: center;
 }
-
-/* Option A (recommended): move the location TEXT slightly down */
-.locline span{
-  position: relative;
-  top: 1px;              /* increase to 2px if needed */
-}
-
 /* ===== Navbar MS Logo Hover Effect ===== */
 
 .brand{
@@ -1948,136 +1954,6 @@ button.brand{
   align-items: center;
 }
 
-.locline span{ top: 0 !important; position: static !important; }
-
 .moi-inline span{
   margin-left: 6px;   /* more breathing from icon */
-}
-
-:where(html, body).theme-switching :where(
-  .nav-inner, .nav, .nav-links, .nav-actions,
-  .card, .btn,
-  .project-card, .timeline-item, .item,
-  .cert, .verify-card, .stat, .time-card,
-  .objective, .icon-chip, .pill, .tag, .icon-btn,
-  #themeFade
-){
-  transition-property: background-color, border-color, box-shadow, filter, opacity, color;
-  transition-duration: var(--theme-dur);
-  transition-timing-function: var(--theme-ease);
-}
-
-/* ===== Time card compact layout (tight + no wasted space) ===== */
-.time-card.time-compact{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;              /* ✅ less space between time + weather */
-}
-
-/* keep time block compact */
-.time-left{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* ✅ looks tighter */
-  justify-content: center;
-  gap: 6px;
-}
-
-/* right side shouldn't stretch */
-.time-right{
-  display: flex;
-  align-items: center;
-}
-
-/* ✅ inline wave + weather text + toggle */
-.weather-row{
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  width: auto;
-  margin-top: 0;
-}
-
-.weather-left{
-  display: flex;
-  align-items: center;
-  gap: 8px;               /* ✅ wave next to text */
-}
-
-/* Bigger animated waving hand */
-.wave{
-  font-size: 22px;
-  line-height: 1;
-  transform-origin: 70% 70%;
-  animation: waveHand 1.35s ease-in-out infinite;
-  filter: drop-shadow(0 0 10px rgba(88,166,255,0.18));
-}
-
-@keyframes waveHand{
-  0%,100% { transform: rotate(0deg); }
-  20% { transform: rotate(16deg); }
-  40% { transform: rotate(-10deg); }
-  60% { transform: rotate(14deg); }
-  80% { transform: rotate(-6deg); }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .wave{ animation: none !important; }
-}
-
-.weather-text{
-  font-size: 14px;
-  font-weight: 850;
-  color: var(--text);
-  opacity: .92;
-  white-space: nowrap;
-}
-
-/* Unit toggle (same look, smooth press) */
-.unit-toggle{
-  display: flex;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(127,127,127,0.10);
-  border: 1px solid transparent;
-}
-
-.unit-btn{
-  border: 0;
-  cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 900;
-  opacity: .75;
-  transition: transform 180ms ease, background-color 180ms ease, opacity 180ms ease;
-}
-.unit-btn:active{ transform: scale(0.96); }
-
-.unit-btn.active{
-  background: rgba(88,166,255,0.18);
-  opacity: 1;
-}
-
-/* Temp swap animation */
-.weather-text.temp-swap{
-  animation: tempSwap 240ms var(--theme-ease);
-}
-@keyframes tempSwap{
-  0%{ opacity: .2; transform: translateY(3px); }
-  100%{ opacity: .92; transform: translateY(0); }
-}
-
-/* Mobile: stack */
-@media (max-width: 520px){
-  .time-card.time-compact{
-    flex-direction: column;
-    align-items: center;
-  }
-  .time-left{ align-items: center; }
 }
