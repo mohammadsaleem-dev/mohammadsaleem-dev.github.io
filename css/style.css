@@ -1914,43 +1914,48 @@ button.brand{
   transition-timing-function: var(--theme-ease);
 }
 
-/* ===== Time card compact layout (time left, greeting+weather right) ===== */
+/* ===== Time card compact layout (tight + no wasted space) ===== */
 .time-card.time-compact{
-  display:flex;
-  align-items:center;
-  gap: 28px; 
-  justify-content:center;
-}
-
-.time-left{
-  display:flex;
-  flex-direction: column;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-width: auto;
+  gap: 14px;              /* ✅ less space between time + weather */
 }
 
-.time-right{
-  display:flex;
+/* keep time block compact */
+.time-left{
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;  /* align closer to time */
-  gap: 8px;
+  align-items: flex-start; /* ✅ looks tighter */
+  justify-content: center;
+  gap: 6px;
 }
 
-/* Mobile: stack again */
-@media (max-width: 520px){
-  .time-card.time-compact{
-    flex-direction: column;
-    align-items: center;
-    min-width: 190px; /* your old behavior */
-  }
-  .time-right{ align-items: center; }
+/* right side shouldn't stretch */
+.time-right{
+  display: flex;
+  align-items: center;
 }
 
-/* ===== Bigger animated waving hand ===== */
+/* ✅ inline wave + weather text + toggle */
+.weather-row{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: auto;
+  margin-top: 0;
+}
+
+.weather-left{
+  display: flex;
+  align-items: center;
+  gap: 8px;               /* ✅ wave next to text */
+}
+
+/* Bigger animated waving hand */
 .wave{
-  font-size: 22px;      /* bigger */
+  font-size: 22px;
   line-height: 1;
   transform-origin: 70% 70%;
   animation: waveHand 1.35s ease-in-out infinite;
@@ -1969,15 +1974,6 @@ button.brand{
   .wave{ animation: none !important; }
 }
 
-/* ===== Weather row (right aligned) ===== */
-.weather-row{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap: 12px;
-  width: 100%;
-}
-
 .weather-text{
   font-size: 14px;
   font-weight: 850;
@@ -1986,9 +1982,9 @@ button.brand{
   white-space: nowrap;
 }
 
-/* ===== Unit toggle styling (with smooth feel) ===== */
+/* Unit toggle (same look, smooth press) */
 .unit-toggle{
-  display:flex;
+  display: flex;
   gap: 6px;
   padding: 4px;
   border-radius: 999px;
@@ -2008,7 +2004,6 @@ button.brand{
   opacity: .75;
   transition: transform 180ms ease, background-color 180ms ease, opacity 180ms ease;
 }
-
 .unit-btn:active{ transform: scale(0.96); }
 
 .unit-btn.active{
@@ -2016,11 +2011,20 @@ button.brand{
   opacity: 1;
 }
 
-/* ===== Temp change animation ===== */
+/* Temp swap animation */
 .weather-text.temp-swap{
   animation: tempSwap 240ms var(--theme-ease);
 }
 @keyframes tempSwap{
   0%{ opacity: .2; transform: translateY(3px); }
   100%{ opacity: .92; transform: translateY(0); }
+}
+
+/* Mobile: stack */
+@media (max-width: 520px){
+  .time-card.time-compact{
+    flex-direction: column;
+    align-items: center;
+  }
+  .time-left{ align-items: center; }
 }
