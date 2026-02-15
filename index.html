@@ -232,38 +232,29 @@
 
  <div class="container">
 
-<div class="meta-wrap">
-  <div class="time-card time-compact">
-    <div class="time-left">
-      <div class="time-label">Jordan Time</div>
-      <div class="time-value" id="liveTime">--:--:--</div>
-    </div>
-
-<div class="time-card time-compact">
-  <!-- Row 1 (center) -->
-  <div class="time-top">
-    <div class="time-label">Jordan Time</div>
-  </div>
-
-      <!-- Row 2 (time left, weather right) -->
+  <div class="meta-wrap">
+    <div class="time-card time-compact">
+      <!-- Row 1: centered label -->
+      <div class="time-top">
+        <div class="time-label">Jordan Time</div>
+      </div>
+  
+      <!-- Row 2: time left, weather right -->
       <div class="time-bottom">
         <div class="time-value" id="liveTime">--:--:--</div>
-    
+  
         <div class="weather-inline" aria-label="Weather in Amman">
           <span class="wave" id="greeting" aria-label="Greeting">👋</span>
           <span class="weather-text" id="weatherText">Amman • --°C</span>
-    
+  
           <div class="unit-toggle" role="group" aria-label="Temperature unit">
-            <button type="button" class="unit-btn" data-unit="C">°C</button>
+            <button type="button" class="unit-btn active" data-unit="C">°C</button>
             <button type="button" class="unit-btn" data-unit="F">°F</button>
           </div>
         </div>
       </div>
     </div>
-
-    </div>
   </div>
-</div>
 
    <div class="grid anchor">
      <div class="card hero-card reveal">
