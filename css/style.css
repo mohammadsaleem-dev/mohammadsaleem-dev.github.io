@@ -53,11 +53,11 @@
 
 /* Light theme */
 html.light{
-  --bg: #ffffff;
-  --panel: #f6f8fa;
-  --panel2: #f6f8fa;
+  --bg: #f5f5f7;
+  --panel: #ffffff;   /* ✅ Apple card surface (optional) */
+  --panel2:#ffffff;   /* ✅ optional */
+  --text: #1d1d1f;    /* ✅ optional */
   --border: #d0d7de;
-  --text: #24292f;
   --muted: #57606a;
   --muted2: #6e7781;
   --accent: #0969da;
