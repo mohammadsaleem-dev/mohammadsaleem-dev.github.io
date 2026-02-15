@@ -878,6 +878,11 @@ button.brand{
 }
 @media (max-width: 900px){
   .projects-grid{ grid-template-columns: 1fr; }
+  .v-badge{
+    order: 2;
+    margin-left: 2px;
+    transform: none;
+  }
 }
 
 .project-card{
@@ -1540,7 +1545,13 @@ button.brand{
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap; 
   min-width: 0;
+}
+.name-wrap h1{
+  margin: 0;
+  min-width: 0;           /* important in flex layouts */
+  max-width: 100%;
 }
 
 /* ===== Verification badge: remove gray outer circle, keep hover animation ===== */
