@@ -1958,26 +1958,26 @@ button.brand{
   margin-left: 6px;   /* more breathing from icon */
 }
 
-/* Tight version of outer timeline cards */
-.card.card-tight{
-  padding: 14px;   /* was 26px */
+/* =========================
+   COMPACT CARD MODE
+   ========================= */
+.card.card-compact{
+  padding: 18px;     /* default card is 26px */
 }
 
-.card.card-tight .timeline{
+.card.card-compact .section-sub{ margin-bottom: 10px; }
+.card.card-compact .lead{ margin-bottom: 10px; }
+
+/* timelines inside compact cards */
+.card.card-compact .timeline{
   margin-top: 6px;
-  padding-left: 16px;
 }
 
-.card.card-tight .timeline-item{
+.card.card-compact .timeline-item{
   margin: 0 0 10px;
   padding: 12px 14px;
 }
 
-.card.card-tight .timeline-item:last-child{
+.card.card-compact .timeline-item:last-child{
   margin-bottom: 0;
 }
-
-.card.card-tight .timeline-item::before{
-  top: 16px;
-}
-
