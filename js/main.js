@@ -173,6 +173,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const TZ = "Asia/Amman";
 
   let lastC = null;
+    // ✅ Skip weather fetch for bots/crawlers (fixes Google test warnings)
+  const isBot =
+    typeof navigator !== "undefined" &&
+    /bot|crawl|spider|slurp|googlebot|bingbot|duckduckbot|baiduspider|yandex/i.test(navigator.userAgent);
 
   const cToF = (c) => (c * 9) / 5 + 32;
 
@@ -202,6 +206,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadWeather() {
     try {
+      // ✅ Googlebot / crawler: don’t call Open-Meteo
+      if (isBot) {
+        const unit = getUnit();
+        setActive(unit);
+        renderTemp(unit, false);
+        return;
+      }
       const url =
         `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
         `&current=temperature_2m&timezone=${encodeURIComponent(TZ)}`;
