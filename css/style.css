@@ -1116,6 +1116,16 @@ button.brand{
   color: var(--text);
   white-space: nowrap;
 }
+/* Blinking colon in clock */
+.time-value .colon{
+  display: inline-block;
+  animation: colonBlink 1s steps(1) infinite;
+  opacity: 0.9;
+}
+
+@keyframes colonBlink{
+  50% { opacity: 0.25; }
+}
 
 /* Weather inline */
 .weather-inline{
