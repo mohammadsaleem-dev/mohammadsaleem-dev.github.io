@@ -239,15 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(loadWeather, 15 * 60 * 1000);
 });
 
-     const tick = () => {
-  const t = fmt(); // e.g. "08:48:30 PM"
-  const parts = t.split(":"); // ["08","48","30 PM"]
-  if (parts.length !== 3) { el.textContent = t; return; }
-
-  el.innerHTML =
-    `${parts[0]}<span class="colon">:</span>${parts[1]}<span class="colon">:</span>${parts[2]}`;
-};
-
+const tick = () => { el.textContent = fmt(); };
+      
       tick();
       const now = Date.now();
       const delay = 1000 - (now % 1000);
