@@ -1090,6 +1090,51 @@ button.brand{
 .time-label{ font-size: 12px; font-weight: 900; letter-spacing: 0.4px; color: var(--muted2); }
 .time-value{ font-size: 22px; font-weight: 900; letter-spacing: 0.3px; color: var(--text); }
 
+.time-sub{
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.weather-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  width: 100%;
+  margin-top: 10px;
+}
+.weather-text{
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  opacity: .92;
+  white-space: nowrap;
+}
+.unit-toggle{
+  display:flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(127,127,127,0.10);
+  border: 1px solid transparent;
+}
+.unit-btn{
+  border: 0;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 900;
+  opacity: .75;
+}
+
+.unit-btn.active{
+  background: rgba(88,166,255,0.18);
+  opacity: 1;
+}
 /* -------------------------
    VERIFICATION
 ------------------------- */
