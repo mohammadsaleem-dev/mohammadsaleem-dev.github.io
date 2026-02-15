@@ -446,6 +446,25 @@ button.brand{
     color: var(--accent);
     transform: translateX(2px);
   }
+
+   /* 1) prevent "Home" from overlapping the MS logo */
+  .nav-inner{
+    position: relative;
+    grid-template-columns: auto 1fr auto;   /* brand | center | actions */
+  }
+
+  /* 2) center the 3-dots button */
+  .menu-btn{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* (optional but recommended) keep brand from taking extra width */
+  .brand{
+    max-width: 60px;
+  }
 }
 
 
