@@ -40,17 +40,19 @@
   <!-- ===== Browser Theme Color ===== -->
    <meta name="theme-color" content="#0d1117">
   
-  <!-- ===== Security Policy ===== -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    base-uri 'self';
-    object-src 'none';
-    img-src 'self' https: data:;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-    script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
-    connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.open-meteo.com; upgrade-insecure-requests; worker-src 'self';
-  ">
+<!-- ===== Security Policy ===== -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  base-uri 'self';
+  object-src 'none';
+  img-src 'self' https: data:;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+  font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+  script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+  connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.open-meteo.com;
+  worker-src 'self';
+  upgrade-insecure-requests;
+">
   
   <!-- ===== Privacy & Compatibility ===== -->
   <meta name="referrer" content="strict-origin-when-cross-origin">
