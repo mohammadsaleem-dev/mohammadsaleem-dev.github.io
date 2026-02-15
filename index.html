@@ -233,18 +233,22 @@
  <div class="container">
 
 <div class="meta-wrap">
-  <div class="time-card" title="Local time">
-    <div class="time-label">Jordan Time</div>
-    <div class="time-value" id="liveTime">--:--:--</div>
+  <div class="time-card time-compact" title="Local time">
+    <div class="time-left">
+      <div class="time-label">Jordan Time</div>
+      <div class="time-value" id="liveTime">--:--:--</div>
+    </div>
 
-    <div class="time-sub" id="greeting">Good Evening, Visitor 👋</div>
+    <div class="time-right">
+      <div class="wave" id="greeting" aria-label="Greeting">👋</div>
 
-    <div class="weather-row" aria-label="Weather in Amman">
-      <div class="weather-text" id="weatherText">Amman • --°C</div>
+      <div class="weather-row" aria-label="Weather in Amman">
+        <div class="weather-text" id="weatherText">Amman • --°C</div>
 
-      <div class="unit-toggle" role="group" aria-label="Temperature unit">
-        <button type="button" class="unit-btn" data-unit="C">°C</button>
-        <button type="button" class="unit-btn" data-unit="F">°F</button>
+        <div class="unit-toggle" role="group" aria-label="Temperature unit">
+          <button type="button" class="unit-btn" data-unit="C">°C</button>
+          <button type="button" class="unit-btn" data-unit="F">°F</button>
+        </div>
       </div>
     </div>
   </div>
