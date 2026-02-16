@@ -623,32 +623,62 @@ const runIntro = ({ goTop }) => {
   });
 })();
 
+// Force-collapse when nav-links starts overflowing (reliable)
 (() => {
   const navInner = document.querySelector(".nav-inner");
   const brand = document.querySelector(".brand");
   const links = document.querySelector(".nav-links");
   const actions = document.querySelector(".nav-actions");
+  const menuBtn = document.getElementById("menuBtn");
 
   if (!navInner || !brand || !links || !actions) return;
 
+  const closeMenu = () => {
+    links.classList.remove("is-open");
+    if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+  };
+
   const check = () => {
-  // if links already in dropdown open/close mode, keep consistent
-  const brandRect = brand.getBoundingClientRect();
-  const linksRect = links.getBoundingClientRect();
-  const actionsRect = actions.getBoundingClientRect();
+    // ✅ overflow detection = best trigger
+    const overflow = links.scrollWidth > (links.clientWidth + 4);
 
-  // overlap if brand touches links OR links touches actions
-  const collideBrandLinks = brandRect.right + 10 > linksRect.left;
-  const collideLinksActions = linksRect.right + 10 > actionsRect.left;
+    // fallback collision (optional)
+    const brandRect = brand.getBoundingClientRect();
+    const linksRect = links.getBoundingClientRect();
+    const actionsRect = actions.getBoundingClientRect();
+    const collide =
+      (brandRect.right + 8 > linksRect.left) ||
+      (linksRect.right + 8 > actionsRect.left);
 
-  navInner.classList.toggle("force-collapse", collideBrandLinks || collideLinksActions);
-};
-  // run once + keep updated
-  check();
-  window.addEventListener("resize", check);
-  new ResizeObserver(check).observe(navInner);
+    const shouldCollapse = overflow || collide;
+
+    const wasCollapsed = navInner.classList.contains("force-collapse");
+    navInner.classList.toggle("force-collapse", shouldCollapse);
+
+    // if we just left collapse mode, close dropdown
+    if (wasCollapsed && !shouldCollapse) closeMenu();
+  };
+
+  requestAnimationFrame(check);
+  setTimeout(check, 50);
+  setTimeout(check, 200);
+
+  window.addEventListener("resize", check, { passive: true });
+
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(check).observe(navInner);
+    new ResizeObserver(check).observe(links);
+  }
 
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(check).catch(() => {});
+    document.fonts.ready.then(() => {
+      requestAnimationFrame(check);
+      setTimeout(check, 120);
+    }).catch(() => {});
   }
+
+  window.addEventListener("load", () => {
+    requestAnimationFrame(check);
+    setTimeout(check, 120);
+  });
 })();
