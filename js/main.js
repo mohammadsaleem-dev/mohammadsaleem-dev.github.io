@@ -200,11 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const renderTemp = (unit, doAnim = false) => {
     if (lastC == null) {
-      weatherEl.textContent = `${CITY} • --°${unit}`;
+      weatherEl.textContent = `${CITY} --°${unit}`;
       return;
     }
     const val = unit === "F" ? Math.round(cToF(lastC)) : Math.round(lastC);
-    weatherEl.textContent = `${CITY} • ${val}°${unit}`;
+    weatherEl.textContent = `${CITY} --°${unit}`;
     if (doAnim) animateTemp();
   };
 
