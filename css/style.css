@@ -209,7 +209,7 @@ html.theme-switching :where(.card, .project-card, .timeline-item, .item, .cert, 
 
 .grid{
   display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
+  grid-template-columns: 1.5fr 0.5fr;
   gap: 18px;
   margin-top: 18px;
 }
