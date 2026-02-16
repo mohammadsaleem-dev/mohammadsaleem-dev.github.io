@@ -632,25 +632,14 @@ const runIntro = ({ goTop }) => {
   if (!navInner || !brand || !links || !actions) return;
 
   const check = () => {
-    // 1) If links wrap/overflow, collapse
-    const overflow = links.scrollWidth > links.clientWidth + 2;
+  // if links already in dropdown open/close mode, keep consistent
+  const brandRect = brand.getBoundingClientRect();
+  const linksRect = links.getBoundingClientRect();
+  const actionsRect = actions.getBoundingClientRect();
 
-    // 2) If brand + links + actions don't fit into nav, collapse
-    const available = navInner.clientWidth;
-    const needed = brand.offsetWidth + links.scrollWidth + actions.offsetWidth + 40; // padding safety
+  // overlap if brand touches links OR links touches actions
+  const collideBrandLinks = brandRect.right + 10 > linksRect.left;
+  const collideLinksActions = linksRect.right + 10 > actionsRect.left;
 
-    navInner.classList.toggle("force-collapse", overflow || needed > available);
-  };
-
-  // Run on load + resize + font load
-  check();
-  window.addEventListener("resize", check);
-
-  // React to live size changes (smooth + accurate)
-  new ResizeObserver(check).observe(navInner);
-
-  // If fonts load late, widths change
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(check).catch(() => {});
-  }
-})();
+  navInner.classList.toggle("force-collapse", collideBrandLinks || collideLinksActions);
+};
