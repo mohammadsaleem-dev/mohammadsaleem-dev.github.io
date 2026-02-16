@@ -583,7 +583,7 @@ const runIntro = ({ goTop }) => {
 
     try {
       // ✅ Cache-bust SW so browser checks updates immediately
-      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.6");
+      const reg = await navigator.serviceWorker.register("/sw.js?v=1.0.7");
       await reg.update();
       // ✅ If a new SW is waiting, activate it immediately (only if this is an update)
       if (reg.waiting && navigator.serviceWorker.controller) {
