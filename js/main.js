@@ -191,22 +191,13 @@ document.addEventListener("DOMContentLoaded", () => {
     buttons.forEach((b) => b.classList.toggle("active", b.dataset.unit === unit));
   };
 
-  const animateTemp = () => {
-    weatherEl.classList.remove("temp-swap");
-    // force reflow so animation restarts
-    void weatherEl.offsetWidth;
-    weatherEl.classList.add("temp-swap");
-  };
-
-const renderTemp = (unit, doAnim = false) => {
+const renderTemp = (unit) => {
   if (lastC == null) {
     weatherEl.textContent = `${CITY} --°${unit}`;
     return;
   }
   const val = unit === "F" ? Math.round(cToF(lastC)) : Math.round(lastC);
-
   weatherEl.textContent = `${CITY} ${val}°${unit}`;
-  if (doAnim) animateTemp();
 };
 
   async function loadWeather() {
@@ -247,7 +238,7 @@ const renderTemp = (unit, doAnim = false) => {
       const unit = btn.dataset.unit;
       setUnit(unit);
       setActive(unit);
-      renderTemp(unit, true); // ✅ animate on switch
+      renderTemp(unit); 
     });
   });
 
