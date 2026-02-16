@@ -1100,7 +1100,7 @@ button.brand{
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.4px;
-  color: var(--muted2);
+  color: var(--text);
   text-align: center;
 }
 
@@ -1153,7 +1153,7 @@ button.brand{
 
 /* Weather text */
 .weather-text{
-  font-size: 14px;
+  font-size: 22px;
   font-weight: 850;
   color: var(--text);
   opacity: .92;
@@ -1177,7 +1177,7 @@ button.brand{
   border-radius: 999px;
   background: transparent;
   color: var(--text);
-  font-size: 12px;         /* smaller */
+  font-size: 22px;         /* smaller */
   font-weight: 900;
   opacity: .7;
   transition: transform 160ms ease, background-color 160ms ease, opacity 160ms ease;
