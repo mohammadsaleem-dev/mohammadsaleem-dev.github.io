@@ -869,9 +869,6 @@ button.brand{
 /* -------------------------
    PROJECTS
 ------------------------- */
-/* -------------------------
-   PROJECTS
-------------------------- */
 .projects-grid{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)); /* ✅ 3 per row */
@@ -892,37 +889,45 @@ button.brand{
   }
 }
 
+/* ✅ PROJECT CARD (compact, no wasted top space) */
 .project-card{
   border-radius: var(--radius2);
   background: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent; /* hidden until hover */
   overflow: hidden;
+
   display: grid;
-  grid-template-rows: 150px auto;
+  grid-template-rows: auto 1fr;   /* ✅ was 150px auto */
 }
 .project-card:hover{ border-color: var(--border); }
 
+/* ✅ Top area becomes a small “header” for the badge */
 .project-thumb{
   position: relative;
   overflow: hidden;
+
+  padding: 14px;                 /* ✅ gives space for the badge */
+  min-height: 64px;              /* ✅ small, consistent height */
+
   background:
-    radial-gradient(600px 200px at 10% 0%,
+    radial-gradient(520px 160px at 10% 0%,
       rgba(88,166,255,0.18),
       transparent 60%),
     var(--panel);
 }
 
+/* ✅ Badge is now normal flow (no absolute = no empty space) */
 .thumb-badge{
-  position:absolute;
-  left: 14px;
-  top: 14px;
-  display:inline-flex;
-  align-items:center;
+  position: static;              /* ✅ was absolute */
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
+
   padding: 10px 12px;
   border-radius: 999px;
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
   background-color: var(--panel2);
+
   font-weight: 900;
   color: var(--accent);
 }
@@ -930,16 +935,21 @@ button.brand{
 .thumb-badge:hover{ border-color: var(--border); }
 
 .thumb-icon{
-  width: 34px; height: 34px;
+  width: 34px;
+  height: 34px;
   border-radius: 12px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   background-color: var(--panel);
-  border: 1px solid transparent; /* ✅ hidden */
+  border: 1px solid transparent;
 }
 
+/* Body stays the same (you can reduce padding if you want even tighter) */
 .project-body{ padding: 16px 16px 18px; }
+
 .project-title{ 
   margin: 0 0 8px; 
   font-size: clamp(18px, 1.4vw, 21px); /* ✅ bigger but balanced */
