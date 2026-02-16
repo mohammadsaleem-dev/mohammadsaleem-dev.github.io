@@ -198,15 +198,16 @@ document.addEventListener("DOMContentLoaded", () => {
     weatherEl.classList.add("temp-swap");
   };
 
-  const renderTemp = (unit, doAnim = false) => {
-    if (lastC == null) {
-      weatherEl.textContent = `${CITY} --°${unit}`;
-      return;
-    }
-    const val = unit === "F" ? Math.round(cToF(lastC)) : Math.round(lastC);
+const renderTemp = (unit, doAnim = false) => {
+  if (lastC == null) {
     weatherEl.textContent = `${CITY} --°${unit}`;
-    if (doAnim) animateTemp();
-  };
+    return;
+  }
+  const val = unit === "F" ? Math.round(cToF(lastC)) : Math.round(lastC);
+
+  weatherEl.textContent = `${CITY} ${val}°${unit}`;
+  if (doAnim) animateTemp();
+};
 
   async function loadWeather() {
     try {
