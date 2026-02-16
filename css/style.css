@@ -267,7 +267,6 @@ footer{
 /* ✅ no border unless hover */
 .nav-inner{
   height: var(--navh);
-  position: relative;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -1981,75 +1980,4 @@ button.brand{
 
 .card.card-compact .timeline-item:last-child{
   margin-bottom: 0;
-}
-
-/* =========================
-   FORCE COLLAPSE (JS driven)
-   Works even > 1024px
-   ========================= */
-
-.nav-inner.force-collapse{
-  grid-template-columns: auto 1fr auto; /* brand | spacer | actions */
-}
-
-/* show 3 dots even on desktop widths */
-.nav-inner.force-collapse .menu-btn{
-  display: inline-flex !important;
-}
-
-/* turn nav-links into dropdown panel (same as mobile) */
-.nav-inner.force-collapse .nav-links{
-  position: absolute !important;
-  left: 14px !important;
-  right: 14px !important;
-  top: calc(100% + 10px) !important;
-
-  padding: 14px !important;
-  border-radius: 18px !important;
-  background: var(--panel) !important;
-  border: 1px solid transparent !important;
-  box-shadow: var(--shadow) !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 14px !important;
-
-  opacity: 0 !important;
-  transform: translateY(-10px) scale(0.98) !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
-
-  transition:
-    opacity 220ms var(--theme-ease),
-    transform 260ms var(--theme-ease),
-    visibility 0ms linear 260ms !important;
-}
-
-.nav-inner.force-collapse .nav-links.is-open{
-  opacity: 1 !important;
-  transform: translateY(0) scale(1) !important;
-  pointer-events: auto !important;
-  visibility: visible !important;
-
-  transition:
-    opacity 220ms var(--theme-ease),
-    transform 260ms var(--theme-ease),
-    visibility 0ms !important;
-}
-
-/* dropdown links look like your mobile version */
-.nav-inner.force-collapse .nav-links a{
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  color: var(--text) !important;
-  font-weight: 800 !important;
-  text-align: left !important;
-}
-
-.nav-inner.force-collapse .nav-links a:hover{
-  background: transparent !important;
-  color: var(--accent) !important;
-  transform: translateX(2px) !important;
 }
