@@ -547,7 +547,6 @@ button.brand{
   font-size: var(--h1);
   letter-spacing: -0.7px;
   white-space: nowrap;
-  transition: none !important;
   color: var(--text) !important;
 }
 
@@ -555,7 +554,6 @@ button.brand{
 .subtitle,
 .locline,
 .lead{
-  transition: none !important;
 }
 
 
@@ -1153,7 +1151,7 @@ button.brand{
 
 /* Weather text */
 .weather-text{
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 850;
   color: var(--text);
   opacity: .92;
@@ -1177,7 +1175,7 @@ button.brand{
   border-radius: 999px;
   background: transparent;
   color: var(--text);
-  font-size: 22px;         /* smaller */
+  font-size: 14px;         /* smaller */
   font-weight: 900;
   opacity: .7;
   transition: transform 160ms ease, background-color 160ms ease, opacity 160ms ease;
