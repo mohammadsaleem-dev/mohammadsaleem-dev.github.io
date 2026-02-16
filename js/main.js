@@ -622,3 +622,35 @@ const runIntro = ({ goTop }) => {
     }
   });
 })();
+
+(() => {
+  const navInner = document.querySelector(".nav-inner");
+  const brand = document.querySelector(".brand");
+  const links = document.querySelector(".nav-links");
+  const actions = document.querySelector(".nav-actions");
+
+  if (!navInner || !brand || !links || !actions) return;
+
+  const check = () => {
+    // 1) If links wrap/overflow, collapse
+    const overflow = links.scrollWidth > links.clientWidth + 2;
+
+    // 2) If brand + links + actions don't fit into nav, collapse
+    const available = navInner.clientWidth;
+    const needed = brand.offsetWidth + links.scrollWidth + actions.offsetWidth + 40; // padding safety
+
+    navInner.classList.toggle("force-collapse", overflow || needed > available);
+  };
+
+  // Run on load + resize + font load
+  check();
+  window.addEventListener("resize", check);
+
+  // React to live size changes (smooth + accurate)
+  new ResizeObserver(check).observe(navInner);
+
+  // If fonts load late, widths change
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(check).catch(() => {});
+  }
+})();
