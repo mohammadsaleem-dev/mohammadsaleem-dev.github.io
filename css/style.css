@@ -1981,3 +1981,16 @@ button.brand{
 .card.card-compact .timeline-item:last-child{
   margin-bottom: 0;
 }
+
+/* Auto-collapse when JS detects overlap */
+.nav-inner.force-collapse{
+  grid-template-columns: 1fr auto;  /* brand + actions */
+}
+
+.nav-inner.force-collapse .nav-links{
+  display: none !important;
+}
+
+.nav-inner.force-collapse .menu-btn{
+  display: inline-flex !important;  /* show 3 dots */
+}
