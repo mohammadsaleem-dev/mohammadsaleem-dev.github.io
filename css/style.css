@@ -267,6 +267,7 @@ footer{
 /* ✅ no border unless hover */
 .nav-inner{
   height: var(--navh);
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
