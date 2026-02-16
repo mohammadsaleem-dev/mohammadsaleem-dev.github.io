@@ -643,3 +643,12 @@ const runIntro = ({ goTop }) => {
 
   navInner.classList.toggle("force-collapse", collideBrandLinks || collideLinksActions);
 };
+  // run once + keep updated
+  check();
+  window.addEventListener("resize", check);
+  new ResizeObserver(check).observe(navInner);
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(check).catch(() => {});
+  }
+})();
