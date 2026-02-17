@@ -15,6 +15,10 @@
   --radius2: 18px;
   --max: 1920px;
   --navh: 56px;
+   /* Gold (Premium) */
+  --gold: #f5c518;
+  --gold2: #ffd700;
+  --gold-ring: rgba(245,197,24,0.22);
 
   --ease: cubic-bezier(.22,.61,.36,1);
   --theme-dur: 520ms;                  /* ✅ unified duration */
@@ -62,6 +66,9 @@ html.light{
   --muted2: #6e7781;
   --accent: #0969da;
   --accent2: #1f6feb;
+  --gold: #c99700;     /* slightly deeper gold for white bg */
+  --gold2: #ffd24a;
+  --gold-ring: rgba(201,151,0,0.22);
 
   --shadow: 0 10px 22px rgba(27,31,36,0.10);
   --glow: 0 12px 26px rgba(27,31,36,0.12);
@@ -931,6 +938,23 @@ button.brand{
   font-weight: 900;
   color: var(--accent);
 }
+
+/* ✅ Featured badge = GOLD */
+.thumb-badge.is-featured{
+  color: var(--gold);
+  background: rgba(245,197,24,0.08);
+  border-color: transparent;
+}
+
+.thumb-badge.is-featured i{
+  color: var(--gold);
+}
+
+.thumb-badge.is-featured:hover{
+  border-color: rgba(245,197,24,0.45);
+  box-shadow: 0 0 0 1px var(--gold-ring) inset, var(--glow);
+}
+
 .thumb-badge i{ color: var(--accent); }
 .thumb-badge:hover{ border-color: var(--border); }
 
