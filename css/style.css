@@ -1336,8 +1336,8 @@ button.brand{
   position: fixed;
   right: 18px;
   bottom: calc(18px + env(safe-area-inset-bottom));
-  width: 54px;
-  height: 54px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid transparent;
   background: var(--accent2);
@@ -1348,9 +1348,17 @@ button.brand{
   transform: translateY(10px);
   pointer-events: none;
   transition: 200ms ease;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow)   ;
   z-index: 70;
+  display: grid; 
+  place-items: center;
 }
+
+.to-top i{
+  font-size: 22px;      /* ✅ bigger arrow */
+  line-height: 1;
+}
+
 .to-top.show{ opacity: 1; transform: translateY(0); pointer-events: auto; }
 .to-top:hover{ filter: brightness(1.05); }
 
