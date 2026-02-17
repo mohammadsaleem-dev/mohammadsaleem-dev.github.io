@@ -15,10 +15,6 @@
   --radius2: 18px;
   --max: 1920px;
   --navh: 56px;
-   /* Gold (Premium) */
-  --gold: #f5c518;
-  --gold2: #ffd700;
-  --gold-ring: rgba(245,197,24,0.22);
 
   --ease: cubic-bezier(.22,.61,.36,1);
   --theme-dur: 520ms;                  /* ✅ unified duration */
@@ -31,6 +27,11 @@
   --h3: 18px;
   --body: 16px;
   --leading: 1.75;
+
+   /* Gold (Project title highlight) */
+  --gold: #f5c518;
+  --gold2: #ffd700;
+  --gold-ring: rgba(245,197,24,0.22);
 
   /* GitHub-like (dark) */
   --bg: #0d1117;
@@ -66,9 +67,10 @@ html.light{
   --muted2: #6e7781;
   --accent: #0969da;
   --accent2: #1f6feb;
-  --gold: #c99700;     /* slightly deeper gold for white bg */
+  --gold: #c99700;
   --gold2: #ffd24a;
   --gold-ring: rgba(201,151,0,0.22);
+
 
   --shadow: 0 10px 22px rgba(27,31,36,0.10);
   --glow: 0 12px 26px rgba(27,31,36,0.12);
@@ -622,6 +624,15 @@ button.brand{
   filter: drop-shadow(0 0 10px rgba(88,166,255,0.35));
 }
 
+.subtitle-row:hover .mini-pc{
+  transform: translateY(-1px) scale(1.06);
+  filter: brightness(1.06);
+}
+.subtitle-row:hover .mini-pc i{
+  transform: rotate(-8deg) scale(1.08);
+  filter: drop-shadow(0 0 10px rgba(88,166,255,0.35));
+}
+
 /* reduced motion */
 @media (prefers-reduced-motion: reduce){
   .mini-pc, .mini-pc i{ transition: none !important; }
@@ -929,35 +940,8 @@ button.brand{
   font-weight: 900;
   color: var(--accent);
 }
-
-/* ✅ Featured badge = GOLD */
-.thumb-badge.is-featured{
-  color: var(--gold);
-  background: rgba(245,197,24,0.08);
-  border-color: transparent;
-}
-
-.thumb-badge.is-featured i{
-  color: var(--gold);
-}
-
-.thumb-badge.is-featured:hover{
-  border-color: rgba(245,197,24,0.45);
-  box-shadow: 0 0 0 1px var(--gold-ring) inset, var(--glow);
-}
-
-/* default badge (NOT featured) */
-.thumb-badge:not(.is-featured){
-  color: var(--accent);
-}
-
-.thumb-badge:not(.is-featured) i{
-  color: var(--accent);
-}
-
-.thumb-badge:not(.is-featured):hover{
-  border-color: var(--border);
-}
+.thumb-badge i{ color: var(--accent); }
+.thumb-badge:hover{ border-color: var(--border); }
 
 .thumb-icon{
   width: 34px;
@@ -981,6 +965,15 @@ button.brand{
   font-weight: 900;
   letter-spacing: -0.3px;
 }
+
+/* =========================
+   GOLD PROJECT TITLE ONLY
+   ========================= */
+.project-card .project-title{
+  color: var(--gold) !important;
+  text-shadow: 0 0 10px var(--gold-ring);
+}
+
 .project-desc{ margin: 0 0 12px; color: var(--muted); line-height: 1.65; font-weight: 600; }
 .tags{ display:flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
 
@@ -1626,21 +1619,9 @@ button.brand{
 }
 
 /* SVG colors (matches your theme accent) */
-/*.v-icon .v-circle{
-  fill: #1877F2; /* Facebook Blue */
-/*}
-
-/* =========================
-   GOLD verification badge
-   ========================= */
 .v-icon .v-circle{
-  fill: var(--gold);
+  fill: #1877F2; /* Facebook Blue */
 }
-
-.v-badge:hover{
-  box-shadow: 0 0 0 6px rgba(245,197,24,0.12), var(--glow);
-}
-
 
 .v-icon .v-check{ fill: #fff; }
 
@@ -1724,6 +1705,10 @@ button.brand{
 
 /* ===== Fix vertical alignment: subtitle + location rows ===== */
 
+/* 2) Location row (pin icon + text) */
+.locline{
+  align-items: center;
+}
 /* ===== Navbar MS Logo Hover Effect ===== */
 
 .brand{
@@ -1867,45 +1852,6 @@ button.brand{
   border: 1px solid rgba(88,166,255,0.18);    /* ✅ same tone */
   box-shadow: none;
 }
-
-/* =========================
-   GOLD GRE (grad-hat + pill)
-   ========================= */
-
-/* Target ONLY the first acad row (GRE row) */
-.acadline .acad-row:first-child i{
-  color: var(--gold);
-  filter: drop-shadow(0 0 10px rgba(245,197,24,0.28));
-}
-
-/* GRE pill base */
-.acadline .acad-row:first-child .acad-sign{
-  background: rgba(245,197,24,0.10);
-  border-color: rgba(245,197,24,0.35);
-}
-
-/* GRE animated sweep (gold version) */
-.acadline .acad-row:first-child .acad-sign.is-anim::before{
-  background: linear-gradient(
-    90deg,
-    rgba(245,197,24,0) 0%,
-    rgba(245,197,24,.18) 40%,
-    rgba(255,210,74,.28) 60%,
-    rgba(245,197,24,0) 100%
-  );
-}
-
-/* GRE animated underline (gold version) */
-.acadline .acad-row:first-child .acad-sign.is-anim::after{
-  background: linear-gradient(
-    90deg,
-    rgba(245,197,24,0),
-    rgba(245,197,24,.95),
-    rgba(255,210,74,.95),
-    rgba(245,197,24,0)
-  );
-}
-
 
 /* Text tone */
 .acad-sign .muted{
