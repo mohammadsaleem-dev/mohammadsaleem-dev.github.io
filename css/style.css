@@ -966,12 +966,23 @@ button.brand{
   letter-spacing: -0.3px;
 }
 
-/* =========================
-   GOLD PROJECT TITLE ONLY
-   ========================= */
-.project-card .project-title{
-  color: var(--gold) !important;
-  text-shadow: 0 0 10px var(--gold-ring);
+/* ===== Make ONLY Featured badge gold ===== */
+.thumb-badge.is-featured{
+  color: var(--gold);
+}
+
+.thumb-badge.is-featured i{
+  color: var(--gold);
+}
+
+.thumb-badge.is-featured .thumb-icon{
+  background: rgba(245,197,24,0.12);   /* soft gold glow */
+}
+
+.thumb-badge.is-featured:hover{
+  box-shadow:
+    0 0 0 1px var(--gold-ring) inset,
+    0 0 22px rgba(245,197,24,0.18);
 }
 
 .project-desc{ margin: 0 0 12px; color: var(--muted); line-height: 1.65; font-weight: 600; }
