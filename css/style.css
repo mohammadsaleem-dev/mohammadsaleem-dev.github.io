@@ -955,8 +955,18 @@ button.brand{
   box-shadow: 0 0 0 1px var(--gold-ring) inset, var(--glow);
 }
 
-.thumb-badge i{ color: var(--accent); }
-.thumb-badge:hover{ border-color: var(--border); }
+/* default badge (NOT featured) */
+.thumb-badge:not(.is-featured){
+  color: var(--accent);
+}
+
+.thumb-badge:not(.is-featured) i{
+  color: var(--accent);
+}
+
+.thumb-badge:not(.is-featured):hover{
+  border-color: var(--border);
+}
 
 .thumb-icon{
   width: 34px;
