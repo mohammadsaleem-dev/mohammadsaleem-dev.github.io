@@ -622,15 +622,6 @@ button.brand{
   filter: drop-shadow(0 0 10px rgba(88,166,255,0.35));
 }
 
-.subtitle-row:hover .mini-pc{
-  transform: translateY(-1px) scale(1.06);
-  filter: brightness(1.06);
-}
-.subtitle-row:hover .mini-pc i{
-  transform: rotate(-8deg) scale(1.08);
-  filter: drop-shadow(0 0 10px rgba(88,166,255,0.35));
-}
-
 /* reduced motion */
 @media (prefers-reduced-motion: reduce){
   .mini-pc, .mini-pc i{ transition: none !important; }
@@ -1721,10 +1712,6 @@ button.brand{
 
 /* ===== Fix vertical alignment: subtitle + location rows ===== */
 
-/* 2) Location row (pin icon + text) */
-.locline{
-  align-items: center;
-}
 /* ===== Navbar MS Logo Hover Effect ===== */
 
 .brand{
