@@ -2039,3 +2039,8 @@ button.brand{
 .card.card-compact .timeline-item:last-child{
   margin-bottom: 0;
 }
+
+.sicon.qa{
+  background: linear-gradient(135deg,#00c6ff,#0072ff);
+  color:white;
+}
