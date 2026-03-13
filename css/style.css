@@ -1606,7 +1606,7 @@ button.brand{
   position: relative;              /* needed for ::after shine */
   width: 30px;
   height: 30px;
-  border-radius: 0;
+  border-radius: 999px;
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
@@ -1638,7 +1638,7 @@ button.brand{
 }
 
 /* SVG colors (matches your theme accent) */
-.v-icon .v-shape{
+.v-icon .v-circle{
   fill: #1877F2; /* Facebook Blue */
 }
 
