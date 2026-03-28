@@ -2044,3 +2044,18 @@ button.brand{
   background: linear-gradient(135deg,#00c6ff,#0072ff);
   color:white;
 }
+
+.cert-name a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cert-name a:hover {
+  color: #3b82f6; /* nice modern blue */
+}
+
+.cert-name a:hover {
+  color: #3b82f6;
+  text-decoration: underline;
+}
