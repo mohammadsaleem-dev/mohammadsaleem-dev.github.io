@@ -2059,3 +2059,19 @@ button.brand{
   color: #3b82f6;
   text-decoration: underline;
 }
+
+.sicon.cypress {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+}
+
+.sicon.jira {
+  background: linear-gradient(135deg, #0052CC, #2684FF);
+}
+
+.sicon.agile {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.sicon.scrum {
+  background: linear-gradient(135deg, #7B1FA2, #BA68C8);
+}
