@@ -1,11 +1,17 @@
 {
   "name": "Mohammad Saleem | Portfolio",
   "short_name": "MS Portfolio",
+  "description": "Official portfolio of Mohammad Saleem - Software Engineer, QA Engineer, Blockchain, AI, Cybersecurity.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait-primary",
   "background_color": "#0a1020",
   "theme_color": "#0a1020",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["portfolio", "developer", "technology", "business"],
   "icons": [
     {
       "src": "/assets/icon-192.png",
