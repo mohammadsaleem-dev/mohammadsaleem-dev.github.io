@@ -2127,10 +2127,17 @@ html.light{
   font-weight: 600;
 }
 
-.t-date:contains("In Progress") {
+/* 🔵 In Progress */
+.status-progress {
   color: #2563eb;
 }
 
-.t-date:contains("Completed") {
+/* 🟡 If you WANT yellow instead of blue */
+.status-progress.yellow {
+  color: #f59e0b;
+}
+
+/* 🟢 Completed */
+.status-completed {
   color: #16a34a;
 }
