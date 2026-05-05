@@ -2122,3 +2122,15 @@ html{
 html.light{
   scrollbar-color: #58a6ff #e8e8e8;
 }
+
+.t-date {
+  font-weight: 600;
+}
+
+.t-date:contains("In Progress") {
+  color: #2563eb;
+}
+
+.t-date:contains("Completed") {
+  color: #16a34a;
+}
