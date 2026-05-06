@@ -1,5 +1,5 @@
 /* sw.js (CLEAN + STABLE) */
-const CACHE_VERSION = "v1.0.7"; // bump on every deploy
+const CACHE_VERSION = "v1.0.8"; // bump on every deploy
 const PRECACHE = `precache-${CACHE_VERSION}`;
 const RUNTIME = `runtime-${CACHE_VERSION}`;
 
@@ -114,7 +114,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     // Images/fonts/etc.
-    event.respondWith(cacheFirst(req));
+    event.respondWith(staleWhileRevalidate(req));
     return;
   }
 
