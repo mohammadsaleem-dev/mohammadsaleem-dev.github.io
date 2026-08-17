@@ -393,7 +393,7 @@ button.brand{
   opacity: .85;
 }
 
-@media (max-width: 1024px){
+@media (max-width: 1260px){
   .menu-btn{ display: inline-flex; }
 
   /* Dropdown panel animation: smooth open/close */
