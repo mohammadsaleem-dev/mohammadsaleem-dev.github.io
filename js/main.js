@@ -83,7 +83,7 @@ const snapshotBodyBgToFade = () => {
   });
 }
 
-    // Mobile/Tablet menu toggle (<=1024px)
+    // Mobile/Tablet menu toggle (<=1260px)
     (function () {
       const btn = document.getElementById("menuBtn");
       const links = document.getElementById("navLinks");
@@ -108,7 +108,7 @@ const snapshotBodyBgToFade = () => {
       });
 
       window.addEventListener("resize", () => {
-        if (window.innerWidth > 1024) closeMenu();
+        if (window.innerWidth > 1260) closeMenu();
       }, { passive: true });
     })();
 
